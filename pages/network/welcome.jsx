@@ -15,7 +15,10 @@ export default function WelcomeForm() {
     thar: '',
     phone: '',
     dob: '',
-    location: '',
+    address: '',
+    street: '',
+    town: '',
+    region: '',
     role: '',
     skills: '',
     guthiRoles: '',
@@ -26,6 +29,8 @@ export default function WelcomeForm() {
     photoURL: ''
   });
   const [suggestedThar, setSuggestedThar] = useState([]);
+  const [locationDenied, setLocationDenied] = useState(false);
+  const [showLocationButton, setShowLocationButton] = useState(false);
   const fuse = new Fuse(tharList, { includeScore: true, threshold: 0.4 });
 
   const handleChange = (e) => {
@@ -42,15 +47,40 @@ export default function WelcomeForm() {
         const results = fuse.search(value);
         setSuggestedThar(results.map((r) => r.item));
       }
+      if (name === 'address' && value.length >= 3) {
+        setShowLocationButton(true);
+      }
     }
+  };
+
+  const handleDetectLocation = () => {
+    if (!navigator.geolocation) return;
+    toast.loading('📍 Detecting your location...');
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        toast.dismiss();
+        const { latitude, longitude } = pos.coords;
+        // Fake reverse geocode function for now
+        const mockAddress = `Medford Street, Medford, Massachusetts, USA`;
+        setForm((prev) => ({ ...prev, address: mockAddress }));
+        toast.success('📍 Location detected');
+      },
+      (err) => {
+        toast.dismiss();
+        toast.error('Location access denied. Please fill in manually.');
+        setLocationDenied(true);
+      }
+    );
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const uid = form.name + '-' + form.thar;
+    const finalAddress = form.address || `${form.street}, ${form.town}, ${form.region}`;
     try {
       await setDoc(doc(db, 'users', uid), {
         ...form,
+        address: finalAddress,
         createdAt: serverTimestamp(),
         karma: 0,
         presence: 'new'
@@ -86,12 +116,7 @@ export default function WelcomeForm() {
             ['🌬️ Your Thar', 'thar', 'Your Thar / Surname'],
             ['🧑‍⚖️ Ma’am or Sir?', 'gender', ''],
             ['📞 Phone', 'phone', 'Phone number'],
-            ['🎂 Date of Birth', 'dob', ''],
-            ['🏡 Where You Live', 'location', 'Your village or town'],
-            ['💬 What Do You Do?', 'role', 'Farmer, Student, Tailor...'],
-            ['🎁 Your Skills', 'skills', 'Singing, Teaching...'],
-            ['🕊️ Guthi Role You Like', 'guthiRoles', 'Cook, Helper...'],
-            ['🗣️ Languages You Speak', 'languages', 'Nepal Bhasa, Nepali...']
+            ['🎂 Date of Birth', 'dob', '']
           ].map(([label, field, placeholder], i) => (
             <motion.div className="form-group" key={field} custom={i} variants={fadeIn}>
               <label className="label font-semibold block mb-1">{label}</label>
@@ -118,7 +143,7 @@ export default function WelcomeForm() {
                     name={field}
                     placeholder={placeholder}
                     onChange={handleChange}
-                    required={field !== 'location'}
+                    required
                   />
                 )}
                 {field === 'thar' && form.thar && suggestedThar.length > 0 && (
@@ -137,6 +162,51 @@ export default function WelcomeForm() {
               </div>
             </motion.div>
           ))}
+
+          <motion.div className="form-group md:col-span-2" variants={fadeIn}>
+            <label className="label font-semibold block mb-1">🏡 Where You Live</label>
+            <div className="border rounded-lg p-2">
+              <input
+                className="input"
+                name="address"
+                placeholder="Village or Town"
+                value={form.address}
+                onChange={handleChange}
+              />
+              {showLocationButton && !locationDenied && (
+                <button
+                  type="button"
+                  onClick={handleDetectLocation}
+                  className="mt-2 text-sm text-blue-600 underline"
+                >
+                  📍 Use My Location
+                </button>
+              )}
+            </div>
+          </motion.div>
+
+          {locationDenied && (
+            <motion.div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4" variants={fadeIn}>
+              <div className="form-group">
+                <label className="label font-semibold block mb-1">🏘 Street or Tole</label>
+                <div className="border rounded-lg p-2">
+                  <input name="street" className="input" onChange={handleChange} placeholder="e.g. Itachhen Tole" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="label font-semibold block mb-1">🌆 Town / Village</label>
+                <div className="border rounded-lg p-2">
+                  <input name="town" className="input" onChange={handleChange} placeholder="e.g. Bhaktapur" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="label font-semibold block mb-1">🌍 Province / Country</label>
+                <div className="border rounded-lg p-2">
+                  <input name="region" className="input" onChange={handleChange} placeholder="e.g. Bagmati, Nepal" />
+                </div>
+              </div>
+            </motion.div>
+          )}
 
           <motion.div className="form-group md:col-span-2" custom={10} variants={fadeIn}>
             <label className="label font-semibold block mb-1">📜 Your Story</label>
