@@ -53,15 +53,27 @@ export default function WelcomeForm() {
     }
   };
 
+  const reverseGeocode = async (lat, lon) => {
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
+      );
+      const data = await res.json();
+      return data.display_name || `${lat}, ${lon}`;
+    } catch (error) {
+      return `${lat}, ${lon}`;
+    }
+  };
+
   const handleDetectLocation = () => {
     if (!navigator.geolocation) return;
     toast.loading('📍 Detecting your location...');
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
-        toast.dismiss();
         const { latitude, longitude } = pos.coords;
-        const mockAddress = `Medford Street, Medford, Massachusetts, USA`;
-        setForm((prev) => ({ ...prev, address: mockAddress }));
+        const address = await reverseGeocode(latitude, longitude);
+        toast.dismiss();
+        setForm((prev) => ({ ...prev, address }));
         toast.success('📍 Location detected');
       },
       (err) => {
