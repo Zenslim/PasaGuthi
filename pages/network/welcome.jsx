@@ -70,13 +70,13 @@ export default function WelcomeForm() {
           🔆 Begin Your Presence in the Guthi Circle
         </h1>
 
-        <input className="input" name="name" placeholder="e.g. Anisha" onChange={handleChange} required />
+        <input className="input" name="name" placeholder="Your full name (e.g. Anisha)" onChange={handleChange} required />
 
         <div className="relative">
           <input
             className="input"
             name="thar"
-            placeholder="e.g. Pradhan (Surname)"
+            placeholder="Your Thar / Surname (e.g. Pradhan)"
             onChange={handleChange}
             required
           />
@@ -100,26 +100,28 @@ export default function WelcomeForm() {
           value={form.phone}
           onChange={(phone) => setForm((p) => ({ ...p, phone }))}
           inputClassName="input"
+          placeholder="Mobile number"
         />
 
-        <input className="input" type="date" name="dob" onChange={handleChange} />
+        <input className="input" type="date" name="dob" onChange={handleChange} placeholder="Date of Birth" />
+
         <div className="flex flex-col md:flex-row gap-4">
-          <input className="input flex-1" name="location" placeholder="e.g. Kathmandu" onChange={handleChange} />
-          <input className="input flex-1" name="role" placeholder="e.g. Artist, Developer" onChange={handleChange} />
+          <input className="input flex-1" name="location" placeholder="City or village (e.g. Kathmandu)" onChange={handleChange} />
+          <input className="input flex-1" name="role" placeholder="Your profession or title (e.g. Artist)" onChange={handleChange} />
         </div>
 
         <div className="flex flex-col md:grid md:grid-cols-3 gap-4">
-          <input className="input" name="skills" placeholder="e.g. Tailoring, Singing, Coding" onChange={handleChange} />
-          <input className="input" name="guthiRoles" placeholder="e.g. Sponsor, Organizer" onChange={handleChange} />
-          <input className="input" name="languages" placeholder="e.g. Nepal Bhasa, Nepali, English" onChange={handleChange} />
+          <input className="input" name="skills" placeholder="Your talents (e.g. Singing, Organizing)" onChange={handleChange} />
+          <input className="input" name="guthiRoles" placeholder="Desired Guthi roles (e.g. Sponsor)" onChange={handleChange} />
+          <input className="input" name="languages" placeholder="Languages you speak (e.g. Nepal Bhasa)" onChange={handleChange} />
         </div>
 
         <div className="flex flex-col md:flex-row gap-4">
-          <textarea className="input flex-1" name="bio" placeholder="Tell us about yourself..." onChange={handleChange} />
+          <textarea className="input flex-1" name="bio" placeholder="Write a short intro about yourself..." onChange={handleChange} />
           <textarea
             className="input flex-1"
             name="whyProud"
-            placeholder="What makes you proud to be Newar?"
+            placeholder="Why are you proud to be Newar?"
             onChange={handleChange}
           />
         </div>
@@ -139,7 +141,7 @@ export default function WelcomeForm() {
   );
 }
 
-// Add to globals.css or component styles
+// Tailwind .input style in globals.css:
 // .input {
 //   @apply w-full p-2 bg-white text-black border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-gray-400;
 // }
