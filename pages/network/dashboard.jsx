@@ -1,71 +1,86 @@
-
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { useAuth } from "../../context/AuthContext";
 import { db } from "../../lib/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import UnifiedProfileCard from "../../components/UnifiedProfileCard";
 
 export default function Dashboard() {
   const { user } = useAuth();
-  const [userData, setUserData] = useState(null);
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
-    if (!user) return;
-    const ref = doc(db, "users", user.uid);
-    getDoc(ref).then((snap) => {
-      if (snap.exists()) {
-        const data = snap.data();
-        setUserData(data);
-        setDoc(doc(db, "profiles", user.uid), {
+    const checkOrCreateProfile = async () => {
+      if (!user) return;
+
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
           uid: user.uid,
-          name: data.firstName,
-          thar: data.thar,
-          role: data.role,
-          region: data.location,
-          photo_url: user.photoURL || "",
-          bio: data.bio || "",
-          skills: data.skills || [],
-          diaspora_node: false
-        }, { merge: true });
+          email: user.email,
+          provider: user.providerData[0].providerId,
+          createdAt: serverTimestamp(),
+          presence: "new",
+          karma: 0,
+          completedOnboarding: false,
+        });
+        setProfile(null);
+      } else {
+        const data = userSnap.data();
+
+        // Minimal onboarding in place
+        if (!data.completedOnboarding) {
+          const firstName = prompt("What name shall we greet you by?");
+          const thar = prompt("Which Thar do you carry in your breath?");
+          const gender = prompt("Shall we address you as Ma’am or Sir?");
+          const location = prompt("Where do your feet rest now?");
+          const role = prompt("Do you carry a gift, skill, or vow?");
+
+          await updateDoc(userRef, {
+            firstName,
+            thar,
+            gender,
+            location,
+            role,
+            completedOnboarding: true,
+            karma: 5
+          });
+
+          setProfile({ ...data, firstName, thar, gender, location, role, completedOnboarding: true });
+        } else {
+          setProfile(data);
+        }
       }
-    });
+
+      setLoading(false);
+    };
+
+    checkOrCreateProfile();
   }, [user]);
 
-  const reflectionCount = userData?.reflections?.length || 0;
-  const karma = userData?.karma || 0;
-  const guthyarRank = ((userData?.firstName?.length || 1) * (karma || 1)) % 1088;
+  if (loading || !user) return <div className="p-10 text-center">🌙 Loading your Guthi Circle...</div>;
 
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-gradient-to-b from-white via-rose-50 to-pink-100 p-6 text-center">
-        <h1 className="text-3xl md:text-4xl font-bold mb-6 text-amber-800">🌿 Your Guthi Presence</h1>
-
-        {user && userData ? (
-          <>
-            <UnifiedProfileCard profile={{ ...userData, uid: user.uid, photo_url: user.photoURL }} currentUser={user} />
-
-            <div className="max-w-md mx-auto mt-6 p-4 bg-gray-100 rounded-xl text-left space-y-3 text-sm">
-              <p><strong>🔥 Karma Points:</strong> {karma}</p>
-              <p><strong>📝 Reflections Submitted:</strong> {reflectionCount}</p>
-              <p><strong>🌕 Moonline Rank:</strong> You are the {guthyarRank}th Guthyar this moon.</p>
-              <p className="text-blue-800 font-medium hover:underline cursor-pointer">
-                🕊️ Why are you proud to be Newar?
-              </p>
-              <div>
-                <p className="font-semibold text-gray-800">🌿 Active Projects:</p>
-                <ul className="list-disc list-inside text-green-800 pl-4">
-                  <li>Healing Circle</li>
-                  <li>Temple Cleanup Drive</li>
-                </ul>
-              </div>
-            </div>
-          </>
-        ) : (
-          <p className="text-red-600 mt-12">Please sign in to view your dashboard.</p>
-        )}
+      <main className="min-h-screen bg-white p-6">
+        <h1 className="text-3xl font-bold mb-4">🌿 Your Dashboard</h1>
+        <div className="p-4 border rounded shadow-sm bg-gray-50">
+          <h2 className="text-xl font-semibold">{profile?.firstName || user.displayName}</h2>
+          <p className="text-sm text-gray-700">{user.email}</p>
+          <p className="mt-2 text-green-700">Karma Points: {profile?.karma ?? 0}</p>
+          <p className="text-sm">Reflections Submitted: 5</p>
+          <p className="mt-2 font-semibold">Active Projects:</p>
+          <ul className="list-disc list-inside text-sm text-purple-800">
+            <li>Healing Circle</li>
+            <li>Temple Cleanup Drive</li>
+          </ul>
+        </div>
       </main>
       <Footer />
     </>
