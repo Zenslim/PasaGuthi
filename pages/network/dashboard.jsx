@@ -5,6 +5,7 @@ import Footer from "../../components/Footer";
 import { useAuth } from "../../context/AuthContext";
 import { db } from "../../lib/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import tharList from "../../data/tharList.json";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -18,6 +19,7 @@ export default function Dashboard() {
     location: "",
     role: ""
   });
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!user) return;
@@ -35,6 +37,14 @@ export default function Dashboard() {
   }, [user]);
 
   const handleNext = () => {
+    if (onboardingSteps[step - 1].field === "thar") {
+      const match = tharList.includes(profile.thar);
+      if (!match) {
+        setError("🙏 Please check your spelling — we couldn’t recognize this Thar.");
+        return;
+      }
+    }
+    setError("");
     setStep((prev) => prev + 1);
   };
 
@@ -54,26 +64,11 @@ export default function Dashboard() {
   };
 
   const onboardingSteps = [
-    {
-      prompt: "🌿 What name shall we greet you by?",
-      field: "firstName",
-    },
-    {
-      prompt: "🪷 Which Thar do you carry in your breath?",
-      field: "thar",
-    },
-    {
-      prompt: "🌸 Shall we address you as Ma’am or Sir?",
-      field: "gender",
-    },
-    {
-      prompt: "🌍 Where do your feet rest now?",
-      field: "location",
-    },
-    {
-      prompt: "🎁 Do you carry a gift, skill, or vow?",
-      field: "role",
-    },
+    { prompt: "🌿 What name shall we greet you by?", field: "firstName" },
+    { prompt: "🪷 Which Thar do you carry in your breath?", field: "thar" },
+    { prompt: "🌸 Shall we address you as Ma’am or Sir?", field: "gender" },
+    { prompt: "🌍 Where do your feet rest now?", field: "location" },
+    { prompt: "🎁 Do you carry a gift, skill, or vow?", field: "role" }
   ];
 
   const daoReady = userData?.karma >= 13 && (userData?.reflections?.length || 0) >= 3;
@@ -89,34 +84,44 @@ export default function Dashboard() {
         {user && userData ? (
           step > 0 ? (
             <div className="max-w-xl w-full bg-white rounded-xl shadow-lg p-8 space-y-4 text-left">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">{onboardingSteps[step - 1].prompt}</h2>
+              <h2 className="text-xl font-semibold text-gray-800">{onboardingSteps[step - 1].prompt}</h2>
+
               {onboardingSteps[step - 1].field === "gender" ? (
-  <select
-    value={profile.gender}
-    onChange={(e) => handleChange("gender", e.target.value)}
-    className="border p-2 rounded w-full text-black"
-  >
-    <option value="">Select</option>
-    <option value="Ma'am">Ma&apos;am</option>
-    <option value="Sir">Sir</option>
-  </select>
-) : onboardingSteps[step - 1].field === "thar" ? (
-  <input
-    list="thars"
-    value={profile.thar}
-    onChange={(e) => handleChange("thar", e.target.value)}
-    className="border p-2 rounded w-full text-black"
-  />
-) : (
-  <input
-    type="text"
-    value={profile[onboardingSteps[step - 1].field]}
-    onChange={(e) => handleChange(onboardingSteps[step - 1].field, e.target.value)}
-    className="border p-2 rounded w-full text-black"
-  />
-)}
+                <select
+                  value={profile.gender}
+                  onChange={(e) => handleChange("gender", e.target.value)}
+                  className="border p-2 rounded w-full text-black"
+                >
+                  <option value="">Select</option>
+                  <option value="Ma'am">Ma'am</option>
+                  <option value="Sir">Sir</option>
+                </select>
+              ) : onboardingSteps[step - 1].field === "thar" ? (
+                <>
+                  <input
+                    list="thars"
+                    value={profile.thar}
+                    onChange={(e) => handleChange("thar", e.target.value)}
+                    className="border p-2 rounded w-full text-black"
+                  />
+                  <datalist id="thars">
+                    {tharList.map((t) => (
+                      <option key={t} value={t} />
+                    ))}
+                  </datalist>
+                  {error && <p className="text-red-600 text-sm">{error}</p>}
+                </>
+              ) : (
+                <input
+                  type="text"
+                  value={profile[onboardingSteps[step - 1].field]}
+                  onChange={(e) => handleChange(onboardingSteps[step - 1].field, e.target.value)}
+                  className="border p-2 rounded w-full text-black"
+                />
+              )}
+
               <button
-                className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
+                className="mt-2 bg-blue-600 text-white px-4 py-2 rounded"
                 onClick={step < onboardingSteps.length ? handleNext : completeOnboarding}
               >
                 {step < onboardingSteps.length ? "Next" : "Complete"}
@@ -168,16 +173,3 @@ export default function Dashboard() {
     </>
   );
 }
-
-<datalist id="thars">
-  <option value="Shilpakar" />
-  <option value="Pradhan" />
-  <option value="Tuladhar" />
-  <option value="Bajracharya" />
-  <option value="Shrestha" />
-  <option value="Joshi" />
-  <option value="Maharjan" />
-  <option value="Dangol" />
-  <option value="Sthapit" />
-  <option value="Awale" />
-</datalist>
