@@ -93,63 +93,71 @@ export default function WelcomeForm() {
             ['🕊️ Guthi Role You Like', 'guthiRoles', 'Cook, Helper...'],
             ['🗣️ Languages You Speak', 'languages', 'Nepal Bhasa, Nepali...']
           ].map(([label, field, placeholder], i) => (
-            <motion.div className="form-group border rounded-lg p-4" key={field} custom={i} variants={fadeIn}>
+            <motion.div className="form-group" key={field} custom={i} variants={fadeIn}>
               <label className="label font-semibold block mb-1">{label}</label>
-              {field === 'gender' ? (
-                <select name="gender" className="input" onChange={handleChange} required>
-                  <option value="">Select...</option>
-                  <option value="female">Ma’am</option>
-                  <option value="male">Sir</option>
-                </select>
-              ) : field === 'phone' ? (
-                <PhoneInput
-                  defaultCountry="np"
-                  value={form.phone}
-                  onChange={(phone) => setForm((p) => ({ ...p, phone }))}
-                  inputClassName="input"
-                  placeholder={placeholder}
-                />
-              ) : field === 'dob' ? (
-                <input className="input" type="date" name="dob" onChange={handleChange} />
-              ) : (
-                <input
-                  className="input"
-                  name={field}
-                  placeholder={placeholder}
-                  onChange={handleChange}
-                  required={field !== 'location'}
-                />
-              )}
-              {field === 'thar' && form.thar && suggestedThar.length > 0 && (
-                <ul className="absolute z-10 bg-white text-black border w-full rounded shadow">
-                  {suggestedThar.map((s, idx) => (
-                    <li
-                      key={idx}
-                      className="px-3 py-2 hover:bg-purple-100 cursor-pointer"
-                      onClick={() => setForm((prev) => ({ ...prev, thar: s }))}
-                    >
-                      {s}
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <div className="border rounded-lg p-2">
+                {field === 'gender' ? (
+                  <select name="gender" className="input" onChange={handleChange} required>
+                    <option value="">Select...</option>
+                    <option value="female">Ma’am</option>
+                    <option value="male">Sir</option>
+                  </select>
+                ) : field === 'phone' ? (
+                  <PhoneInput
+                    defaultCountry="np"
+                    value={form.phone}
+                    onChange={(phone) => setForm((p) => ({ ...p, phone }))}
+                    inputClassName="input"
+                    placeholder={placeholder}
+                  />
+                ) : field === 'dob' ? (
+                  <input className="input" type="date" name="dob" onChange={handleChange} />
+                ) : (
+                  <input
+                    className="input"
+                    name={field}
+                    placeholder={placeholder}
+                    onChange={handleChange}
+                    required={field !== 'location'}
+                  />
+                )}
+                {field === 'thar' && form.thar && suggestedThar.length > 0 && (
+                  <ul className="absolute z-10 bg-white text-black border w-full rounded shadow">
+                    {suggestedThar.map((s, idx) => (
+                      <li
+                        key={idx}
+                        className="px-3 py-2 hover:bg-purple-100 cursor-pointer"
+                        onClick={() => setForm((prev) => ({ ...prev, thar: s }))}
+                      >
+                        {s}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </motion.div>
           ))}
 
-          <motion.div className="form-group md:col-span-2 border rounded-lg p-4" custom={10} variants={fadeIn}>
+          <motion.div className="form-group md:col-span-2" custom={10} variants={fadeIn}>
             <label className="label font-semibold block mb-1">📜 Your Story</label>
-            <textarea className="input" name="bio" placeholder="Tell us a little about yourself..." onChange={handleChange} />
+            <div className="border rounded-lg p-2">
+              <textarea className="input" name="bio" placeholder="Tell us a little about yourself..." onChange={handleChange} />
+            </div>
           </motion.div>
 
-          <motion.div className="form-group md:col-span-2 border rounded-lg p-4" custom={11} variants={fadeIn}>
+          <motion.div className="form-group md:col-span-2" custom={11} variants={fadeIn}>
             <label className="label font-semibold block mb-1">❤️ Why You’re Proud to Be Newar</label>
-            <textarea className="input" name="whyProud" placeholder="Your roots, culture, or heart..." onChange={handleChange} />
+            <div className="border rounded-lg p-2">
+              <textarea className="input" name="whyProud" placeholder="Your roots, culture, or heart..." onChange={handleChange} />
+            </div>
           </motion.div>
 
-          <motion.div className="form-group md:col-span-2 border rounded-lg p-4" custom={12} variants={fadeIn}>
+          <motion.div className="form-group md:col-span-2" custom={12} variants={fadeIn}>
             <label className="label font-semibold block mb-1">🖼️ Your Photo</label>
-            <input type="file" name="photoURL" accept="image/*" className="text-black" onChange={handleChange} />
-            {form.photoURL && <img src={form.photoURL} alt="Preview" className="w-24 h-24 rounded-full mt-2" />}
+            <div className="border rounded-lg p-2">
+              <input type="file" name="photoURL" accept="image/*" className="text-black" onChange={handleChange} />
+              {form.photoURL && <img src={form.photoURL} alt="Preview" className="w-24 h-24 rounded-full mt-2" />}
+            </div>
           </motion.div>
         </div>
 
