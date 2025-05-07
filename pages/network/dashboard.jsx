@@ -7,7 +7,7 @@ import { db } from "../../lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 
 export default function Dashboard() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
@@ -27,7 +27,14 @@ export default function Dashboard() {
       <Navbar />
       <main className="min-h-screen bg-white p-6">
         <h1 className="text-3xl font-bold mb-4">🌿 Your Dashboard</h1>
-        {user && userData ? (
+
+        {loading ? (
+          <p className="text-gray-500">⏳ Loading your dashboard...</p>
+        ) : !user ? (
+          <p className="text-red-600">🔒 Please sign in to view your dashboard.</p>
+        ) : !userData ? (
+          <p className="text-gray-500">📡 Fetching your profile...</p>
+        ) : (
           <div className="p-4 border rounded shadow-sm bg-gray-50">
             <h2 className="text-xl font-semibold">{userData.name || user.displayName || "Newar Seeker"}</h2>
             <p className="text-sm text-gray-700">{user.email}</p>
@@ -39,8 +46,6 @@ export default function Dashboard() {
               <li>Temple Cleanup Drive</li>
             </ul>
           </div>
-        ) : (
-          <p className="text-red-600">Please sign in to view your dashboard.</p>
         )}
       </main>
       <Footer />
