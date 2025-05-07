@@ -64,71 +64,101 @@ export default function WelcomeForm() {
     <div className="min-h-screen bg-white text-black flex items-center justify-center p-6">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-2xl space-y-4 bg-white p-6 rounded-xl shadow-xl border border-gray-200"
+        className="w-full max-w-3xl bg-white p-8 rounded-xl shadow-xl border border-gray-200 space-y-6"
       >
-        <h1 className="text-3xl font-bold text-purple-600 mb-2 text-center">
+        <h1 className="text-3xl font-bold text-purple-600 text-center">
           🔆 Begin Your Presence in the Guthi Circle
         </h1>
 
-        <input className="input" name="name" placeholder="Your full name (e.g. Anisha)" onChange={handleChange} required />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="form-group">
+            <label className="label">Full Name</label>
+            <input className="input" name="name" placeholder="e.g. Anisha" onChange={handleChange} required />
+          </div>
 
-        <div className="relative">
-          <input
-            className="input"
-            name="thar"
-            placeholder="Your Thar / Surname (e.g. Pradhan)"
-            onChange={handleChange}
-            required
-          />
-          {form.thar && suggestedThar.length > 0 && (
-            <ul className="absolute z-10 bg-white text-black rounded w-full border">
-              {suggestedThar.map((s, idx) => (
-                <li
-                  key={idx}
-                  className="px-4 py-2 hover:bg-purple-100 cursor-pointer"
-                  onClick={() => setForm((prev) => ({ ...prev, thar: s }))}
-                >
-                  {s}
-                </li>
-              ))}
-            </ul>
-          )}
+          <div className="form-group">
+            <label className="label">Thar (Surname)</label>
+            <div className="relative">
+              <input
+                className="input"
+                name="thar"
+                placeholder="e.g. Pradhan"
+                onChange={handleChange}
+                required
+              />
+              {form.thar && suggestedThar.length > 0 && (
+                <ul className="absolute z-10 bg-white text-black border w-full rounded shadow">
+                  {suggestedThar.map((s, idx) => (
+                    <li
+                      key={idx}
+                      className="px-3 py-2 hover:bg-purple-100 cursor-pointer"
+                      onClick={() => setForm((prev) => ({ ...prev, thar: s }))}
+                    >
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="label">Phone</label>
+            <PhoneInput
+              defaultCountry="np"
+              value={form.phone}
+              onChange={(phone) => setForm((p) => ({ ...p, phone }))}
+              inputClassName="input"
+              placeholder="e.g. +977-9800000000"
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="label">Date of Birth</label>
+            <input className="input" type="date" name="dob" onChange={handleChange} />
+          </div>
+
+          <div className="form-group">
+            <label className="label">Location</label>
+            <input className="input" name="location" placeholder="e.g. Kathmandu" onChange={handleChange} />
+          </div>
+
+          <div className="form-group">
+            <label className="label">Title / Role</label>
+            <input className="input" name="role" placeholder="e.g. Artist, Developer" onChange={handleChange} />
+          </div>
+
+          <div className="form-group">
+            <label className="label">Skills</label>
+            <input className="input" name="skills" placeholder="e.g. Singing, Teaching" onChange={handleChange} />
+          </div>
+
+          <div className="form-group">
+            <label className="label">Guthi Roles</label>
+            <input className="input" name="guthiRoles" placeholder="e.g. Sponsor, Organizer" onChange={handleChange} />
+          </div>
+
+          <div className="form-group">
+            <label className="label">Languages</label>
+            <input className="input" name="languages" placeholder="e.g. Nepal Bhasa, English" onChange={handleChange} />
+          </div>
+
+          <div className="form-group md:col-span-2">
+            <label className="label">Your Bio / Intro</label>
+            <textarea className="input" name="bio" placeholder="Tell us about yourself..." onChange={handleChange} />
+          </div>
+
+          <div className="form-group md:col-span-2">
+            <label className="label">Why are you proud to be Newar?</label>
+            <textarea className="input" name="whyProud" placeholder="Your cultural story..." onChange={handleChange} />
+          </div>
+
+          <div className="form-group md:col-span-2">
+            <label className="label">Upload Profile Picture</label>
+            <input type="file" name="photoURL" accept="image/*" className="text-black" onChange={handleChange} />
+            {form.photoURL && <img src={form.photoURL} alt="Preview" className="w-24 h-24 rounded-full mt-2" />}
+          </div>
         </div>
-
-        <PhoneInput
-          defaultCountry="np"
-          value={form.phone}
-          onChange={(phone) => setForm((p) => ({ ...p, phone }))}
-          inputClassName="input"
-          placeholder="Mobile number"
-        />
-
-        <input className="input" type="date" name="dob" onChange={handleChange} placeholder="Date of Birth" />
-
-        <div className="flex flex-col md:flex-row gap-4">
-          <input className="input flex-1" name="location" placeholder="City or village (e.g. Kathmandu)" onChange={handleChange} />
-          <input className="input flex-1" name="role" placeholder="Your profession or title (e.g. Artist)" onChange={handleChange} />
-        </div>
-
-        <div className="flex flex-col md:grid md:grid-cols-3 gap-4">
-          <input className="input" name="skills" placeholder="Your talents (e.g. Singing, Organizing)" onChange={handleChange} />
-          <input className="input" name="guthiRoles" placeholder="Desired Guthi roles (e.g. Sponsor)" onChange={handleChange} />
-          <input className="input" name="languages" placeholder="Languages you speak (e.g. Nepal Bhasa)" onChange={handleChange} />
-        </div>
-
-        <div className="flex flex-col md:flex-row gap-4">
-          <textarea className="input flex-1" name="bio" placeholder="Write a short intro about yourself..." onChange={handleChange} />
-          <textarea
-            className="input flex-1"
-            name="whyProud"
-            placeholder="Why are you proud to be Newar?"
-            onChange={handleChange}
-          />
-        </div>
-
-        <label className="text-sm">Upload Profile Picture</label>
-        <input type="file" name="photoURL" accept="image/*" className="text-black" onChange={handleChange} />
-        {form.photoURL && <img src={form.photoURL} alt="Preview" className="w-24 h-24 rounded-full mt-2" />}
 
         <button
           type="submit"
@@ -141,7 +171,7 @@ export default function WelcomeForm() {
   );
 }
 
-// Tailwind .input style in globals.css:
-// .input {
-//   @apply w-full p-2 bg-white text-black border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-gray-400;
-// }
+// Tailwind global styles
+// .input { @apply w-full p-2 bg-white text-black border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-gray-400; }
+// .label { @apply block text-sm font-medium text-gray-700 mb-1; }
+// .form-group { @apply flex flex-col; }
