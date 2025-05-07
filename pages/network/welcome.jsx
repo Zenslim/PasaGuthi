@@ -73,12 +73,12 @@ export default function WelcomeForm() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="form-group">
-            <label className="label">What name shall we greet you by?</label>
+            <label className="label font-semibold">🙏 What name shall we greet you by?</label>
             <input className="input" name="name" placeholder="Your full name" onChange={handleChange} required />
           </div>
 
           <div className="form-group">
-            <label className="label">Which Thar do you carry in your breath?</label>
+            <label className="label font-semibold">🌬️ Which Thar do you carry in your breath?</label>
             <div className="relative">
               <input
                 className="input"
@@ -104,7 +104,7 @@ export default function WelcomeForm() {
           </div>
 
           <div className="form-group">
-            <label className="label">Shall we address you as Ma’am or Sir?</label>
+            <label className="label font-semibold">🧑‍⚖️ Shall we address you as Ma’am or Sir?</label>
             <select name="gender" className="input" onChange={handleChange} required>
               <option value="">Select...</option>
               <option value="female">Ma’am</option>
@@ -113,7 +113,7 @@ export default function WelcomeForm() {
           </div>
 
           <div className="form-group">
-            <label className="label">Phone</label>
+            <label className="label font-semibold">📞 Your contact number</label>
             <PhoneInput
               defaultCountry="np"
               value={form.phone}
@@ -124,47 +124,47 @@ export default function WelcomeForm() {
           </div>
 
           <div className="form-group">
-            <label className="label">When did you arrive in this world?</label>
+            <label className="label font-semibold">🎂 When did you arrive in this world?</label>
             <input className="input" type="date" name="dob" onChange={handleChange} />
           </div>
 
           <div className="form-group">
-            <label className="label">Where do your feet rest now?</label>
-            <input className="input" name="location" placeholder="Current place you live" onChange={handleChange} />
+            <label className="label font-semibold">🏡 Where do your feet rest now?</label>
+            <input className="input" name="location" placeholder="Your current place" onChange={handleChange} />
           </div>
 
           <div className="form-group">
-            <label className="label">Your present walk / title</label>
+            <label className="label font-semibold">💼 Your present walk / title</label>
             <input className="input" name="role" placeholder="Profession or contribution" onChange={handleChange} />
           </div>
 
           <div className="form-group">
-            <label className="label">Do you carry a gift, skill, or vow?</label>
-            <input className="input" name="skills" placeholder="Talents or offerings" onChange={handleChange} />
+            <label className="label font-semibold">🎁 Do you carry a gift, skill, or vow?</label>
+            <input className="input" name="skills" placeholder="Your talents or offerings" onChange={handleChange} />
           </div>
 
           <div className="form-group">
-            <label className="label">What Guthi role resonates with you?</label>
+            <label className="label font-semibold">🕊️ What Guthi role resonates with you?</label>
             <input className="input" name="guthiRoles" placeholder="Sponsor, Organizer, Cook..." onChange={handleChange} />
           </div>
 
           <div className="form-group">
-            <label className="label">Tongues you speak</label>
-            <input className="input" name="languages" placeholder="Nepal Bhasa, English..." onChange={handleChange} />
+            <label className="label font-semibold">🗣️ Tongues you speak</label>
+            <input className="input" name="languages" placeholder="Languages spoken" onChange={handleChange} />
           </div>
 
           <div className="form-group md:col-span-2">
-            <label className="label">Whisper your story to us</label>
+            <label className="label font-semibold">📜 Whisper your story to us</label>
             <textarea className="input" name="bio" placeholder="A short introduction..." onChange={handleChange} />
           </div>
 
           <div className="form-group md:col-span-2">
-            <label className="label">What makes you proud to be Newar?</label>
+            <label className="label font-semibold">❤️ What makes you proud to be Newar?</label>
             <textarea className="input" name="whyProud" placeholder="Cultural pride, roots, rituals..." onChange={handleChange} />
           </div>
 
           <div className="form-group md:col-span-2">
-            <label className="label">A picture to remember you by</label>
+            <label className="label font-semibold">🖼️ A picture to remember you by</label>
             <input type="file" name="photoURL" accept="image/*" className="text-black" onChange={handleChange} />
             {form.photoURL && <img src={form.photoURL} alt="Preview" className="w-24 h-24 rounded-full mt-2" />}
           </div>
