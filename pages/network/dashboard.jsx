@@ -90,12 +90,31 @@ export default function Dashboard() {
           step > 0 ? (
             <div className="max-w-xl w-full bg-white rounded-xl shadow-lg p-8 space-y-4 text-left">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">{onboardingSteps[step - 1].prompt}</h2>
-              <input
-                type="text"
-                value={profile[onboardingSteps[step - 1].field]}
-                onChange={(e) => handleChange(onboardingSteps[step - 1].field, e.target.value)}
-                className="border p-2 rounded w-full text-black"
-              />
+              {onboardingSteps[step - 1].field === "gender" ? (
+  <select
+    value={profile.gender}
+    onChange={(e) => handleChange("gender", e.target.value)}
+    className="border p-2 rounded w-full text-black"
+  >
+    <option value="">Select</option>
+    <option value="Ma'am">Ma&apos;am</option>
+    <option value="Sir">Sir</option>
+  </select>
+) : onboardingSteps[step - 1].field === "thar" ? (
+  <input
+    list="thars"
+    value={profile.thar}
+    onChange={(e) => handleChange("thar", e.target.value)}
+    className="border p-2 rounded w-full text-black"
+  />
+) : (
+  <input
+    type="text"
+    value={profile[onboardingSteps[step - 1].field]}
+    onChange={(e) => handleChange(onboardingSteps[step - 1].field, e.target.value)}
+    className="border p-2 rounded w-full text-black"
+  />
+)}
               <button
                 className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
                 onClick={step < onboardingSteps.length ? handleNext : completeOnboarding}
@@ -149,3 +168,16 @@ export default function Dashboard() {
     </>
   );
 }
+
+<datalist id="thars">
+  <option value="Shilpakar" />
+  <option value="Pradhan" />
+  <option value="Tuladhar" />
+  <option value="Bajracharya" />
+  <option value="Shrestha" />
+  <option value="Joshi" />
+  <option value="Maharjan" />
+  <option value="Dangol" />
+  <option value="Sthapit" />
+  <option value="Awale" />
+</datalist>
