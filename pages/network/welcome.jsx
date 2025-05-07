@@ -68,10 +68,10 @@ export default function WelcomeForm() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black flex items-center justify-center p-6">
+    <div className="min-h-screen bg-white text-black p-4">
       <motion.form
         onSubmit={handleSubmit}
-        className="w-full max-w-3xl bg-white p-8 rounded-xl shadow-xl border border-gray-200 space-y-6"
+        className="w-full max-w-full p-4 space-y-6"
         initial="hidden"
         animate="visible"
         variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
