@@ -140,6 +140,8 @@ export default function Dashboard() {
               <h2 className="text-2xl font-semibold text-rose-700">
                 {userData.firstName || user.displayName || "Newar Seeker"}
               </h2>
+              <p className="text-sm text-purple-700">{userData.thar ? `Thar: ${userData.thar}` : ""}</p>
+              <p className="text-sm text-indigo-700">{userData.role ? `Role: ${userData.role}` : ""}</p>
               <p className="text-gray-700">{user.email}</p>
               <p className="mt-2 text-green-800 font-medium">Karma Points: {userData.karma || 0}</p>
               <p className="text-purple-800">Reflections Submitted: {userData.reflections?.length || 0}</p>
