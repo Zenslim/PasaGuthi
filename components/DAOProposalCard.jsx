@@ -1,0 +1,1 @@
+export default function DAOProposalCard() { return <div>Proposal</div>; }

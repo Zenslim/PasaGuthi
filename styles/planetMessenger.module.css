@@ -1,0 +1,48 @@
+@keyframes fadeZoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translate(var(--fromX), var(--fromY));
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.1) translate(0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translate(0, 0);
+  }
+}
+
+@keyframes fadeZoomOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) translate(0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3) translate(var(--toX), var(--toY));
+  }
+}
+
+@keyframes slowSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.planetEnter {
+  animation: fadeZoomIn 2.5s ease-in-out forwards;
+  z-index: 10;
+}
+
+.planetExit {
+  animation: fadeZoomOut 1.5s ease-in-out forwards;
+  z-index: 10;
+}
+
+.spin-slow {
+  animation: slowSpin 60s linear infinite;
+}

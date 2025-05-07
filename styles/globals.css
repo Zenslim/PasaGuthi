@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Star Glow and Mood Effects */
+@keyframes pulse-red {
+  0%, 100% { background-position: center; opacity: 0.8; }
+  50% { background-position: bottom; opacity: 1; }
+}
+
+@keyframes mist-float {
+  0%, 100% { background-position: top; opacity: 0.9; }
+  50% { background-position: bottom; opacity: 0.95; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.9; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+
+@keyframes sparkle {
+  0%, 100% { background-position: center; }
+  50% { background-position: left; }
+}
+
+/* Mood-based Backgrounds */
+.mood-angry {
+  background: radial-gradient(#ff6b6b, #3b0a0a);
+  animation: pulse-red 8s infinite ease-in-out;
+}
+
+.mood-sad {
+  background: radial-gradient(#5f9ea0, #1a1a40);
+  animation: mist-float 10s infinite ease-in-out;
+}
+
+.mood-neutral {
+  background: radial-gradient(#444, #111);
+}
+
+.mood-happy {
+  background: radial-gradient(#ffe066, #ffd700);
+  animation: glow-pulse 8s infinite ease-in-out;
+}
+
+.mood-joy {
+  background: radial-gradient(#b28dff, #2c0050);
+  animation: sparkle 10s infinite ease-in-out;
+}
+
+/* General Fade-In Animation */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-in-out forwards;
+}

@@ -1,0 +1,31 @@
+{
+  "name": "pasaguthi-org",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "firebase": "^11.6.0",
+    "next": "latest",
+    "next-pwa": "^5.6.0",
+    "notion-client": "^4.13.2",
+    "prismjs": "^1.29.0",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-notion-x": "^7.3.0",
+    "react-icons": "^4.11.0",
+    "framer-motion": "^11.0.1",
+    "dayjs": "^1.11.10",
+     "axios": "^1.6.8",
+    "chart.js": "^4.4.1",
+    "three": "^0.160.0",
+    "date-fns": "^3.6.0",
+    "react-textarea-autosize": "^8.3.4",
+    "react-chartjs-2": "^5.2.0",
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8.4.21",
+    "autoprefixer": "^10.4.13"
+  }
+}

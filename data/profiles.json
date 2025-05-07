@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Sajana Shrestha",
+    "title": "Architect",
+    "skills": ["Design", "Heritage Mapping"],
+    "region": "Kathmandu"
+  },
+  {
+    "name": "Dipak Maharjan",
+    "title": "Woodcarver",
+    "skills": ["CNC", "Iconography"],
+    "region": "Bhaktapur"
+  },
+  {
+    "name": "Tara Tuladhar",
+    "title": "Diaspora Organizer",
+    "skills": ["Fundraising", "Event Planning"],
+    "region": "NYC"
+  }
+]

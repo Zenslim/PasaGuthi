@@ -1,0 +1,1 @@
+export default function PromptModal() { return <div>Prompt</div>; }
