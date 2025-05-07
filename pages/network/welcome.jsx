@@ -71,7 +71,7 @@ export default function WelcomeForm() {
     <div className="min-h-screen bg-white text-black p-4">
       <motion.form
         onSubmit={handleSubmit}
-        className="w-full max-w-full p-4 space-y-6"
+        className="w-full max-w-full space-y-6"
         initial="hidden"
         animate="visible"
         variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
@@ -93,8 +93,8 @@ export default function WelcomeForm() {
             ['🕊️ Guthi Role You Like', 'guthiRoles', 'Cook, Helper...'],
             ['🗣️ Languages You Speak', 'languages', 'Nepal Bhasa, Nepali...']
           ].map(([label, field, placeholder], i) => (
-            <motion.div className="form-group" key={field} custom={i} variants={fadeIn}>
-              <label className="label font-semibold">{label}</label>
+            <motion.div className="form-group border rounded-lg p-4" key={field} custom={i} variants={fadeIn}>
+              <label className="label font-semibold block mb-1">{label}</label>
               {field === 'gender' ? (
                 <select name="gender" className="input" onChange={handleChange} required>
                   <option value="">Select...</option>
@@ -136,18 +136,18 @@ export default function WelcomeForm() {
             </motion.div>
           ))}
 
-          <motion.div className="form-group md:col-span-2" custom={10} variants={fadeIn}>
-            <label className="label font-semibold">📜 Your Story</label>
+          <motion.div className="form-group md:col-span-2 border rounded-lg p-4" custom={10} variants={fadeIn}>
+            <label className="label font-semibold block mb-1">📜 Your Story</label>
             <textarea className="input" name="bio" placeholder="Tell us a little about yourself..." onChange={handleChange} />
           </motion.div>
 
-          <motion.div className="form-group md:col-span-2" custom={11} variants={fadeIn}>
-            <label className="label font-semibold">❤️ Why You’re Proud to Be Newar</label>
+          <motion.div className="form-group md:col-span-2 border rounded-lg p-4" custom={11} variants={fadeIn}>
+            <label className="label font-semibold block mb-1">❤️ Why You’re Proud to Be Newar</label>
             <textarea className="input" name="whyProud" placeholder="Your roots, culture, or heart..." onChange={handleChange} />
           </motion.div>
 
-          <motion.div className="form-group md:col-span-2" custom={12} variants={fadeIn}>
-            <label className="label font-semibold">🖼️ Your Photo</label>
+          <motion.div className="form-group md:col-span-2 border rounded-lg p-4" custom={12} variants={fadeIn}>
+            <label className="label font-semibold block mb-1">🖼️ Your Photo</label>
             <input type="file" name="photoURL" accept="image/*" className="text-black" onChange={handleChange} />
             {form.photoURL && <img src={form.photoURL} alt="Preview" className="w-24 h-24 rounded-full mt-2" />}
           </motion.div>
@@ -168,5 +168,5 @@ export default function WelcomeForm() {
 
 // Tailwind global styles
 // .input { @apply w-full p-2 bg-white text-black border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-gray-400; }
-// .label { @apply block text-sm font-medium text-gray-700 mb-1; }
+// .label { @apply block text-sm font-medium text-gray-700; }
 // .form-group { @apply flex flex-col relative; }
