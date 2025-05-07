@@ -13,24 +13,34 @@ export default function WelcomeForm() {
     name: '',
     thar: '',
     phone: '',
+    dob: '',
     location: '',
     role: '',
     skills: '',
     guthiRoles: '',
     languages: '',
     bio: '',
-    whyProud: ''
+    whyProud: '',
+    photoURL: ''
   });
   const [suggestedThar, setSuggestedThar] = useState([]);
 
   const fuse = new Fuse(tharList, { includeScore: true, threshold: 0.4 });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    if (name === 'thar') {
-      const results = fuse.search(value);
-      setSuggestedThar(results.map((r) => r.item));
+    const { name, value, files } = e.target;
+    if (name === 'photoURL' && files && files[0]) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setForm((prev) => ({ ...prev, photoURL: reader.result }));
+      };
+      reader.readAsDataURL(files[0]);
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+      if (name === 'thar') {
+        const results = fuse.search(value);
+        setSuggestedThar(results.map((r) => r.item));
+      }
     }
   };
 
@@ -80,6 +90,7 @@ export default function WelcomeForm() {
           )}
         </div>
         <PhoneInput defaultCountry="np" value={form.phone} onChange={(phone) => setForm((p) => ({ ...p, phone }))} />
+        <input className="input" type="date" name="dob" placeholder="Date of Birth" onChange={handleChange} />
         <input className="input" name="location" placeholder="Location / Region" onChange={handleChange} />
         <input className="input" name="role" placeholder="Title / Role" onChange={handleChange} />
         <input className="input" name="skills" placeholder="Skills (comma separated)" onChange={handleChange} />
@@ -87,6 +98,17 @@ export default function WelcomeForm() {
         <input className="input" name="languages" placeholder="Languages (comma separated)" onChange={handleChange} />
         <textarea className="input" name="bio" placeholder="Your Bio / Intro" onChange={handleChange} />
         <textarea className="input" name="whyProud" placeholder="Why are you proud to be Newar?" onChange={handleChange} />
+
+        <label className="block text-sm font-medium text-gray-700">Upload Profile Picture</label>
+        <input
+          className="input"
+          type="file"
+          accept="image/*"
+          name="photoURL"
+          onChange={handleChange}
+        />
+        {form.photoURL && <img src={form.photoURL} alt="Preview" className="w-24 h-24 rounded-full mt-2" />}
+
         <button type="submit" className="bg-purple-700 text-white px-6 py-2 rounded hover:bg-purple-800">
           ✨ Join the Guthi
         </button>
@@ -95,7 +117,4 @@ export default function WelcomeForm() {
   );
 }
 
-// Add in your globals.css or component-level styles
-// .input {
-//   @apply w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-purple-500;
-// }
+// .input class should be styled in global CSS as previously advised
