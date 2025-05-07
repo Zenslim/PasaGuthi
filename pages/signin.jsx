@@ -1,42 +1,57 @@
-
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth';
-import { auth } from '../lib/firebase';
-import { handlePostSignIn } from '../lib/firestore';
+import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../lib/firebase'; // ensure this exports initialized auth
+import { FcGoogle } from 'react-icons/fc';
+import { FaFacebook } from 'react-icons/fa';
 
-export default function SignInPage() {
+export default function SignIn() {
   const router = useRouter();
 
-  const signIn = async (providerType) => {
-    const provider = providerType === 'google' ? new GoogleAuthProvider() : new FacebookAuthProvider();
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) router.push('/dashboard');
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleGoogleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(auth, provider);
-      const redirect = await handlePostSignIn(result.user);
-      router.push(redirect.redirect);
-    } catch (err) {
-      console.error("Sign-in error:", err);
-      alert("Something went wrong during sign-in.");
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.error('Google sign-in error:', error);
+    }
+  };
+
+  const handleFacebookSignIn = async () => {
+    const provider = new FacebookAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.error('Facebook sign-in error:', error);
     }
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-purple-100 flex flex-col items-center justify-center text-center p-6">
-      <h1 className="text-4xl font-bold text-purple-800 mb-2">🌐 Join the Guthi</h1>
-      <p className="text-gray-600 mb-8 text-lg">One Heritage. Many Homes. Infinite Connections.</p>
-      <div className="space-y-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-purple-100 to-white p-6">
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full text-center space-y-6">
+        <h1 className="text-2xl font-bold text-gray-800">🔐 Sign In to Pasaguthi</h1>
         <button
-          onClick={() => signIn('google')}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full shadow transition"
+          onClick={handleGoogleSignIn}
+          className="w-full flex items-center justify-center space-x-2 border border-gray-300 rounded-md py-2 hover:bg-gray-50"
         >
-          Sign in with Google
+          <FcGoogle className="text-xl" />
+          <span>Sign in with Google</span>
         </button>
         <button
-          onClick={() => signIn('facebook')}
-          className="bg-[#3b5998] hover:bg-[#2d4373] text-white px-6 py-3 rounded-full shadow transition"
+          onClick={handleFacebookSignIn}
+          className="w-full flex items-center justify-center space-x-2 border border-blue-600 text-blue-600 rounded-md py-2 hover:bg-blue-50"
         >
-          Sign in with Facebook
+          <FaFacebook className="text-xl" />
+          <span>Sign in with Facebook</span>
         </button>
       </div>
-    </main>
+    </div>
   );
 }
