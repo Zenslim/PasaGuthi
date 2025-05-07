@@ -2,13 +2,13 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
-  getAuth,
   signInWithPopup,
   GoogleAuthProvider,
   FacebookAuthProvider,
   onAuthStateChanged
 } from 'firebase/auth';
 import { auth } from '../lib/firebase';
+import { handlePostSignIn } from '../lib/handlePostSignIn';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
 
@@ -16,8 +16,11 @@ export default function SignIn() {
   const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) router.push('/dashboard');
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const redirect = await handlePostSignIn(user);
+        router.push(redirect.redirect);
+      }
     });
     return () => unsubscribe();
   }, []);
@@ -25,7 +28,9 @@ export default function SignIn() {
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const redirect = await handlePostSignIn(result.user);
+      router.push(redirect.redirect);
     } catch (error) {
       console.error('Google sign-in error:', error);
       alert("Something went wrong with Google sign-in.");
@@ -35,7 +40,9 @@ export default function SignIn() {
   const handleFacebookSignIn = async () => {
     const provider = new FacebookAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const redirect = await handlePostSignIn(result.user);
+      router.push(redirect.redirect);
     } catch (error) {
       console.error('Facebook sign-in error:', error);
       alert("Something went wrong with Facebook sign-in.");
