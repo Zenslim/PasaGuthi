@@ -94,7 +94,7 @@ export default function Dashboard() {
                 type="text"
                 value={profile[onboardingSteps[step - 1].field]}
                 onChange={(e) => handleChange(onboardingSteps[step - 1].field, e.target.value)}
-                className="border p-2 rounded w-full"
+                className="border p-2 rounded w-full text-black"
               />
               <button
                 className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
