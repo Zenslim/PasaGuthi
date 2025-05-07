@@ -27,7 +27,8 @@ export default function Dashboard() {
       if (snap.exists()) {
         const data = snap.data();
         setUserData(data);
-        if (!data.completedOnboarding) setStep(1);
+        const incomplete = !data.firstName || !data.thar || !data.gender;
+        if (incomplete) setStep(1);
       }
     };
     fetchUserData();
@@ -86,7 +87,7 @@ export default function Dashboard() {
       <Navbar />
       <main className="min-h-screen bg-gradient-to-b from-white via-rose-50 to-pink-100 p-6 text-center">
         {user && userData ? (
-          !userData.completedOnboarding ? (
+          step > 0 ? (
             <div className="max-w-xl mx-auto p-6 bg-white rounded-xl shadow-lg">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">{onboardingSteps[step - 1].prompt}</h2>
               <input
@@ -104,7 +105,7 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="p-6 border rounded-xl shadow-lg bg-white max-w-xl mx-auto">
-              <div className="mb-4 animate-pulse">
+              <div className="mb-4 mt-4 animate-pulse">
                 <img
                   src={user.photoURL || "/icons/guthi-flame.svg"}
                   alt="Guthi Flame"
