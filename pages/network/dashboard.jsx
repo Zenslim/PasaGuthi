@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { db } from "../../lib/firebase";
-import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import UnifiedProfileCard from "../../components/UnifiedProfileCard";
+import SacredProfileCard from "../../components/SacredProfileCard";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -40,7 +40,7 @@ export default function Dashboard() {
       <main className="min-h-screen bg-gradient-to-b from-white via-rose-50 to-pink-100 p-6 text-center">
         <h1 className="text-3xl md:text-4xl font-bold mb-6 text-amber-800">🌿 Your Guthi Presence</h1>
         {user && userData ? (
-          <UnifiedProfileCard profile={{ ...userData, uid: user.uid, photo_url: user.photoURL }} currentUser={user} />
+          <SacredProfileCard profile={{ ...userData, uid: user.uid, photo_url: user.photoURL }} />
         ) : (
           <p className="text-red-600 mt-12">Please sign in to view your dashboard.</p>
         )}
