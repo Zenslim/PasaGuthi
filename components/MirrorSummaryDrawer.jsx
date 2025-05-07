@@ -60,7 +60,7 @@ export default function MirrorSummaryDrawer({ summary, isOpen, onClose }) {
         const useGoogle = await new Promise((resolve) => {
           const choice = window.open("", "SignInChoice", "width=420,height=400");
           if (!choice) return resolve(true);
-          choice.document.write(\`
+          choice.document.write(`
             <style>
               body {
                 margin: 0;
