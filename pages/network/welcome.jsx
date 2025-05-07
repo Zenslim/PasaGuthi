@@ -77,21 +77,21 @@ export default function WelcomeForm() {
         variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
       >
         <motion.h1 className="text-3xl font-bold text-purple-600 text-center" variants={fadeIn}>
-          🔆 Begin Your Presence in the Guthi Circle
+          🔆 Join the Guthi Circle
         </motion.h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {[
-            ['🙏 What name shall we greet you by?', 'name', 'Your full name'],
-            ['🌬️ Which Thar do you carry in your breath?', 'thar', 'Your Thar / Surname'],
-            ['🧑‍⚖️ Shall we address you as Ma’am or Sir?', 'gender', ''],
-            ['📞 Your contact number', 'phone', 'Phone number'],
-            ['🎂 When did you arrive in this world?', 'dob', ''],
-            ['🏡 Where do your feet rest now?', 'location', 'Your current place'],
-            ['💼 Your present walk / title', 'role', 'Profession or contribution'],
-            ['🎁 Do you carry a gift, skill, or vow?', 'skills', 'Your talents or offerings'],
-            ['🕊️ What Guthi role resonates with you?', 'guthiRoles', 'Sponsor, Organizer, Cook...'],
-            ['🗣️ Tongues you speak', 'languages', 'Languages spoken']
+            ['🙏 Your Name', 'name', 'Your full name'],
+            ['🌬️ Your Thar', 'thar', 'Your Thar / Surname'],
+            ['🧑‍⚖️ Ma’am or Sir?', 'gender', ''],
+            ['📞 Phone', 'phone', 'Phone number'],
+            ['🎂 Date of Birth', 'dob', ''],
+            ['🏡 Where You Live', 'location', 'Your village or town'],
+            ['💬 What Do You Do?', 'role', 'Farmer, Student, Tailor...'],
+            ['🎁 Your Skills', 'skills', 'Singing, Teaching...'],
+            ['🕊️ Guthi Role You Like', 'guthiRoles', 'Cook, Helper...'],
+            ['🗣️ Languages You Speak', 'languages', 'Nepal Bhasa, Nepali...']
           ].map(([label, field, placeholder], i) => (
             <motion.div className="form-group" key={field} custom={i} variants={fadeIn}>
               <label className="label font-semibold">{label}</label>
@@ -137,17 +137,17 @@ export default function WelcomeForm() {
           ))}
 
           <motion.div className="form-group md:col-span-2" custom={10} variants={fadeIn}>
-            <label className="label font-semibold">📜 Whisper your story to us</label>
-            <textarea className="input" name="bio" placeholder="A short introduction..." onChange={handleChange} />
+            <label className="label font-semibold">📜 Your Story</label>
+            <textarea className="input" name="bio" placeholder="Tell us a little about yourself..." onChange={handleChange} />
           </motion.div>
 
           <motion.div className="form-group md:col-span-2" custom={11} variants={fadeIn}>
-            <label className="label font-semibold">❤️ What makes you proud to be Newar?</label>
-            <textarea className="input" name="whyProud" placeholder="Cultural pride, roots, rituals..." onChange={handleChange} />
+            <label className="label font-semibold">❤️ Why You’re Proud to Be Newar</label>
+            <textarea className="input" name="whyProud" placeholder="Your roots, culture, or heart..." onChange={handleChange} />
           </motion.div>
 
           <motion.div className="form-group md:col-span-2" custom={12} variants={fadeIn}>
-            <label className="label font-semibold">🖼️ A picture to remember you by</label>
+            <label className="label font-semibold">🖼️ Your Photo</label>
             <input type="file" name="photoURL" accept="image/*" className="text-black" onChange={handleChange} />
             {form.photoURL && <img src={form.photoURL} alt="Preview" className="w-24 h-24 rounded-full mt-2" />}
           </motion.div>
