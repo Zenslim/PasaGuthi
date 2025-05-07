@@ -60,7 +60,6 @@ export default function WelcomeForm() {
       async (pos) => {
         toast.dismiss();
         const { latitude, longitude } = pos.coords;
-        // Fake reverse geocode function for now
         const mockAddress = `Medford Street, Medford, Massachusetts, USA`;
         setForm((prev) => ({ ...prev, address: mockAddress }));
         toast.success('📍 Location detected');
@@ -177,7 +176,7 @@ export default function WelcomeForm() {
                 <button
                   type="button"
                   onClick={handleDetectLocation}
-                  className="mt-2 text-sm text-blue-600 underline"
+                  className="mt-2 text-sm text-blue-600"
                 >
                   📍 Use My Location
                 </button>
