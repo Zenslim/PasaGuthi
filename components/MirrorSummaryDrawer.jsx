@@ -51,7 +51,63 @@ export default function MirrorSummaryDrawer({ summary, isOpen, onClose }) {
             <AnimatePresence mode="wait">
               <motion.button
                 key={ctaIndex}
-                onClick={() => router.push('/signin')}
+                onClick={async () => {
+      const { signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } = await import("firebase/auth");
+      const { auth } = await import("../lib/firebase");
+      const { handlePostSignIn } = await import("../lib/firestore");
+
+      try {
+        const useGoogle = await new Promise((resolve) => {
+          const choice = window.open("", "SignInChoice", "width=420,height=400");
+          if (!choice) return resolve(true);
+          choice.document.write(\`
+            <style>
+              body {
+                margin: 0;
+                font-family: sans-serif;
+                background: #fff;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+              }
+              h1 {
+                font-size: 20px;
+                margin-bottom: 2rem;
+                color: #4B0082;
+              }
+              button {
+                padding: 12px 24px;
+                margin: 8px;
+                font-size: 14px;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                width: 200px;
+              }
+              .google { background-color: #4285F4; color: white; }
+              .facebook { background-color: #3b5998; color: white; }
+            </style>
+            <h1>🌐 One Heritage. Many Homes.<br/>Infinite Connections.</h1>
+            <button class='google' onclick="window.opener.postMessage('google', '*'); window.close()">Join with Google</button>
+            <button class='facebook' onclick="window.opener.postMessage('facebook', '*'); window.close()">Join with Facebook</button>
+          \`);
+          window.addEventListener("message", (e) => {
+            if (e.data === "google") resolve(true);
+            if (e.data === "facebook") resolve(false);
+          }, { once: true });
+        });
+
+        const provider = useGoogle ? new GoogleAuthProvider() : new FacebookAuthProvider();
+        const result = await signInWithPopup(auth, provider);
+        const redirect = await handlePostSignIn(result.user);
+        router.push(redirect.redirect);
+      } catch (error) {
+        console.error("Sign-in failed:", error);
+        alert("Something went wrong during sign-in.");
+      }
+    }}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
