@@ -3,7 +3,8 @@ import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import Fuse from 'fuse.js';
 import tharList from '../../data/tharList.json';
-import { supabase } from '../lib/supabaseClient';
+import { db } from '../../lib/firebase';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import { toast } from 'react-hot-toast';
@@ -71,21 +72,27 @@ export default function WelcomeForm() {
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    const uid = user?.uid || `${form.name}-${form.thar}`;
+    const finalAddress = form.address || `${form.street}, ${form.town}, ${form.region}`;
     try {
-      const uid = getAuth().currentUser?.uid;
-      if (!uid) return;
-
-      await setDoc(doc(db, 'users', uid), {
+      await setDoc(doc(db, 'profiles', uid), {
         ...form,
         uid,
-        createdAt: serverTimestamp(),
+        region: form.region || form.address,
+        role: form.guthiRoles || '',
+        skills: { thar: form.thar },
+        diaspora_node: false,
+        photo_url: form.photoURL,
+        name: form.name,
+        createdAt: serverTimestamp()
       });
       localStorage.setItem('guthiUid', uid);
+      toast.success('🌸 Welcome to the Guthi Circle!');
       router.push('/network/dashboard');
-      toast.success('Welcome to the Guthi Circle!');
     } catch (err) {
-      console.error('Error saving data:', err);
-      toast.error('Submission failed. Please try again.');
+      toast.error('Something went wrong');
+      console.error(err);
     }
   };
 
