@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import Fuse from 'fuse.js';
 import tharList from '../../data/tharList.json';
@@ -7,8 +8,12 @@ import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '../../context/AuthContext';
 
 export default function WelcomeForm() {
+  const { user } = useAuth();
+  const router = useRouter();
+
   const [form, setForm] = useState({
     name: '', thar: '', phone: '', dob: '', address: '',
     street: '', town: '', region: '', gender: '',
@@ -66,30 +71,30 @@ export default function WelcomeForm() {
     );
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  const uid = auth.currentUser?.uid || `${form.name}-${form.thar}`;
-  const finalAddress = form.address || `${form.street}, ${form.town}, ${form.region}`;
-  try {
-    await setDoc(doc(db, 'profiles', uid), {
-      ...form,
-      uid,
-      region: form.region || form.address,
-      role: form.guthiRoles || '',
-      skills: { thar: form.thar },
-      diaspora_node: false,
-      photo_url: form.photoURL,
-      name: form.name,
-      createdAt: serverTimestamp()
-    });
-    localStorage.setItem('guthiUid', uid);
-    toast.success('🌸 Welcome to the Guthi Circle!');
-    router.push('/network/dashboard');
-  } catch (err) {
-    toast.error('Something went wrong');
-    console.error(err);
-  }
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const uid = user?.uid || `${form.name}-${form.thar}`;
+    const finalAddress = form.address || `${form.street}, ${form.town}, ${form.region}`;
+    try {
+      await setDoc(doc(db, 'profiles', uid), {
+        ...form,
+        uid,
+        region: form.region || form.address,
+        role: form.guthiRoles || '',
+        skills: { thar: form.thar },
+        diaspora_node: false,
+        photo_url: form.photoURL,
+        name: form.name,
+        createdAt: serverTimestamp()
+      });
+      localStorage.setItem('guthiUid', uid);
+      toast.success('🌸 Welcome to the Guthi Circle!');
+      router.push('/network/dashboard');
+    } catch (err) {
+      toast.error('Something went wrong');
+      console.error(err);
+    }
+  };
 
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
