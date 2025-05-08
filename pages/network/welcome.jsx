@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Fuse from 'fuse.js';
@@ -12,8 +11,8 @@ import { toast } from 'react-hot-toast';
 export default function WelcomeForm() {
   const [form, setForm] = useState({
     name: '', thar: '', phone: '', dob: '', address: '',
-    street: '', town: '', region: '', role: '', skills: '',
-    guthiRoles: '', languages: '', gender: '', bio: '',
+    street: '', town: '', region: '', gender: '',
+    skills: '', guthiRoles: '', languages: '', bio: '',
     whyProud: '', photoURL: ''
   });
   const [suggestedThar, setSuggestedThar] = useState([]);
@@ -26,19 +25,15 @@ export default function WelcomeForm() {
     const { name, value, files } = e.target;
     if (name === 'photoURL' && files?.[0]) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setForm((prev) => ({ ...prev, photoURL: reader.result }));
-      };
+      reader.onloadend = () => setForm(prev => ({ ...prev, photoURL: reader.result }));
       reader.readAsDataURL(files[0]);
     } else {
-      setForm((prev) => ({ ...prev, [name]: value }));
+      setForm(prev => ({ ...prev, [name]: value }));
       if (name === 'thar') {
         const results = fuse.search(value);
-        setSuggestedThar(results.map((r) => r.item));
+        setSuggestedThar(results.map(r => r.item));
       }
-      if (name === 'address' && value.length >= 3) {
-        setShowLocationButton(true);
-      }
+      if (name === 'address' && value.length >= 3) setShowLocationButton(true);
     }
   };
 
@@ -60,12 +55,12 @@ export default function WelcomeForm() {
         const { latitude, longitude } = pos.coords;
         const address = await reverseGeocode(latitude, longitude);
         toast.dismiss();
-        setForm((prev) => ({ ...prev, address }));
+        setForm(prev => ({ ...prev, address }));
         toast.success('📍 Location detected');
       },
       () => {
         toast.dismiss();
-        toast.error('Location access denied. Please fill in manually.');
+        toast.error('Location access denied');
         setLocationDenied(true);
       }
     );
@@ -85,7 +80,7 @@ export default function WelcomeForm() {
       });
       toast.success('🌸 Welcome to the Guthi Circle!');
     } catch (err) {
-      toast.error('Something went wrong.');
+      toast.error('Something went wrong');
       console.error(err);
     }
   };
@@ -110,8 +105,8 @@ export default function WelcomeForm() {
 
         {[
           ['🙏 Your Name', 'name', 'Your full name'],
-          ['🌬️ Your Thar', 'thar', 'Your Thar / Surname'],
-          ["🧑‍⚖️ Ma'am or Sir?", 'gender', ''],
+          ['🌀 Your Thar', 'thar', 'Your surname'],
+          ['🧑‍⚖️ Ma’am or Sir?', 'gender', ''],
           ['📞 Phone', 'phone', 'Phone number'],
           ['🎂 Date of Birth', 'dob', '']
         ].map(([label, field, placeholder], i) => (
@@ -130,7 +125,6 @@ export default function WelcomeForm() {
                   value={form.phone}
                   onChange={(phone) => setForm((p) => ({ ...p, phone }))}
                   inputClassName="w-full px-4 py-3 border border-gray-300 rounded-md"
-                  placeholder={placeholder}
                 />
               ) : field === 'dob' ? (
                 <input className="w-full px-4 py-3 border border-gray-300 rounded-md" type="date" name="dob" onChange={handleChange} />
@@ -143,7 +137,7 @@ export default function WelcomeForm() {
                     <li
                       key={idx}
                       className="px-3 py-2 hover:bg-purple-100 cursor-pointer"
-                      onClick={() => setForm((prev) => ({ ...prev, thar: s }))}
+                      onClick={() => setForm(prev => ({ ...prev, thar: s }))}
                     >
                       {s}
                     </li>
@@ -156,26 +150,62 @@ export default function WelcomeForm() {
 
         <motion.div className="form-group" variants={fadeIn}>
           <label className="block font-bold mb-1">🏡 Where You Live</label>
-          <div className="w-full">
-            <input
-              className="w-full px-4 py-3 border border-gray-300 rounded-md"
-              name="address"
-              placeholder="Village or Town"
-              value={form.address}
-              onChange={handleChange}
-            />
-            {showLocationButton && !locationDenied && (
-              <button
-                type="button"
-                onClick={handleDetectLocation}
-                className="mt-2 text-sm text-blue-600"
-              >
-                📍 Use My Location
-              </button>
-            )}
-          </div>
+          <input
+            className="w-full px-4 py-3 border border-gray-300 rounded-md"
+            name="address"
+            placeholder="Village or Town"
+            value={form.address}
+            onChange={handleChange}
+          />
+          {showLocationButton && !locationDenied && (
+            <button type="button" onClick={handleDetectLocation} className="mt-2 text-sm text-blue-600">
+              📍 Use My Location
+            </button>
+          )}
         </motion.div>
 
+        {locationDenied && (
+          <>
+            {[
+              ['🏘 Street or Tole', 'street', 'Your neighborhood'],
+              ['🌆 Town / Village', 'town', 'e.g. Bhaktapur'],
+              ['🌍 Province / Country', 'region', 'Bagmati, Nepal']
+            ].map(([label, field, placeholder], i) => (
+              <div key={field} className="form-group">
+                <label className="block font-bold mb-1">{label}</label>
+                <input className="w-full px-4 py-3 border border-gray-300 rounded-md" name={field} onChange={handleChange} placeholder={placeholder} />
+              </div>
+            ))}
+          </>
+        )}
+
+        {[
+          ['🎁 Your Skills', 'skills', 'e.g. Singing, Teaching'],
+          ['🛕 Guthi Roles You Like', 'guthiRoles', 'e.g. Cook, Organizer'],
+          ['🗣️ Languages You Speak', 'languages', 'Nepal Bhasa, Nepali, English'],
+          ['📜 Your Story', 'bio', 'Tell us about yourself...'],
+          ['❤️ Why You’re Proud to Be Newar', 'whyProud', 'Your roots, culture, heart...']
+        ].map(([label, field, placeholder], i) => (
+          <motion.div key={field} className="form-group" custom={10 + i} variants={fadeIn}>
+            <label className="block font-bold mb-1">{label}</label>
+            <textarea className="w-full px-4 py-3 border border-gray-300 rounded-md" name={field} placeholder={placeholder} onChange={handleChange} />
+          </motion.div>
+        ))}
+
+        <motion.div className="form-group" custom={16} variants={fadeIn}>
+          <label className="block font-bold mb-1">🖼️ Your Photo</label>
+          <input type="file" name="photoURL" accept="image/*" className="text-black w-full" onChange={handleChange} />
+          {form.photoURL && <img src={form.photoURL} alt="Preview" className="w-24 h-24 rounded-full mt-2" />}
+        </motion.div>
+
+        <motion.button
+          type="submit"
+          className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg text-lg font-semibold"
+          variants={fadeIn}
+          custom={17}
+        >
+          ✨ Join the Guthi
+        </motion.button>
       </motion.form>
     </div>
   );
