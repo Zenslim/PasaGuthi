@@ -7,74 +7,73 @@ const planetPrompts = [
     name: "Earth",
     image: "/planet/earth.png",
     prompts: [
-      "What makes you feel safe, like home?",
-      "When did you last feel truly yourself uncensored?",
-      "What childhood memory makes you alive?",
-      "What gift are you carrying for your people?"
-    ]
-  },
-  {
-    name: "Mars",
-    image: "/planet/mars.png",
-    prompts: [
-      "What would you do, if you weren’t judged?",
+      "Are you happy or just suppressing pain?",
       "When was the last time you felt truly alive?",
-      "What would you say if you weren’t scared?",
-      "What truth are you afraid to say?"
+      "Are you seeking comfort to forget the pain?",
+      "Do you smile to please others or to express joy?",
     ]
   },
   {
     name: "Moon",
     image: "/planet/moon.png",
     prompts: [
-      "What do you feel but never speak?",
-      "What Guthi memory do you carry in silence?",
       "Who are you when no one sees you?",
-      "What childhood memory makes your heart smile?"
+      "What childhood memory makes you smile?",
+      "What do you feel but afraid to speak?",
+      "If you never feel pain, will you ever feel real joy?",
+    ]
+  },
+  {
+    name: "Mars",
+    image: "/planet/mars.png",
+    prompts: [
+      "Why do you obey people you’ll never meet?",
+      "What happens when you stop saying yes?",
+      "Do you wake up to live or just not die??",
+      "If the algorithm rewards you, is it love or control?",
     ]
   },
   {
     name: "Jupiter",
     image: "/planet/jupiter.png",
     prompts: [
-      "What are you here to grow?",
-      "What kind of future do you imagine for your kids?",
-      "What change do your people need?",
-      "What big dream lives inside you?"
-    ]
-  },
-  {
-    name: "Pluto",
-    image: "/planet/pluto.png",
-    prompts: [
-      "What must you leave behind?",
-      "What pain are you still carrying in silence?",
-      "What truth are you still hiding?",
-      "What fear blocks your return?"
+      "If your job ended tomorrow, what would remain of you?",
+      "If your phone vanished today, who would you still be?",
+      "Are you living, thriving or merely surviving?",
+      "Who wins when you stop asking why?",
     ]
   },
   {
     name: "Saturn",
     image: "/planet/saturn.png",
     prompts: [
-      "What do you want to leave after you’re gone?",
-      "What Guthi truth can’t be forgotten?",
-      "What duty did you inherit?",
-      "What if you never left Guthi?"
+      "Are you loyal or just afraid to disappoint?",
+      "Who wins when you stop questioning and keep working?",
+      "Are your thoughts yours or conditioned?",
+      "Whose dream do you fullfil with your time?",
+    ]
+  },
+  {
+    name: "Pluto",
+    image: "/planet/pluto.png",
+    prompts: [
+      "If everything is “fine,” why do you feel empty?",
+      "What part of you died without you noticing?",
+      "How would you like to be remembered?",
+      "What does it mean to be authentic?",
     ]
   },
   {
     name: "Populated",
     image: "/planet/populated.png",
     prompts: [
-      "What if Guthi remembers you?",
-      "What makes you feel part of the circle?",
-      "What is something you can bring to our Guthi?",
-      "What if Guthi is just you, finally coming home?"
+      "Where else would you like to live? Why?",
+      "What do you love doing that you aren’t doing?",
+      "What's the biggest lie you once believed was true?",
+      "Is it more important to love or be loved?",
     ]
-  }
+  },
 ];
-
 const directions = [
   { fromX: '-200%', fromY: '-200%', toX: '200%', toY: '200%' },
   { fromX: '200%', fromY: '-200%', toX: '-200%', toY: '200%' },
