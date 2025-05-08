@@ -79,11 +79,9 @@ export default function WelcomeForm() {
         presence: 'new'
       });
       toast.success('🌸 Welcome to the Guthi Circle!');
-    } catch (err) {
-      toast.error('Something went wrong');
-      console.error(err);
-    }
-  };
+setTimeout(() => {
+  window.location.href = '/network/dashboard';
+}, 1200);
 
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
