@@ -46,9 +46,9 @@ export default function WelcomeForm() {
     try {
       const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
       const data = await res.json();
-      return data.display_name || \`\${lat}, \${lon}\`;
+      return data.display_name || `${lat}, ${lon}`;
     } catch {
-      return \`\${lat}, \${lon}\`;
+      return `${lat}, ${lon}`;
     }
   };
 
@@ -73,8 +73,8 @@ export default function WelcomeForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const uid = \`\${form.name}-\${form.thar}\`;
-    const finalAddress = form.address || \`\${form.street}, \${form.town}, \${form.region}\`;
+    const uid = `${form.name}-${form.thar}`;
+    const finalAddress = form.address || `${form.street}, ${form.town}, ${form.region}`;
     try {
       await setDoc(doc(db, 'users', uid), {
         ...form,
@@ -179,9 +179,9 @@ export default function WelcomeForm() {
         {locationDenied && (
           <motion.div className="space-y-4" variants={fadeIn}>
             {[
-              ['🏘 Street or Tole', 'street', 'e.g. Itachhen Tole'],
-              ['🌆 Town / Village', 'town', 'e.g. Bhaktapur'],
-              ['🌍 Province / Country', 'region', 'e.g. Bagmati, Nepal']
+              ['🏘 Street or Tole', 'street', 'Itachhen Tole'],
+              ['🌆 Town / Village', 'town', 'Bhaktapur'],
+              ['🌍 Province / Country', 'region', 'Bagmati, Nepal']
             ].map(([label, field, placeholder], i) => (
               <div key={field} className="form-group">
                 <label className="label">{label}</label>
