@@ -1,8 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../lib/firebase";
-import { useAuth } from "../../context/AuthContext";
+import { supabase } from '../lib/supabaseClient';
 import UnifiedProfileCard from "../../components/UnifiedProfileCard";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
