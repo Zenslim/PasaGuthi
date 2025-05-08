@@ -51,7 +51,7 @@ export default function MirrorSummaryDrawer({ summary, isOpen, onClose }) {
             <AnimatePresence mode="wait">
               <motion.button
                 key={ctaIndex}
-                onClick={() => router.push('/signin')}
+                onClick={() => router.push('/welcome')}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
