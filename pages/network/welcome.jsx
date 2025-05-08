@@ -72,27 +72,21 @@ export default function WelcomeForm() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const uid = user?.uid || `${form.name}-${form.thar}`;
-    const finalAddress = form.address || `${form.street}, ${form.town}, ${form.region}`;
     try {
-      await setDoc(doc(db, 'profiles', uid), {
+      const uid = getAuth().currentUser?.uid;
+      if (!uid) return;
+
+      await setDoc(doc(db, 'users', uid), {
         ...form,
         uid,
-        region: form.region || form.address,
-        role: form.guthiRoles || '',
-        skills: { thar: form.thar },
-        diaspora_node: false,
-        photo_url: form.photoURL,
-        name: form.name,
-        createdAt: serverTimestamp()
+        createdAt: serverTimestamp(),
       });
       localStorage.setItem('guthiUid', uid);
-      toast.success('🌸 Welcome to the Guthi Circle!');
       router.push('/network/dashboard');
+      toast.success('Welcome to the Guthi Circle!');
     } catch (err) {
-      toast.error('Something went wrong');
-      console.error(err);
+      console.error('Error saving data:', err);
+      toast.error('Submission failed. Please try again.');
     }
   };
 
