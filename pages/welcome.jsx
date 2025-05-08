@@ -29,7 +29,8 @@ export default function Welcome() {
     if (!navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(async (pos) => {
       const { latitude, longitude } = pos.coords;
-      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);      const data = await res.json();
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+      const data = await res.json();
       if (data?.address?.county || data?.address?.state) {
         setForm(prev => ({ ...prev, region: data.address.county || data.address.state }));
       }
@@ -59,14 +60,12 @@ export default function Welcome() {
       createdAt: new Date().toISOString()
     }]);
 
-   if (!error) {
-  localStorage.setItem('guthiKey', guthiKey);
-  setSubmitted(true);
-  setTimeout(() => {
-    const checkKey = localStorage.getItem('guthiKey');
-    if (checkKey) router.push('/whisper');
-  }, 5000);
-}
+    if (!error) {
+      localStorage.setItem('guthiKey', guthiKey);
+      setSubmitted(true);
+    } else {
+      console.error(error);
+    }
   };
 
   if (submitted) {
@@ -76,7 +75,13 @@ export default function Welcome() {
           <h1 className="text-2xl font-bold">🌿 Welcome, {form.name}</h1>
           <p className="mt-4">Your Guthi Key:</p>
           <code className="text-lg bg-gray-100 p-2 rounded mt-2 inline-block">{guthiKey}</code>
-          <p className="mt-4">The forest will now remember you. Returning to whisper...</p>
+          <p className="mt-4 text-green-700">✅ The forest now remembers you.</p>
+          <button
+            onClick={() => router.push('/dashboard')}
+            className="mt-6 bg-black text-white px-4 py-2 rounded"
+          >
+            🌀 Enter Your Guthi Dashboard
+          </button>
         </div>
       </div>
     );
