@@ -1,14 +1,6 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import {
-  signInWithPopup,
-  GoogleAuthProvider,
-  FacebookAuthProvider,
-  onAuthStateChanged
-} from 'firebase/auth';
-import { auth } from '../lib/firebase';
-import { handlePostSignIn } from '../lib/handlePostSignIn';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
 
