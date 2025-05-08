@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../lib/firebase";
+import { supabase } from '../lib/supabaseClient';
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
