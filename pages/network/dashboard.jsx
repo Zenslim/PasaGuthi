@@ -1,88 +1,84 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { useAuth } from "../../context/AuthContext";
-import { db } from "../../lib/firebase";
-import { doc, getDoc, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { db } from '../../lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { motion } from 'framer-motion';
 
-export default function Dashboard() {
-  const { user } = useAuth();
+export default function GuthiDashboard() {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [profile, setProfile] = useState(null);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    const checkOrCreateProfile = async () => {
-      if (!user) return;
-
-      const userRef = doc(db, "users", user.uid);
-      const userSnap = await getDoc(userRef);
-
-      if (!userSnap.exists()) {
-        await setDoc(userRef, {
-          uid: user.uid,
-          email: user.email,
-          provider: user.providerData[0].providerId,
-          createdAt: serverTimestamp(),
-          presence: "new",
-          karma: 0,
-          completedOnboarding: false,
-        });
-        setProfile(null);
-      } else {
-        const data = userSnap.data();
-
-        // Minimal onboarding in place
-        if (!data.completedOnboarding) {
-          const firstName = prompt("What name shall we greet you by?");
-          const thar = prompt("Which Thar do you carry in your breath?");
-          const gender = prompt("Shall we address you as Ma’am or Sir?");
-          const location = prompt("Where do your feet rest now?");
-          const role = prompt("Do you carry a gift, skill, or vow?");
-
-          await updateDoc(userRef, {
-            firstName,
-            thar,
-            gender,
-            location,
-            role,
-            completedOnboarding: true,
-            karma: 5
-          });
-
-          setProfile({ ...data, firstName, thar, gender, location, role, completedOnboarding: true });
-        } else {
-          setProfile(data);
-        }
+    const fetchUserData = async () => {
+      const storedUid = localStorage.getItem('guthiUid');
+      if (!storedUid) {
+        router.push('/network/welcome');
+        return;
       }
-
-      setLoading(false);
+      const docSnap = await getDoc(doc(db, 'users', storedUid));
+      if (docSnap.exists()) setUserData(docSnap.data());
+      else router.push('/network/welcome');
     };
+    fetchUserData();
+  }, []);
 
-    checkOrCreateProfile();
-  }, [user]);
+  if (!userData) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <p className="text-gray-600 text-xl">🌸 Loading your Guthi Circle...</p>
+      </div>
+    );
+  }
 
-  if (loading || !user) return <div className="p-10 text-center">🌙 Loading your Guthi Circle...</div>;
+  const Card = ({ label, value, icon }) => (
+    <div className="bg-white shadow-lg rounded-xl p-5 w-full md:w-[48%] lg:w-[30%] text-center">
+      <p className="text-3xl mb-2">{icon}</p>
+      <p className="text-sm text-gray-500">{label}</p>
+      <p className="font-bold text-xl text-purple-700">{value}</p>
+    </div>
+  );
 
   return (
-    <>
-      <Navbar />
-      <main className="min-h-screen bg-white p-6">
-        <h1 className="text-3xl font-bold mb-4">🌿 Your Dashboard</h1>
-        <div className="p-4 border rounded shadow-sm bg-gray-50">
-          <h2 className="text-xl font-semibold">{profile?.firstName || user.displayName}</h2>
-          <p className="text-sm text-gray-700">{user.email}</p>
-          <p className="mt-2 text-green-700">Karma Points: {profile?.karma ?? 0}</p>
-          <p className="text-sm">Reflections Submitted: 5</p>
-          <p className="mt-2 font-semibold">Active Projects:</p>
-          <ul className="list-disc list-inside text-sm text-purple-800">
-            <li>Healing Circle</li>
-            <li>Temple Cleanup Drive</li>
-          </ul>
+    <div className="min-h-screen bg-gradient-to-br from-white via-purple-50 to-purple-100 px-6 py-10">
+      <motion.div
+        className="max-w-4xl mx-auto text-center"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <h1 className="text-4xl font-bold text-purple-700 mb-2">🌿 Welcome, {userData.name.split(' ')[0]}</h1>
+        <p className="text-lg text-gray-600">Your presence has been recorded in the sacred Guthi Circle.</p>
+      </motion.div>
+
+      <div className="mt-10 flex flex-wrap gap-4 justify-center">
+        <Card label="Thar" value={userData.thar} icon="🌀" />
+        <Card label="Guthi Role" value={userData.guthiRoles || '—'} icon="🛕" />
+        <Card label="Phone" value={userData.phone} icon="📞" />
+        <Card label="Town" value={userData.town || userData.address || '—'} icon="🌆" />
+        <Card label="Languages" value={userData.languages || '—'} icon="🗣️" />
+        <Card label="Skills" value={userData.skills || '—'} icon="🎁" />
+        <Card label="Presence" value={userData.presence || 'new'} icon="🧘" />
+        <Card label="Karma Points" value="0" icon="🌟" />
+      </div>
+
+      {userData.photoURL && (
+        <div className="mt-10 flex justify-center">
+          <img
+            src={userData.photoURL}
+            alt="User Photo"
+            className="w-40 h-40 rounded-full shadow-md border-4 border-purple-500"
+          />
         </div>
-      </main>
-      <Footer />
-    </>
+      )}
+
+      <div className="mt-10 text-center">
+        <button
+          onClick={() => router.push('/')}
+          className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-full text-lg"
+        >
+          🏠 Go to Main Portal
+        </button>
+      </div>
+    </div>
   );
 }
