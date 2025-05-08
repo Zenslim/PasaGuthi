@@ -66,27 +66,30 @@ export default function WelcomeForm() {
     );
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const uid = `${form.name}-${form.thar}`;
-    const finalAddress = form.address || `${form.street}, ${form.town}, ${form.region}`;
-    try {
-      await setDoc(doc(db, 'users', uid), {
-        ...form,
-        address: finalAddress,
-        createdAt: serverTimestamp(),
-        karma: 0,
-        presence: 'new'
-      });
-      toast.success('🌸 Welcome to the Guthi Circle!');
-      setTimeout(() => {
-        window.location.href = '/network/dashboard';
-      }, 1200);
-    } catch (err) {
-      toast.error('Something went wrong');
-      console.error(err);
-    }
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  const uid = auth.currentUser?.uid || `${form.name}-${form.thar}`;
+  const finalAddress = form.address || `${form.street}, ${form.town}, ${form.region}`;
+  try {
+    await setDoc(doc(db, 'profiles', uid), {
+      ...form,
+      uid,
+      region: form.region || form.address,
+      role: form.guthiRoles || '',
+      skills: { thar: form.thar },
+      diaspora_node: false,
+      photo_url: form.photoURL,
+      name: form.name,
+      createdAt: serverTimestamp()
+    });
+    localStorage.setItem('guthiUid', uid);
+    toast.success('🌸 Welcome to the Guthi Circle!');
+    router.push('/network/dashboard');
+  } catch (err) {
+    toast.error('Something went wrong');
+    console.error(err);
+  }
+};
 
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
