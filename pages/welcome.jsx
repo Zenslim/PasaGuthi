@@ -59,13 +59,14 @@ export default function Welcome() {
       createdAt: new Date().toISOString()
     }]);
 
-    if (!error) {
-      localStorage.setItem('guthiKey', guthiKey);
-      setSubmitted(true);
-      setTimeout(() => router.push('/whisper'), 3000);
-    } else {
-      console.error(error);
-    }
+   if (!error) {
+  localStorage.setItem('guthiKey', guthiKey);
+  setSubmitted(true);
+  setTimeout(() => {
+    const checkKey = localStorage.getItem('guthiKey');
+    if (checkKey) router.push('/whisper');
+  }, 5000);
+}
   };
 
   if (submitted) {
