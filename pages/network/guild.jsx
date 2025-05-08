@@ -1,23 +1,25 @@
 import { useEffect, useState } from 'react';
-import UnifiedProfileCard from '../../components/UnifiedProfileCard';
-import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
+import { supabase } from '../../lib/supabaseClient';
 
-export default function GuildPage() {
-  const [data, setData] = useState([]);
+export default function Guild() {
+  const [profiles, setProfiles] = useState([]);
+
   useEffect(() => {
-    setData([{ name: 'Sample Member', skill: 'Wisdom' }]);
+    const loadProfiles = async () => {
+      const { data, error } = await supabase.from('profiles').select('*');
+      if (!error) setProfiles(data);
+    };
+    loadProfiles();
   }, []);
 
   return (
-    <div>
-      <Navbar />
-      <main className="p-4">
-        {data.map((d, i) => (
-          <UnifiedProfileCard key={i} user={d} />
+    <div className="p-6">
+      <h1 className="text-2xl font-bold">🛡️ Guthi Members</h1>
+      <ul>
+        {profiles.map(profile => (
+          <li key={profile.id}>{profile.full_name}</li>
         ))}
-      </main>
-      <Footer />
+      </ul>
     </div>
   );
 }
