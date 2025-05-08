@@ -1,9 +1,9 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { supabase } from '../../lib/supabaseClient';
+import { supabase } from '../lib/supabaseClient';
+import tharList from '../data/tharList.json';
 import { nanoid } from 'nanoid';
-import tharList from '../../data/tharList.json';
 import Fuse from 'fuse.js';
 
 export default function Welcome() {
