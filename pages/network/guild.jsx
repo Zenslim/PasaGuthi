@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { supabase } from '../lib/supabaseClient';
+import { supabase } from '../../lib/supabaseClient';
 import UnifiedProfileCard from "../../components/UnifiedProfileCard";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
