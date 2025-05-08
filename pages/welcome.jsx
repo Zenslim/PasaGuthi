@@ -29,7 +29,7 @@ export default function Welcome() {
     if (!navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(async (pos) => {
       const { latitude, longitude } = pos.coords;
-      const res = await fetch(\`https://nominatim.openstreetmap.org/reverse?lat=\${latitude}&lon=\${longitude}&format=json\`);
+      const res = await fetch(\`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json\`);
       const data = await res.json();
       if (data?.address?.county || data?.address?.state) {
         setForm(prev => ({ ...prev, region: data.address.county || data.address.state }));
