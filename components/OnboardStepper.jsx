@@ -3,9 +3,7 @@
 import { useState, useEffect } from 'react';
 import { signInWithGoogle, signInWithEmail } from '../lib/auth';
 import { checkTharMatch } from '../utils/checkTharMatch';
-import { auth, db } from '../lib/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import { supabase } from '../lib/supabaseClient';
 import tharList from '../data/tharList.json';
 import { FcGoogle } from 'react-icons/fc';
 import { useRouter } from 'next/router';
