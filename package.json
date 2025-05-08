@@ -7,8 +7,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "firebase": "^11.6.0",
-    "fuse.js": "^6.6.2",
+      "fuse.js": "^6.6.2",
     "libphonenumber-js": "^1.10.20",
     "@headlessui/react": "^1.7.7",
     "next": "latest",
