@@ -116,10 +116,10 @@ export default function WelcomeForm() {
           ['🎂 Date of Birth', 'dob', '']
         ].map(([label, field, placeholder], i) => (
           <motion.div key={field} className="form-group" custom={i} variants={fadeIn}>
-            <label className="label">{label}</label>
+            <label className="block font-bold mb-1">{label}</label>
             <div className="w-full">
               {field === 'gender' ? (
-                <select name="gender" className="input w-full" onChange={handleChange} required>
+                <select name="gender" className="w-full px-4 py-3 border border-gray-300 rounded-md" onChange={handleChange} required>
                   <option value="">Select...</option>
                   <option value="female">Ma’am</option>
                   <option value="male">Sir</option>
@@ -129,13 +129,13 @@ export default function WelcomeForm() {
                   defaultCountry="np"
                   value={form.phone}
                   onChange={(phone) => setForm((p) => ({ ...p, phone }))}
-                  inputClassName="input w-full"
+                  inputClassName="w-full px-4 py-3 border border-gray-300 rounded-md"
                   placeholder={placeholder}
                 />
               ) : field === 'dob' ? (
-                <input className="input w-full" type="date" name="dob" onChange={handleChange} />
+                <input className="w-full px-4 py-3 border border-gray-300 rounded-md" type="date" name="dob" onChange={handleChange} />
               ) : (
-                <input className="input w-full" name={field} placeholder={placeholder} onChange={handleChange} required />
+                <input className="w-full px-4 py-3 border border-gray-300 rounded-md" name={field} placeholder={placeholder} onChange={handleChange} required />
               )}
               {field === 'thar' && form.thar && suggestedThar.length > 0 && (
                 <ul className="absolute z-10 bg-white text-black border w-full rounded shadow">
@@ -155,10 +155,10 @@ export default function WelcomeForm() {
         ))}
 
         <motion.div className="form-group" variants={fadeIn}>
-          <label className="label">🏡 Where You Live</label>
+          <label className="block font-bold mb-1">🏡 Where You Live</label>
           <div className="w-full">
             <input
-              className="input w-full"
+              className="w-full px-4 py-3 border border-gray-300 rounded-md"
               name="address"
               placeholder="Village or Town"
               value={form.address}
@@ -176,45 +176,6 @@ export default function WelcomeForm() {
           </div>
         </motion.div>
 
-        {locationDenied && (
-          <motion.div className="space-y-4" variants={fadeIn}>
-            {[
-              ['🏘 Street or Tole', 'street', 'Itachhen Tole'],
-              ['🌆 Town / Village', 'town', 'Bhaktapur'],
-              ['🌍 Province / Country', 'region', 'Bagmati, Nepal']
-            ].map(([label, field, placeholder], i) => (
-              <div key={field} className="form-group">
-                <label className="label">{label}</label>
-                <input name={field} className="input w-full" onChange={handleChange} placeholder={placeholder} />
-              </div>
-            ))}
-          </motion.div>
-        )}
-
-        {[
-          ['📜 Your Story', 'bio', 'Tell us a little about yourself...'],
-          ['❤️ Why You’re Proud to Be Newar', 'whyProud', 'Your roots, culture, or heart...']
-        ].map(([label, field, placeholder], i) => (
-          <motion.div key={field} className="form-group" custom={10 + i} variants={fadeIn}>
-            <label className="label">{label}</label>
-            <textarea className="input w-full" name={field} placeholder={placeholder} onChange={handleChange} />
-          </motion.div>
-        ))}
-
-        <motion.div className="form-group" custom={12} variants={fadeIn}>
-          <label className="label">🖼️ Your Photo</label>
-          <input type="file" name="photoURL" accept="image/*" className="text-black w-full" onChange={handleChange} />
-          {form.photoURL && <img src={form.photoURL} alt="Preview" className="w-24 h-24 rounded-full mt-2" />}
-        </motion.div>
-
-        <motion.button
-          type="submit"
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg text-lg font-semibold"
-          variants={fadeIn}
-          custom={13}
-        >
-          ✨ Join the Guthi
-        </motion.button>
       </motion.form>
     </div>
   );
