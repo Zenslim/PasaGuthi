@@ -47,27 +47,28 @@ export default function Welcome() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const sporeId = localStorage.getItem('sporeId');
-    const guthiKey = `${form.name.toLowerCase()}-${form.thar.toLowerCase()}-${form.region.toLowerCase()}-${form.skills.toLowerCase()}-${nanoid(5)}`;
-    setGuthiKey(guthiKey);
+  e.preventDefault();
+  const sporeId = localStorage.getItem('sporeId');
+  const guthiKey = `${form.name.toLowerCase()}-${form.thar.toLowerCase()}-${form.region.toLowerCase()}-${form.skills.toLowerCase()}-${nanoid(5)}`;
+  setGuthiKey(guthiKey);
 
-    const { error } = await supabase.from('users').insert([{
-      sporeId,
-      guthiKey,
-      ...form,
-      karma: 0,
-      createdAt: new Date().toISOString()
-    }]);
+  const { error, data } = await supabase.from('users').insert([{
+    sporeId,
+    guthiKey,
+    ...form,
+    karma: 0,
+    createdAt: new Date().toISOString()
+  }]);
 
-    if (!error) {
-      localStorage.setItem('guthiKey', guthiKey);
-      setSubmitted(true);
-    } else {
-      console.error(error);
-    }
-  };
+  console.log('📤 Insert result:', { error, data }); // Log result
 
+  if (!error) {
+    localStorage.setItem('guthiKey', guthiKey);
+    setSubmitted(true);
+  } else {
+    console.error('❌ Supabase insert failed:', error); // Log failure
+  }
+};
   if (submitted) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white p-6 text-center text-black">
