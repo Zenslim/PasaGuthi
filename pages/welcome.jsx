@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
-import tharList from '../data/tharList.json';
 import { nanoid } from 'nanoid';
+import tharList from '../data/tharList.json';
 import Fuse from 'fuse.js';
 
 export default function Welcome() {
@@ -24,6 +24,18 @@ export default function Welcome() {
     const id = localStorage.getItem('sporeId') || crypto.randomUUID();
     localStorage.setItem('sporeId', id);
   }, []);
+
+  const detectRegion = () => {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const { latitude, longitude } = pos.coords;
+      const res = await fetch(\`https://nominatim.openstreetmap.org/reverse?lat=\${latitude}&lon=\${longitude}&format=json\`);
+      const data = await res.json();
+      if (data?.address?.county || data?.address?.state) {
+        setForm(prev => ({ ...prev, region: data.address.county || data.address.state }));
+      }
+    });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,7 +63,7 @@ export default function Welcome() {
     if (!error) {
       localStorage.setItem('guthiKey', guthiKey);
       setSubmitted(true);
-      setTimeout(() => router.push('/whisper'), 2500);
+      setTimeout(() => router.push('/whisper'), 3000);
     } else {
       console.error(error);
     }
@@ -59,7 +71,7 @@ export default function Welcome() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white p-6 text-center">
+      <div className="min-h-screen flex items-center justify-center bg-white p-6 text-center text-black">
         <div>
           <h1 className="text-2xl font-bold">🌿 Welcome, {form.name}</h1>
           <p className="mt-4">Your Guthi Key:</p>
@@ -71,26 +83,51 @@ export default function Welcome() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white p-6">
-      <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
-        <h1 className="text-xl font-bold">🌱 Offer Your Guthi Identity</h1>
-        <input name="name" required onChange={handleChange} placeholder="First Name" className="border p-2 w-full" />
-        <input name="thar" required onChange={handleChange} placeholder="Thar (Surname)" className="border p-2 w-full" />
-        {suggestedThar.length > 0 && (
-          <ul className="bg-gray-50 border p-2 text-sm">
-            {suggestedThar.map((t, i) => (
-              <li key={i} onClick={() => setForm(prev => ({ ...prev, thar: t }))}>{t}</li>
-            ))}
-          </ul>
-        )}
-        <select name="gender" required onChange={handleChange} className="border p-2 w-full">
-          <option value="">Select Gender</option>
-          <option value="Male">Sir</option>
-          <option value="Female">Ma'am</option>
-        </select>
-        <input name="region" required onChange={handleChange} placeholder="Your District/Region" className="border p-2 w-full" />
-        <input name="skills" required onChange={handleChange} placeholder="Your Skills (e.g. farming, tech)" className="border p-2 w-full" />
-        <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded w-full">🌿 Generate Guthi Key</button>
+    <div className="min-h-screen flex items-center justify-center bg-white text-black p-6">
+      <form onSubmit={handleSubmit} className="w-full max-w-md space-y-5">
+        <h1 className="text-xl font-bold text-center">🌿 The forest welcomes you.</h1>
+        <p className="text-center text-sm text-gray-600">Enter your sacred Guthi identity to be remembered.</p>
+
+        <div>
+          <label className="block font-semibold">🪶 Your Name — What should we call your soul when it returns?</label>
+          <input name="name" required onChange={handleChange} placeholder="First Name" className="border bg-white text-black p-2 w-full rounded" />
+        </div>
+
+        <div>
+          <label className="block font-semibold">🌳 Your Thar — From which branch of the sacred tree do you descend?</label>
+          <input name="thar" required onChange={handleChange} placeholder="Thar (Surname)" className="border bg-white text-black p-2 w-full rounded" />
+          {suggestedThar.length > 0 && (
+            <ul className="bg-gray-50 border p-2 text-sm rounded mt-1">
+              {suggestedThar.map((t, i) => (
+                <li key={i} className="cursor-pointer hover:bg-gray-100" onClick={() => setForm(prev => ({ ...prev, thar: t }))}>{t}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div>
+          <label className="block font-semibold">🌸 How shall we address you?</label>
+          <select name="gender" required onChange={handleChange} className="border bg-white text-black p-2 w-full rounded">
+            <option value="">Select</option>
+            <option value="Male">Sir</option>
+            <option value="Female">Ma'am</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block font-semibold">🗺️ Your Region — Which soil has touched your feet?</label>
+          <div className="flex space-x-2">
+            <input name="region" required onChange={handleChange} placeholder="Your District/Region" value={form.region} className="border bg-white text-black p-2 w-full rounded" />
+            <button type="button" onClick={detectRegion} className="text-sm text-blue-600 underline">📍 Detect</button>
+          </div>
+        </div>
+
+        <div>
+          <label className="block font-semibold">👐 Your Skills — What gift do you carry in your hands?</label>
+          <input name="skills" required onChange={handleChange} placeholder="Your Skills (e.g. farming, design)" className="border bg-white text-black p-2 w-full rounded" />
+        </div>
+
+        <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full font-bold">🌿 Generate My Guthi Key</button>
       </form>
     </div>
   );
