@@ -37,7 +37,7 @@ export default function Welcome() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const sporeId = localStorage.getItem('sporeId');
-    const guthiKey = \`\${form.name.toLowerCase()}-\${form.thar.toLowerCase()}-\${form.region.toLowerCase()}-\${form.skills.toLowerCase()}-\${nanoid(5)}\`;
+    const guthiKey = `${form.name.toLowerCase()}-${form.thar.toLowerCase()}-${form.region.toLowerCase()}-${form.skills.toLowerCase()}-${nanoid(5)}`;
     setGuthiKey(guthiKey);
 
     const { error } = await supabase.from('users').insert([{
