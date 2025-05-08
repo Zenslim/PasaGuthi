@@ -1,6 +1,8 @@
 
-import { useEffect, useState } from "react";
-import { supabase } from '../../lib/supabaseClient';
+
+
+ 
+import { useAuth } 
 import UnifiedProfileCard from "../../components/UnifiedProfileCard";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";

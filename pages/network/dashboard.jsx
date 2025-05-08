@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { motion } from 'framer-motion';
+
+
+
+
+
 export default function GuthiDashboard() {
   const router = useRouter();
   const [userData, setUserData] = useState(null);

@@ -1,8 +1,16 @@
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { FcGoogle } from 'react-icons/fc';
-import { FaFacebook } from 'react-icons/fa';
+
+
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  onAuthStateChanged
+} 
+
+
+
+
 
 export default function SignIn() {
   const router = useRouter();
