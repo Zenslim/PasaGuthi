@@ -1,167 +1,398 @@
 [
-  "Aalubanjar",
-  "Amate",
-  "Amatya",
-  "Awale",
-  "Baidhya",
-  "Baidya",
-  "Bajiko",
-  "Bajimaya",
-  "Bajracharya",
-  "Balami",
-  "Baniya",
-  "Banjar",
-  "Banmala",
-  "Banmali",
-  "Basi",
-  "Basukala",
-  "Bataju",
-  "Bekoju",
-  "Bhakhuche",
-  "Bhari",
-  "Bhattu",
-  "Bhuju",
-  "Bhutta",
-  "Bijukche",
-  "Bohaju",
-  "Buddhacharya",
-  "Byanjankar",
-  "Byanju",
-  "Chaguthi",
-  "Chamkhalak",
-  "Chhusyabaga",
-  "Chikanbanjar",
-  "Chitrakar",
-  "Chuke",
-  "Chyamey",
-  "Dali",
-  "Dangol",
-  "Darshandhari",
-  "Daware",
-  "Deola",
-  "Desemaru",
-  "Deshar",
-  "Dhanbhanjara",
-  "Dhaubhanjar",
-  "Dhaugoda",
-  "Dhewaju",
-  "Dhoju",
-  "Dhoubanjar",
-  "Dhuju",
-  "Duwal",
-  "Gaiju",
-  "Gambanjar",
-  "Goja",
-  "Gopali",
-  "Gosai",
-  "Gothe",
-  "Gubhaju",
-  "Gwachha",
-  "Halahulu",
-  "Heaju",
-  "Jojiju",
-  "Joshi",
-  "Kansakar",
-  "Kapali",
-  "Karanjit",
-  "Karmacharya",
-  "Kasaju",
-  "Kashichhawa",
-  "Kasichhwa",
-  "Kaspal",
-  "Kasula",
-  "Kayastha",
-  "Khadgi",
-  "Khayemali",
-  "Khichaju",
-  "Khyaju",
-  "Kishiju",
-  "Koju",
-  "Kulu",
-  "Kusle",
-  "Kutu",
-  "Kyatha",
-  "Lachhimasyu",
-  "Lakhaju",
-  "Lakhe",
-  "Lakhemaru",
-  "Lawaju",
-  "Leba",
-  "Lubanjar",
-  "Machamasi",
-  "Maharjan",
-  "Majju",
-  "Maka",
-  "Makai",
-  "Malakar",
-  "Malepati",
-  "Mali",
-  "Malla",
-  "Manandhar",
-  "Maskey",
-  "Mulmi",
-  "Munikar",
-  "Musyag",
-  "Musyaju",
-  "Nagarkoti",
-  "Nakarmi",
-  "Napit",
-  "Nepali",
-  "Nhemapuki",
-  "Pahi",
-  "Pakwan",
-  "Palancho",
-  "Palubanjar",
-  "Pasachhe",
-  "Pentago",
-  "Phaju",
-  "Phasikawa",
-  "Piya",
-  "Pode",
-  "Potamah",
-  "Pote",
-  "Pradhan",
-  "Pradhanang",
-  "Prajapati",
-  "Pujari",
-  "Pulu",
-  "Pusaju",
-  "Putwar",
-  "Pyatha",
-  "Raghubansi",
-  "Rajbhak",
-  "Rajbhandari",
-  "Rajopadhyaya",
-  "Rajthala",
-  "Ranjit",
-  "Ranjitkar",
-  "Rojak",
-  "Sainju",
-  "Sayami",
-  "Shahi",
-  "Shakya",
-  "Shilaakar",
-  "Shrestha",
-  "Sibanjar",
-  "Sijapati",
-  "Silakar",
-  "Silalik",
-  "Sindurakar",
-  "Singh",
-  "Sipakar",
-  "Sthapit",
-  "Sulpe",
-  "Sulu",
-  "Suwal",
-  "Takhachhe",
-  "Takra",
-  "Tamrakar",
-  "Tandukar",
-  "Thusaju",
-  "Tuitui",
-  "Tuladhar",
-  "Tuwayna",
-  "Twanabasu",
-  "Udas",
-  "Ulak"
+  {
+    "Thar": "Acharaya",
+    "Meaning": "The disciplined teacher of sacred thought."
+  },
+  {
+    "Thar": "Aalubanjar",
+    "Meaning": "The stewards of the earth’s hidden harvest, trading humble roots."
+  },
+  {
+    "Thar": "Amatya",
+    "Meaning": "The wise counselor guiding the realm with intellect and integrity."
+  },
+  {
+    "Thar": "Awa",
+    "Meaning": "The nurturer, whose presence is a balm to all."
+  },
+  {
+    "Thar": "Awal",
+    "Meaning": "The pioneer, leading paths into new beginnings."
+  },
+  {
+    "Thar": "Awale",
+    "Meaning": "The subtle guide, unseen but essential."
+  },
+  {
+    "Thar": "Baidya",
+    "Meaning": "The healer who mends not just bodies but the spirit of the community."
+  },
+  {
+    "Thar": "Bajracharya",
+    "Meaning": "The thunderbolt priest of tantric awakening."
+  },
+  {
+    "Thar": "Bammala",
+    "Meaning": "The florist, offering blooms in devotion and love."
+  },
+  {
+    "Thar": "Baniya",
+    "Meaning": "The seller of scents, flowers, and sacred moments."
+  },
+  {
+    "Thar": "Bhaju",
+    "Meaning": "The respected elder, a living repository of tradition."
+  },
+  {
+    "Thar": "Bharati",
+    "Meaning": "The orator of divine speech and cultural flame."
+  },
+  {
+    "Thar": "Bista",
+    "Meaning": "The community steward  of order and structure."
+  },
+  {
+    "Thar": "Brahmachari",
+    "Meaning": "The celibate scholar bound to discipline."
+  },
+  {
+    "Thar": "Byanjankar",
+    "Meaning": "The chef, blending flavors into culinary art."
+  },
+  {
+    "Thar": "Chamkhalak",
+    "Meaning": "The purifier, upholding cleanliness as a virtue."
+  },
+  {
+    "Thar": "Chhantyal",
+    "Meaning": "The mountain miner rooted in ore and wind."
+  },
+  {
+    "Thar": "Chitrakar",
+    "Meaning": "The visionary who paints gods into form."
+  },
+  {
+    "Thar": "Chyame",
+    "Meaning": "The cleaner, ensuring purity in sacred spaces."
+  },
+  {
+    "Thar": "Dali",
+    "Meaning": "The basket weaver, intertwining utility with artistry."
+  },
+  {
+    "Thar": "Dangol",
+    "Meaning": "The unshaken foundation of heritage and valor."
+  },
+  {
+    "Thar": "Darshandhari",
+    "Meaning": "The visionary, perceiving truths beyond the visible."
+  },
+  {
+    "Thar": "Deola",
+    "Meaning": "The temple keeper, maintaining sanctuaries of faith."
+  },
+  {
+    "Thar": "Desar",
+    "Meaning": "The messenger, bridging distances with news and hope."
+  },
+  {
+    "Thar": "Dhakhwa",
+    "Meaning": "The drummer whose beats echo memory and myth."
+  },
+  {
+    "Thar": "Gopali",
+    "Meaning": "The pastoral guardian, friend of the fertile earth."
+  },
+  {
+    "Thar": "Gubhaju",
+    "Meaning": "The initiator of secrets, tantric and true."
+  },
+  {
+    "Thar": "Guruvacharya",
+    "Meaning": "The spiritual teacher illuminating paths with divine light."
+  },
+  {
+    "Thar": "Hada",
+    "Meaning": "The valiant warrior upholding honor and bravery."
+  },
+  {
+    "Thar": "Halahulu",
+    "Meaning": "The sweeper, whose humble service maintains sanctity."
+  },
+  {
+    "Thar": "Halwai",
+    "Meaning": "The confectioner, sweetening life's celebrations."
+  },
+  {
+    "Thar": "Joshi",
+    "Meaning": "The astrologer who reads time’s eternal wheel."
+  },
+  {
+    "Thar": "Kakchapati",
+    "Meaning": "The guardian of thresholds, marking transitions with grace."
+  },
+  {
+    "Thar": "Kami",
+    "Meaning": "The blacksmith, forging tools that build civilizations."
+  },
+  {
+    "Thar": "Kansakar",
+    "Meaning": "The shaper of bell metal into daily divinity."
+  },
+  {
+    "Thar": "Kapali",
+    "Meaning": "The tantric keeper of twilight thresholds."
+  },
+  {
+    "Thar": "Karmacharya",
+    "Meaning": "The ritual guardian of karmic flow and fire."
+  },
+  {
+    "Thar": "Kayastha",
+    "Meaning": "The meticulous record-keeper, preserving the annals of time."
+  },
+  {
+    "Thar": "Khadgi",
+    "Meaning": "The ceremonial wielder of sacrificial blade."
+  },
+  {
+    "Thar": "Kulu",
+    "Meaning": "The drummer, setting rhythms that move hearts."
+  },
+  {
+    "Thar": "Kumhal",
+    "Meaning": "The potter, shaping earth into vessels of purpose."
+  },
+  {
+    "Thar": "Kunwar",
+    "Meaning": "The princely step between courage and crown."
+  },
+  {
+    "Thar": "Kusle",
+    "Meaning": "The tailor, stitching fabrics into expressions of identity."
+  },
+  {
+    "Thar": "Lakhey",
+    "Meaning": "The fearsome dancer who wards off evil spirits."
+  },
+  {
+    "Thar": "Madhikarmi",
+    "Meaning": "The sweet creator, bringing joy through confections."
+  },
+  {
+    "Thar": "Maharjan",
+    "Meaning": "The cultivator of land and protector of roots."
+  },
+  {
+    "Thar": "Malakar",
+    "Meaning": "The garland maker, threading flowers into symbols of reverence."
+  },
+  {
+    "Thar": "Mali",
+    "Meaning": "The gardener, cultivating beauty and sustenance."
+  },
+  {
+    "Thar": "Malla",
+    "Meaning": "The ancient kingmaker, elegant and enduring."
+  },
+  {
+    "Thar": "Manandhar",
+    "Meaning": "The keeper of measurement and precision in trade."
+  },
+  {
+    "Thar": "Maskey",
+    "Meaning": "The artisan whose creations reflect the soul of the Newar people."
+  },
+  {
+    "Thar": "Mathema",
+    "Meaning": "The scholar whose knowledge bridges the past and future."
+  },
+  {
+    "Thar": "Mishra",
+    "Meaning": "The bridge of castes and conductor of hybrid rituals."
+  },
+  {
+    "Thar": "Mulmi",
+    "Meaning": "The foundation stone, steadfast and enduring."
+  },
+  {
+    "Thar": "Nagarkoti",
+    "Meaning": "The city's shield, ever watchful and resilient."
+  },
+  {
+    "Thar": "Nakarmi",
+    "Meaning": "The blacksmith of ancestral strength and protection."
+  },
+  {
+    "Thar": "Napit",
+    "Meaning": "The blade bearer of transition and ritual."
+  },
+  {
+    "Thar": "Nepali",
+    "Meaning": "The patriot, representing the nation's spirit."
+  },
+  {
+    "Thar": "Nyachhyon",
+    "Meaning": "The harmonious one, weaving melodies into daily life."
+  },
+  {
+    "Thar": "Pahari",
+    "Meaning": "The hill dweller, harmonizing with nature's rhythms."
+  },
+  {
+    "Thar": "Patrabansh",
+    "Meaning": "The bearer of sacred texts and ancient wisdom."
+  },
+  {
+    "Thar": "Pradhan",
+    "Meaning": "The pillar of civic duty and ancient leadership."
+  },
+  {
+    "Thar": "Prajapati",
+    "Meaning": "The creator lineage, shaper of earthen gods."
+  },
+  {
+    "Thar": "Pujari",
+    "Meaning": "The priest, conducting rituals that connect mortals to the divine."
+  },
+  {
+    "Thar": "Pulu",
+    "Meaning": "The torchbearer, lighting the way in solemn ceremonies."
+  },
+  {
+    "Thar": "Putwar",
+    "Meaning": "The bearer, carrying burdens with silent strength."
+  },
+  {
+    "Thar": "Rai",
+    "Meaning": "The hill sentinel with warrior’s pride."
+  },
+  {
+    "Thar": "Rajbahak",
+    "Meaning": "The royal carrier, entrusted with regal messages."
+  },
+  {
+    "Thar": "Rajbhandari",
+    "Meaning": "The treasurer of royal secrets and guardian of prosperity."
+  },
+  {
+    "Thar": "Rajkarnikar",
+    "Meaning": "The royal accountant, balancing ledgers with precision."
+  },
+  {
+    "Thar": "Rajopadhyaya",
+    "Meaning": "The royal priest who bridges cosmos and court."
+  },
+  {
+    "Thar": "Rajvanshi",
+    "Meaning": "The noble lineage that carries the legacy of kings."
+  },
+  {
+    "Thar": "Rana",
+    "Meaning": "The frontier defender, forged by conflict and code."
+  },
+  {
+    "Thar": "Ranjitkar",
+    "Meaning": "The dyer of colors, weaver of festival hues."
+  },
+  {
+    "Thar": "Sayami",
+    "Meaning": "The torchbearer of night and secret procession."
+  },
+  {
+    "Thar": "Silalik",
+    "Meaning": "The riyak confectioners of the Newa community"
+  },
+  {
+    "Thar": "Sindurakar",
+    "Meaning": "The fantastic weavers of dresses for deities"
+  },
+  {
+    "Thar": "Shahi",
+    "Meaning": "The noble breath of warrior royalty."
+  },
+  {
+    "Thar": "Shakya",
+    "Meaning": "The serene path-holder of the Buddha's lineage."
+  },
+  {
+    "Thar": "Shilpakar",
+    "Meaning": "The sculptor whose hands retell myth in stone."
+  },
+  {
+    "Thar": "Shrestha",
+    "Meaning": "The honored steward of wisdom and commerce."
+  },
+  {
+    "Thar": "Sikarmi",
+    "Meaning": "The builder, crafting homes that cradle generations."
+  },
+  {
+    "Thar": "Sikhrakar",
+    "Meaning": "The pinnacle dweller, reaching heights of aspiration."
+  },
+  {
+    "Thar": "Silakar",
+    "Meaning": "The stone carver, etching stories into eternity."
+  },
+  {
+    "Thar": "Sindurakar",
+    "Meaning": "The one who adorns, adding color to sacred rituals."
+  },
+  {
+    "Thar": "Singh",
+    "Meaning": "The lion soul , fierce, noble, resolute."
+  },
+  {
+    "Thar": "Singhal",
+    "Meaning": "The golden bell of dignity and trade."
+  },
+  {
+    "Thar": "Sivacharya",
+    "Meaning": "The devotee of Shiva, channeling cosmic energies."
+  },
+  {
+    "Thar": "Sthapit",
+    "Meaning": "The established architect of divine geometry."
+  },
+  {
+    "Thar": "Suwal",
+    "Meaning": "The generous heart of hospitality and warmth."
+  },
+  {
+    "Thar": "Tamrakar",
+    "Meaning": "The artisan of copper and ancestral alchemy."
+  },
+  {
+    "Thar": "Tandukar",
+    "Meaning": "The horn-worker shaping grace from the mundane."
+  },
+  {
+    "Thar": "Tepe",
+    "Meaning": "The cultivator, turning soil into fields of abundance."
+  },
+  {
+    "Thar": "Thakali",
+    "Meaning": "The trader of trails, gourmet of Himalayan taste."
+  },
+  {
+    "Thar": "Tuladhar",
+    "Meaning": "The bearer of sacred balances and merchant tradition."
+  },
+  {
+    "Thar": "Udas",
+    "Meaning": "The serene soul, carrying quiet strength in the face of life's impermanence."
+  },
+  {
+    "Thar": "Ulak",
+    "Meaning": "The fire-bringer, kindling transformation through devotion and fierce clarity."
+  },
+  {
+    "Thar": "Vaidya",
+    "Meaning": "The healer who mends not just bodies but the spirit of the community."
+  },
+  {
+    "Thar": "Vajracharya",
+    "Meaning": "The masters of Vajrayana Buddhism"
+  }
 ]
