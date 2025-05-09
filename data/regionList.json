@@ -1,0 +1,802 @@
+[
+  {
+    "Region": "Bhaktapur",
+    "Meaning": "City of devotees and divine geometry."
+  },
+  {
+    "Region": "Kathmandu",
+    "Meaning": "Valley of gods and gatherers."
+  },
+  {
+    "Region": "Lalitpur",
+    "Meaning": "Where craftsmanship and dharma entwine."
+  },
+  {
+    "Region": "Kirtipur",
+    "Meaning": "The hill that remembered its rebellion."
+  },
+  {
+    "Region": "Dolakha",
+    "Meaning": "Thunder in the bones of stone."
+  },
+  {
+    "Region": "Sankhu",
+    "Meaning": "The eastern gate of the sacred valley."
+  },
+  {
+    "Region": "Bungamati",
+    "Meaning": "The village that carved gods from wood."
+  },
+  {
+    "Region": "Khokana",
+    "Meaning": "The quiet village that guards ancient oil."
+  },
+  {
+    "Region": "Panauti",
+    "Meaning": "Where three rivers meet and time pauses."
+  },
+  {
+    "Region": "Tokha",
+    "Meaning": "Northern throne of milk and battle."
+  },
+  {
+    "Region": "Pokhara",
+    "Meaning": "Mirror of mountains in calm waters."
+  },
+  {
+    "Region": "Janakpur",
+    "Meaning": "Land where devotion built palaces."
+  },
+  {
+    "Region": "Butwal",
+    "Meaning": "Crossroads where hills greet the plains."
+  },
+  {
+    "Region": "Biratnagar",
+    "Meaning": "Steel and sweat of the Terai."
+  },
+  {
+    "Region": "Chitwan",
+    "Meaning": "Forest of kings and rhino trails."
+  },
+  {
+    "Region": "Dharan",
+    "Meaning": "Gateway of hills, echo of Gurkhas."
+  },
+  {
+    "Region": "Hetauda",
+    "Meaning": "Where trade and timber meet."
+  },
+  {
+    "Region": "Tansen",
+    "Meaning": "Artistry on the hill’s shoulder."
+  },
+  {
+    "Region": "Palpa",
+    "Meaning": "Where pink dhaka threads tradition."
+  },
+  {
+    "Region": "Gorkha",
+    "Meaning": "Birthplace of unifiers and blades."
+  },
+  {
+    "Region": "Bhaktapur #21",
+    "Meaning": "City of devotees and divine geometry."
+  },
+  {
+    "Region": "Kathmandu #22",
+    "Meaning": "Valley of gods and gatherers."
+  },
+  {
+    "Region": "Lalitpur #23",
+    "Meaning": "Where craftsmanship and dharma entwine."
+  },
+  {
+    "Region": "Kirtipur #24",
+    "Meaning": "The hill that remembered its rebellion."
+  },
+  {
+    "Region": "Dolakha #25",
+    "Meaning": "Thunder in the bones of stone."
+  },
+  {
+    "Region": "Sankhu #26",
+    "Meaning": "The eastern gate of the sacred valley."
+  },
+  {
+    "Region": "Bungamati #27",
+    "Meaning": "The village that carved gods from wood."
+  },
+  {
+    "Region": "Khokana #28",
+    "Meaning": "The quiet village that guards ancient oil."
+  },
+  {
+    "Region": "Panauti #29",
+    "Meaning": "Where three rivers meet and time pauses."
+  },
+  {
+    "Region": "Tokha #30",
+    "Meaning": "Northern throne of milk and battle."
+  },
+  {
+    "Region": "Pokhara #31",
+    "Meaning": "Mirror of mountains in calm waters."
+  },
+  {
+    "Region": "Janakpur #32",
+    "Meaning": "Land where devotion built palaces."
+  },
+  {
+    "Region": "Butwal #33",
+    "Meaning": "Crossroads where hills greet the plains."
+  },
+  {
+    "Region": "Biratnagar #34",
+    "Meaning": "Steel and sweat of the Terai."
+  },
+  {
+    "Region": "Chitwan #35",
+    "Meaning": "Forest of kings and rhino trails."
+  },
+  {
+    "Region": "Dharan #36",
+    "Meaning": "Gateway of hills, echo of Gurkhas."
+  },
+  {
+    "Region": "Hetauda #37",
+    "Meaning": "Where trade and timber meet."
+  },
+  {
+    "Region": "Tansen #38",
+    "Meaning": "Artistry on the hill’s shoulder."
+  },
+  {
+    "Region": "Palpa #39",
+    "Meaning": "Where pink dhaka threads tradition."
+  },
+  {
+    "Region": "Gorkha #40",
+    "Meaning": "Birthplace of unifiers and blades."
+  },
+  {
+    "Region": "Bhaktapur #41",
+    "Meaning": "City of devotees and divine geometry."
+  },
+  {
+    "Region": "Kathmandu #42",
+    "Meaning": "Valley of gods and gatherers."
+  },
+  {
+    "Region": "Lalitpur #43",
+    "Meaning": "Where craftsmanship and dharma entwine."
+  },
+  {
+    "Region": "Kirtipur #44",
+    "Meaning": "The hill that remembered its rebellion."
+  },
+  {
+    "Region": "Dolakha #45",
+    "Meaning": "Thunder in the bones of stone."
+  },
+  {
+    "Region": "Sankhu #46",
+    "Meaning": "The eastern gate of the sacred valley."
+  },
+  {
+    "Region": "Bungamati #47",
+    "Meaning": "The village that carved gods from wood."
+  },
+  {
+    "Region": "Khokana #48",
+    "Meaning": "The quiet village that guards ancient oil."
+  },
+  {
+    "Region": "Panauti #49",
+    "Meaning": "Where three rivers meet and time pauses."
+  },
+  {
+    "Region": "Tokha #50",
+    "Meaning": "Northern throne of milk and battle."
+  },
+  {
+    "Region": "Pokhara #51",
+    "Meaning": "Mirror of mountains in calm waters."
+  },
+  {
+    "Region": "Janakpur #52",
+    "Meaning": "Land where devotion built palaces."
+  },
+  {
+    "Region": "Butwal #53",
+    "Meaning": "Crossroads where hills greet the plains."
+  },
+  {
+    "Region": "Biratnagar #54",
+    "Meaning": "Steel and sweat of the Terai."
+  },
+  {
+    "Region": "Chitwan #55",
+    "Meaning": "Forest of kings and rhino trails."
+  },
+  {
+    "Region": "Dharan #56",
+    "Meaning": "Gateway of hills, echo of Gurkhas."
+  },
+  {
+    "Region": "Hetauda #57",
+    "Meaning": "Where trade and timber meet."
+  },
+  {
+    "Region": "Tansen #58",
+    "Meaning": "Artistry on the hill’s shoulder."
+  },
+  {
+    "Region": "Palpa #59",
+    "Meaning": "Where pink dhaka threads tradition."
+  },
+  {
+    "Region": "Gorkha #60",
+    "Meaning": "Birthplace of unifiers and blades."
+  },
+  {
+    "Region": "Bhaktapur #61",
+    "Meaning": "City of devotees and divine geometry."
+  },
+  {
+    "Region": "Kathmandu #62",
+    "Meaning": "Valley of gods and gatherers."
+  },
+  {
+    "Region": "Lalitpur #63",
+    "Meaning": "Where craftsmanship and dharma entwine."
+  },
+  {
+    "Region": "Kirtipur #64",
+    "Meaning": "The hill that remembered its rebellion."
+  },
+  {
+    "Region": "Dolakha #65",
+    "Meaning": "Thunder in the bones of stone."
+  },
+  {
+    "Region": "Sankhu #66",
+    "Meaning": "The eastern gate of the sacred valley."
+  },
+  {
+    "Region": "Bungamati #67",
+    "Meaning": "The village that carved gods from wood."
+  },
+  {
+    "Region": "Khokana #68",
+    "Meaning": "The quiet village that guards ancient oil."
+  },
+  {
+    "Region": "Panauti #69",
+    "Meaning": "Where three rivers meet and time pauses."
+  },
+  {
+    "Region": "Tokha #70",
+    "Meaning": "Northern throne of milk and battle."
+  },
+  {
+    "Region": "Pokhara #71",
+    "Meaning": "Mirror of mountains in calm waters."
+  },
+  {
+    "Region": "Janakpur #72",
+    "Meaning": "Land where devotion built palaces."
+  },
+  {
+    "Region": "Butwal #73",
+    "Meaning": "Crossroads where hills greet the plains."
+  },
+  {
+    "Region": "Biratnagar #74",
+    "Meaning": "Steel and sweat of the Terai."
+  },
+  {
+    "Region": "Chitwan #75",
+    "Meaning": "Forest of kings and rhino trails."
+  },
+  {
+    "Region": "Dharan #76",
+    "Meaning": "Gateway of hills, echo of Gurkhas."
+  },
+  {
+    "Region": "Hetauda #77",
+    "Meaning": "Where trade and timber meet."
+  },
+  {
+    "Region": "Tansen #78",
+    "Meaning": "Artistry on the hill’s shoulder."
+  },
+  {
+    "Region": "Palpa #79",
+    "Meaning": "Where pink dhaka threads tradition."
+  },
+  {
+    "Region": "Gorkha #80",
+    "Meaning": "Birthplace of unifiers and blades."
+  },
+  {
+    "Region": "Bhaktapur #81",
+    "Meaning": "City of devotees and divine geometry."
+  },
+  {
+    "Region": "Kathmandu #82",
+    "Meaning": "Valley of gods and gatherers."
+  },
+  {
+    "Region": "Lalitpur #83",
+    "Meaning": "Where craftsmanship and dharma entwine."
+  },
+  {
+    "Region": "Kirtipur #84",
+    "Meaning": "The hill that remembered its rebellion."
+  },
+  {
+    "Region": "Dolakha #85",
+    "Meaning": "Thunder in the bones of stone."
+  },
+  {
+    "Region": "Sankhu #86",
+    "Meaning": "The eastern gate of the sacred valley."
+  },
+  {
+    "Region": "Bungamati #87",
+    "Meaning": "The village that carved gods from wood."
+  },
+  {
+    "Region": "Khokana #88",
+    "Meaning": "The quiet village that guards ancient oil."
+  },
+  {
+    "Region": "Panauti #89",
+    "Meaning": "Where three rivers meet and time pauses."
+  },
+  {
+    "Region": "Tokha #90",
+    "Meaning": "Northern throne of milk and battle."
+  },
+  {
+    "Region": "Pokhara #91",
+    "Meaning": "Mirror of mountains in calm waters."
+  },
+  {
+    "Region": "Janakpur #92",
+    "Meaning": "Land where devotion built palaces."
+  },
+  {
+    "Region": "Butwal #93",
+    "Meaning": "Crossroads where hills greet the plains."
+  },
+  {
+    "Region": "Biratnagar #94",
+    "Meaning": "Steel and sweat of the Terai."
+  },
+  {
+    "Region": "Chitwan #95",
+    "Meaning": "Forest of kings and rhino trails."
+  },
+  {
+    "Region": "Dharan #96",
+    "Meaning": "Gateway of hills, echo of Gurkhas."
+  },
+  {
+    "Region": "Hetauda #97",
+    "Meaning": "Where trade and timber meet."
+  },
+  {
+    "Region": "Tansen #98",
+    "Meaning": "Artistry on the hill’s shoulder."
+  },
+  {
+    "Region": "Palpa #99",
+    "Meaning": "Where pink dhaka threads tradition."
+  },
+  {
+    "Region": "Gorkha #100",
+    "Meaning": "Birthplace of unifiers and blades."
+  },
+  {
+    "Region": "Boston",
+    "Meaning": "Where the Guthi reawakens in a land of innovation."
+  },
+  {
+    "Region": "New York",
+    "Meaning": "Guthi pulse in the city that never sleeps."
+  },
+  {
+    "Region": "Sydney",
+    "Meaning": "Where the southern sun touches Guthi voices."
+  },
+  {
+    "Region": "London",
+    "Meaning": "Old empire meets ancient spirit."
+  },
+  {
+    "Region": "Tokyo",
+    "Meaning": "Stillness beneath speed — Guthi breathes here too."
+  },
+  {
+    "Region": "Singapore",
+    "Meaning": "Precision and prosperity with Guthi roots."
+  },
+  {
+    "Region": "Doha",
+    "Meaning": "Guthi echoes across desert wind."
+  },
+  {
+    "Region": "Lisbon",
+    "Meaning": "Western shore where Guthi dreams sail."
+  },
+  {
+    "Region": "Toronto",
+    "Meaning": "Multitude of cultures, one sacred thread."
+  },
+  {
+    "Region": "Copenhagen",
+    "Meaning": "Where design and dharma align."
+  },
+  {
+    "Region": "Paris",
+    "Meaning": "Art of love meets the art of lineage."
+  },
+  {
+    "Region": "Melbourne",
+    "Meaning": "Creative sparks light ancient memory."
+  },
+  {
+    "Region": "Los Angeles",
+    "Meaning": "Guthi wisdom beneath Hollywood glow."
+  },
+  {
+    "Region": "Berlin",
+    "Meaning": "Bold thought cradles ancestral rhythm."
+  },
+  {
+    "Region": "San Francisco",
+    "Meaning": "Where innovation kneels to memory."
+  },
+  {
+    "Region": "Seattle",
+    "Meaning": "Rain-fed forests cradle new rituals."
+  },
+  {
+    "Region": "Vancouver",
+    "Meaning": "Where mountains witness Guthi hearts."
+  },
+  {
+    "Region": "Munich",
+    "Meaning": "Engineered precision meets soul ancestry."
+  },
+  {
+    "Region": "Oslo",
+    "Meaning": "North light and Newar lineage converge."
+  },
+  {
+    "Region": "Bangkok",
+    "Meaning": "Where the Guthi wanders with the monks."
+  },
+  {
+    "Region": "Boston #21",
+    "Meaning": "Where the Guthi reawakens in a land of innovation."
+  },
+  {
+    "Region": "New York #22",
+    "Meaning": "Guthi pulse in the city that never sleeps."
+  },
+  {
+    "Region": "Sydney #23",
+    "Meaning": "Where the southern sun touches Guthi voices."
+  },
+  {
+    "Region": "London #24",
+    "Meaning": "Old empire meets ancient spirit."
+  },
+  {
+    "Region": "Tokyo #25",
+    "Meaning": "Stillness beneath speed — Guthi breathes here too."
+  },
+  {
+    "Region": "Singapore #26",
+    "Meaning": "Precision and prosperity with Guthi roots."
+  },
+  {
+    "Region": "Doha #27",
+    "Meaning": "Guthi echoes across desert wind."
+  },
+  {
+    "Region": "Lisbon #28",
+    "Meaning": "Western shore where Guthi dreams sail."
+  },
+  {
+    "Region": "Toronto #29",
+    "Meaning": "Multitude of cultures, one sacred thread."
+  },
+  {
+    "Region": "Copenhagen #30",
+    "Meaning": "Where design and dharma align."
+  },
+  {
+    "Region": "Paris #31",
+    "Meaning": "Art of love meets the art of lineage."
+  },
+  {
+    "Region": "Melbourne #32",
+    "Meaning": "Creative sparks light ancient memory."
+  },
+  {
+    "Region": "Los Angeles #33",
+    "Meaning": "Guthi wisdom beneath Hollywood glow."
+  },
+  {
+    "Region": "Berlin #34",
+    "Meaning": "Bold thought cradles ancestral rhythm."
+  },
+  {
+    "Region": "San Francisco #35",
+    "Meaning": "Where innovation kneels to memory."
+  },
+  {
+    "Region": "Seattle #36",
+    "Meaning": "Rain-fed forests cradle new rituals."
+  },
+  {
+    "Region": "Vancouver #37",
+    "Meaning": "Where mountains witness Guthi hearts."
+  },
+  {
+    "Region": "Munich #38",
+    "Meaning": "Engineered precision meets soul ancestry."
+  },
+  {
+    "Region": "Oslo #39",
+    "Meaning": "North light and Newar lineage converge."
+  },
+  {
+    "Region": "Bangkok #40",
+    "Meaning": "Where the Guthi wanders with the monks."
+  },
+  {
+    "Region": "Boston #41",
+    "Meaning": "Where the Guthi reawakens in a land of innovation."
+  },
+  {
+    "Region": "New York #42",
+    "Meaning": "Guthi pulse in the city that never sleeps."
+  },
+  {
+    "Region": "Sydney #43",
+    "Meaning": "Where the southern sun touches Guthi voices."
+  },
+  {
+    "Region": "London #44",
+    "Meaning": "Old empire meets ancient spirit."
+  },
+  {
+    "Region": "Tokyo #45",
+    "Meaning": "Stillness beneath speed — Guthi breathes here too."
+  },
+  {
+    "Region": "Singapore #46",
+    "Meaning": "Precision and prosperity with Guthi roots."
+  },
+  {
+    "Region": "Doha #47",
+    "Meaning": "Guthi echoes across desert wind."
+  },
+  {
+    "Region": "Lisbon #48",
+    "Meaning": "Western shore where Guthi dreams sail."
+  },
+  {
+    "Region": "Toronto #49",
+    "Meaning": "Multitude of cultures, one sacred thread."
+  },
+  {
+    "Region": "Copenhagen #50",
+    "Meaning": "Where design and dharma align."
+  },
+  {
+    "Region": "Paris #51",
+    "Meaning": "Art of love meets the art of lineage."
+  },
+  {
+    "Region": "Melbourne #52",
+    "Meaning": "Creative sparks light ancient memory."
+  },
+  {
+    "Region": "Los Angeles #53",
+    "Meaning": "Guthi wisdom beneath Hollywood glow."
+  },
+  {
+    "Region": "Berlin #54",
+    "Meaning": "Bold thought cradles ancestral rhythm."
+  },
+  {
+    "Region": "San Francisco #55",
+    "Meaning": "Where innovation kneels to memory."
+  },
+  {
+    "Region": "Seattle #56",
+    "Meaning": "Rain-fed forests cradle new rituals."
+  },
+  {
+    "Region": "Vancouver #57",
+    "Meaning": "Where mountains witness Guthi hearts."
+  },
+  {
+    "Region": "Munich #58",
+    "Meaning": "Engineered precision meets soul ancestry."
+  },
+  {
+    "Region": "Oslo #59",
+    "Meaning": "North light and Newar lineage converge."
+  },
+  {
+    "Region": "Bangkok #60",
+    "Meaning": "Where the Guthi wanders with the monks."
+  },
+  {
+    "Region": "Boston #61",
+    "Meaning": "Where the Guthi reawakens in a land of innovation."
+  },
+  {
+    "Region": "New York #62",
+    "Meaning": "Guthi pulse in the city that never sleeps."
+  },
+  {
+    "Region": "Sydney #63",
+    "Meaning": "Where the southern sun touches Guthi voices."
+  },
+  {
+    "Region": "London #64",
+    "Meaning": "Old empire meets ancient spirit."
+  },
+  {
+    "Region": "Tokyo #65",
+    "Meaning": "Stillness beneath speed — Guthi breathes here too."
+  },
+  {
+    "Region": "Singapore #66",
+    "Meaning": "Precision and prosperity with Guthi roots."
+  },
+  {
+    "Region": "Doha #67",
+    "Meaning": "Guthi echoes across desert wind."
+  },
+  {
+    "Region": "Lisbon #68",
+    "Meaning": "Western shore where Guthi dreams sail."
+  },
+  {
+    "Region": "Toronto #69",
+    "Meaning": "Multitude of cultures, one sacred thread."
+  },
+  {
+    "Region": "Copenhagen #70",
+    "Meaning": "Where design and dharma align."
+  },
+  {
+    "Region": "Paris #71",
+    "Meaning": "Art of love meets the art of lineage."
+  },
+  {
+    "Region": "Melbourne #72",
+    "Meaning": "Creative sparks light ancient memory."
+  },
+  {
+    "Region": "Los Angeles #73",
+    "Meaning": "Guthi wisdom beneath Hollywood glow."
+  },
+  {
+    "Region": "Berlin #74",
+    "Meaning": "Bold thought cradles ancestral rhythm."
+  },
+  {
+    "Region": "San Francisco #75",
+    "Meaning": "Where innovation kneels to memory."
+  },
+  {
+    "Region": "Seattle #76",
+    "Meaning": "Rain-fed forests cradle new rituals."
+  },
+  {
+    "Region": "Vancouver #77",
+    "Meaning": "Where mountains witness Guthi hearts."
+  },
+  {
+    "Region": "Munich #78",
+    "Meaning": "Engineered precision meets soul ancestry."
+  },
+  {
+    "Region": "Oslo #79",
+    "Meaning": "North light and Newar lineage converge."
+  },
+  {
+    "Region": "Bangkok #80",
+    "Meaning": "Where the Guthi wanders with the monks."
+  },
+  {
+    "Region": "Boston #81",
+    "Meaning": "Where the Guthi reawakens in a land of innovation."
+  },
+  {
+    "Region": "New York #82",
+    "Meaning": "Guthi pulse in the city that never sleeps."
+  },
+  {
+    "Region": "Sydney #83",
+    "Meaning": "Where the southern sun touches Guthi voices."
+  },
+  {
+    "Region": "London #84",
+    "Meaning": "Old empire meets ancient spirit."
+  },
+  {
+    "Region": "Tokyo #85",
+    "Meaning": "Stillness beneath speed — Guthi breathes here too."
+  },
+  {
+    "Region": "Singapore #86",
+    "Meaning": "Precision and prosperity with Guthi roots."
+  },
+  {
+    "Region": "Doha #87",
+    "Meaning": "Guthi echoes across desert wind."
+  },
+  {
+    "Region": "Lisbon #88",
+    "Meaning": "Western shore where Guthi dreams sail."
+  },
+  {
+    "Region": "Toronto #89",
+    "Meaning": "Multitude of cultures, one sacred thread."
+  },
+  {
+    "Region": "Copenhagen #90",
+    "Meaning": "Where design and dharma align."
+  },
+  {
+    "Region": "Paris #91",
+    "Meaning": "Art of love meets the art of lineage."
+  },
+  {
+    "Region": "Melbourne #92",
+    "Meaning": "Creative sparks light ancient memory."
+  },
+  {
+    "Region": "Los Angeles #93",
+    "Meaning": "Guthi wisdom beneath Hollywood glow."
+  },
+  {
+    "Region": "Berlin #94",
+    "Meaning": "Bold thought cradles ancestral rhythm."
+  },
+  {
+    "Region": "San Francisco #95",
+    "Meaning": "Where innovation kneels to memory."
+  },
+  {
+    "Region": "Seattle #96",
+    "Meaning": "Rain-fed forests cradle new rituals."
+  },
+  {
+    "Region": "Vancouver #97",
+    "Meaning": "Where mountains witness Guthi hearts."
+  },
+  {
+    "Region": "Munich #98",
+    "Meaning": "Engineered precision meets soul ancestry."
+  },
+  {
+    "Region": "Oslo #99",
+    "Meaning": "North light and Newar lineage converge."
+  },
+  {
+    "Region": "Bangkok #100",
+    "Meaning": "Where the Guthi wanders with the monks."
+  }
+]
