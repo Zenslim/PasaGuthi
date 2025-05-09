@@ -10,10 +10,10 @@ export default function SignInPage() {
   const handleSignIn = async () => {
     setError('');
     const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .filter('uid', 'eq', `"${key}"`)
-      .single();
+  .from('users')
+  .select('*')
+  .eq('uid', key.trim())
+  .single();
     if (error || !data) {
       setError('Invalid Guthi Key. Please check and try again.');
       return;
