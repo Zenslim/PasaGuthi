@@ -113,24 +113,6 @@ export default function Welcome() {
           <h1 className="text-2xl font-bold">🌿 Welcome, {form.name}</h1>
           <p className="mt-4">Your Guthi Key:</p>
           <code className="text-lg bg-gray-100 p-2 rounded mt-2 inline-block">{guthiKey}</code>
-
-          <div className="mt-6 text-sm text-gray-700">
-            <label className="block font-semibold">📱🔑 Recovery Number (Optional)</label>
-            <input
-              type="tel"
-              placeholder="+97798XXXXXXX"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full max-w-sm mt-2 p-2 border rounded"
-            />
-            <p className="mt-2 font-medium text-red-700">
-              If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
-            </p>
-            <p className="text-xs text-gray-500 mt-2">
-              Why do we ask this? It’s not for marketing. Only to help you retrieve your Guthi Key if forgotten.
-            </p>
-          </div>
-
           <button
             onClick={() => router.push('/dashboard')}
             className="mt-6 bg-black text-white px-4 py-2 rounded"
@@ -220,40 +202,43 @@ export default function Welcome() {
           <p className="text-xs text-gray-500 mt-1">
             Type a skill and press Enter to confirm — every offering adds to the sacred weave.
           </p>
-        {confirmedSkills.length > 0 && (
-  <div className="mt-2 space-y-1 text-sm text-green-700 italic">
-    {confirmedSkills.map((s, i) => {
-      const match = skillsList.find(k => k.Skill.toLowerCase() === s.toLowerCase());
-      return (
-        <p key={i}>
-          ✨ Aha, {s} — {match ? match.Meaning : "not yet in our sacred list. You are the first to speak it here."}
-        </p>
-      );
-    })}
-  </div>
-)}
+          {confirmedSkills.length > 0 && (
+            <div className="mt-2 space-y-1 text-sm text-green-700 italic">
+              {confirmedSkills.map((s, i) => {
+                const match = skillsList.find(k => k.Skill.toLowerCase() === s.toLowerCase());
+                return (
+                  <p key={i}>
+                    ✨ Aha, {s} — {match ? match.Meaning : "not yet in our sacred list. You are the first to speak it here."}
+                  </p>
+                );
+              })}
+            </div>
+          )}
+        </div>
 
-{/* 📱 Phone input */}
-<div>
-  <label className="block font-semibold">📱🔑 Recovery Number (Optional)</label>
-  <input
-    type="tel"
-    placeholder="+97798XXXXXXX"
-    value={phone}
-    onChange={(e) => setPhone(e.target.value)}
-    className="w-full mt-2 p-2 border rounded"
-  />
-  <p className="mt-2 font-medium text-red-700">
-    If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
-  </p>
-  <p className="text-xs text-gray-500 mt-2">
-    Why do we ask this? It’s not for marketing. Only to help you retrieve your Guthi Key if forgotten.
-  </p>
-</div>
+        {/* 📱 Phone input */}
+        <div className="mt-4">
+          <label className="block font-semibold">📱🔑 Recovery Number (Optional)</label>
+          <input
+            type="tel"
+            placeholder="+97798XXXXXXX"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className="w-full mt-2 p-2 border rounded"
+          />
+          <p className="mt-2 font-medium text-red-700">
+            If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
+          </p>
+          <p className="text-xs text-gray-500 mt-2">
+            Why do we ask this? It’s not for marketing. Only to help you retrieve your Guthi Key if forgotten.
+          </p>
+        </div>
 
-{/* 🌿 Submit Button */}
-<button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full font-bold">
-  🌿 Plant My Guthi Seed
-</button>
-</form> {/* ✅ closes the <form> tag */}
-</div> {/* ✅ closes the outer <div className="min-h-screen ..."> */}
+        {/* 🌿 Submit Button */}
+        <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full font-bold">
+          🌿 Plant My Guthi Seed
+        </button>
+      </form>
+    </div>
+  );
+}
