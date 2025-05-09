@@ -18,6 +18,9 @@ export default function Welcome() {
   const [suggestedThar, setSuggestedThar] = useState([]);
   const [guthiKey, setGuthiKey] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [regionHistory, setRegionHistory] = useState([]);
+  const [skillsHistory, setSkillsHistory] = useState([]);
+
   const fuse = new Fuse(tharList, {
     keys: ['Thar'],
     threshold: 0.3,
@@ -26,12 +29,16 @@ export default function Welcome() {
     useExtendedSearch: true
   });
 
-  const regionHistory = JSON.parse(localStorage.getItem('regionHistory') || '[]');
-  const skillsHistory = JSON.parse(localStorage.getItem('skillsHistory') || '[]');
-
   useEffect(() => {
-    const id = localStorage.getItem('sporeId') || crypto.randomUUID();
-    localStorage.setItem('sporeId', id);
+    if (typeof window !== 'undefined') {
+      const id = localStorage.getItem('sporeId') || crypto.randomUUID();
+      localStorage.setItem('sporeId', id);
+
+      const regions = JSON.parse(localStorage.getItem('regionHistory') || '[]');
+      const skills = JSON.parse(localStorage.getItem('skillsHistory') || '[]');
+      setRegionHistory(regions);
+      setSkillsHistory(skills);
+    }
   }, []);
 
   const detectRegion = () => {
@@ -92,11 +99,6 @@ export default function Welcome() {
 
           <div className="mt-6 text-sm text-gray-700">
             <label className="block font-semibold">📱🔑 Recovery Number (Optional)</label>
-
-            <p className="mt-2 font-medium text-red-700">
-              If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
-            </p>
-
             <input
               type="tel"
               placeholder="+97798XXXXXXX"
@@ -104,7 +106,9 @@ export default function Welcome() {
               onChange={(e) => setPhone(e.target.value)}
               className="w-full max-w-sm mt-2 p-2 border rounded"
             />
-
+            <p className="mt-2 font-medium text-red-700">
+              If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
+            </p>
             <p className="text-xs text-gray-500 mt-2">
               Why do we ask this? It’s not for marketing. Only to help you retrieve your Guthi Key if forgotten.
             </p>
