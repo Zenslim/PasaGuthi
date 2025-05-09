@@ -1,802 +1,1682 @@
 [
   {
+    "Region": "Achham",
+    "Meaning": "Achham — A district of spirit and soil."
+  },
+  {
+    "Region": "Arghakhanchi",
+    "Meaning": "Arghakhanchi — A district of spirit and soil."
+  },
+  {
+    "Region": "Baglung",
+    "Meaning": "Baglung — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Baitadi",
+    "Meaning": "Baitadi — A district of spirit and soil."
+  },
+  {
+    "Region": "Bajhang",
+    "Meaning": "Bajhang — A district of spirit and soil."
+  },
+  {
+    "Region": "Bajura",
+    "Meaning": "Bajura — A district of spirit and soil."
+  },
+  {
+    "Region": "Banke",
+    "Meaning": "Banke — A district of spirit and soil."
+  },
+  {
+    "Region": "Bara",
+    "Meaning": "Bara — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Bardiya",
+    "Meaning": "Bardiya — A district of spirit and soil."
+  },
+  {
     "Region": "Bhaktapur",
-    "Meaning": "City of devotees and divine geometry."
+    "Meaning": "Where time is carved into every brick and wood."
   },
   {
-    "Region": "Kathmandu",
-    "Meaning": "Valley of gods and gatherers."
-  },
-  {
-    "Region": "Lalitpur",
-    "Meaning": "Where craftsmanship and dharma entwine."
-  },
-  {
-    "Region": "Kirtipur",
-    "Meaning": "The hill that remembered its rebellion."
-  },
-  {
-    "Region": "Dolakha",
-    "Meaning": "Thunder in the bones of stone."
-  },
-  {
-    "Region": "Sankhu",
-    "Meaning": "The eastern gate of the sacred valley."
+    "Region": "Bhojpur",
+    "Meaning": "Bhojpur — A district of spirit and soil."
   },
   {
     "Region": "Bungamati",
-    "Meaning": "The village that carved gods from wood."
+    "Meaning": "Bungamati — A sacred thread in the fabric of the valley."
   },
   {
-    "Region": "Khokana",
-    "Meaning": "The quiet village that guards ancient oil."
-  },
-  {
-    "Region": "Panauti",
-    "Meaning": "Where three rivers meet and time pauses."
-  },
-  {
-    "Region": "Tokha",
-    "Meaning": "Northern throne of milk and battle."
-  },
-  {
-    "Region": "Pokhara",
-    "Meaning": "Mirror of mountains in calm waters."
-  },
-  {
-    "Region": "Janakpur",
-    "Meaning": "Land where devotion built palaces."
-  },
-  {
-    "Region": "Butwal",
-    "Meaning": "Crossroads where hills greet the plains."
-  },
-  {
-    "Region": "Biratnagar",
-    "Meaning": "Steel and sweat of the Terai."
+    "Region": "Chabahil",
+    "Meaning": "Gateway to the ancient Bodhisattva whispers."
   },
   {
     "Region": "Chitwan",
-    "Meaning": "Forest of kings and rhino trails."
+    "Meaning": "Chitwan — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Dharan",
-    "Meaning": "Gateway of hills, echo of Gurkhas."
+    "Region": "Dadeldhura",
+    "Meaning": "Dadeldhura — A district of spirit and soil."
   },
   {
-    "Region": "Hetauda",
-    "Meaning": "Where trade and timber meet."
+    "Region": "Dailekh",
+    "Meaning": "Dailekh — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Tansen",
-    "Meaning": "Artistry on the hill’s shoulder."
+    "Region": "Dang",
+    "Meaning": "Dang — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Palpa",
-    "Meaning": "Where pink dhaka threads tradition."
+    "Region": "Darchula",
+    "Meaning": "Darchula — A district of spirit and soil."
+  },
+  {
+    "Region": "Dhading",
+    "Meaning": "Dhading — A place of layered faith and footsteps."
+  },
+  {
+    "Region": "Dhankuta",
+    "Meaning": "Dhankuta — A district of spirit and soil."
+  },
+  {
+    "Region": "Dhanusha",
+    "Meaning": "Dhanusha — A district of spirit and soil."
+  },
+  {
+    "Region": "Dolakha",
+    "Meaning": "Dolakha — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Dolpa",
+    "Meaning": "Dolpa — A district of spirit and soil."
+  },
+  {
+    "Region": "Doti",
+    "Meaning": "Doti — A district of spirit and soil."
+  },
+  {
+    "Region": "Eastern Rukum",
+    "Meaning": "Eastern Rukum — A district of spirit and soil."
+  },
+  {
+    "Region": "Godavari",
+    "Meaning": "Godavari — A sacred thread in the fabric of the valley."
   },
   {
     "Region": "Gorkha",
-    "Meaning": "Birthplace of unifiers and blades."
+    "Meaning": "Gorkha — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Bhaktapur #21",
-    "Meaning": "City of devotees and divine geometry."
+    "Region": "Gulmi",
+    "Meaning": "Gulmi — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Kathmandu #22",
-    "Meaning": "Valley of gods and gatherers."
+    "Region": "Humla",
+    "Meaning": "Humla — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Lalitpur #23",
-    "Meaning": "Where craftsmanship and dharma entwine."
+    "Region": "Ilam",
+    "Meaning": "Ilam — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Kirtipur #24",
-    "Meaning": "The hill that remembered its rebellion."
+    "Region": "Jajarkot",
+    "Meaning": "Jajarkot — A district of spirit and soil."
   },
   {
-    "Region": "Dolakha #25",
-    "Meaning": "Thunder in the bones of stone."
+    "Region": "Jhapa",
+    "Meaning": "Jhapa — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Sankhu #26",
-    "Meaning": "The eastern gate of the sacred valley."
+    "Region": "Jumla",
+    "Meaning": "Jumla — A district of spirit and soil."
   },
   {
-    "Region": "Bungamati #27",
-    "Meaning": "The village that carved gods from wood."
+    "Region": "Kailali",
+    "Meaning": "Kailali — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Khokana #28",
-    "Meaning": "The quiet village that guards ancient oil."
+    "Region": "Kalikot",
+    "Meaning": "Kalikot — A district of spirit and soil."
   },
   {
-    "Region": "Panauti #29",
-    "Meaning": "Where three rivers meet and time pauses."
+    "Region": "Kanchanpur",
+    "Meaning": "Kanchanpur — A town where past and present walk side by side."
   },
   {
-    "Region": "Tokha #30",
-    "Meaning": "Northern throne of milk and battle."
+    "Region": "Kapilvastu",
+    "Meaning": "Kapilvastu — A district of spirit and soil."
   },
   {
-    "Region": "Pokhara #31",
-    "Meaning": "Mirror of mountains in calm waters."
+    "Region": "Kaski",
+    "Meaning": "Kaski — A district of spirit and soil."
   },
   {
-    "Region": "Janakpur #32",
-    "Meaning": "Land where devotion built palaces."
+    "Region": "Kathmandu",
+    "Meaning": "Kathmandu — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Butwal #33",
-    "Meaning": "Crossroads where hills greet the plains."
+    "Region": "Kavrepalanchok",
+    "Meaning": "Kavrepalanchok — A district of spirit and soil."
   },
   {
-    "Region": "Biratnagar #34",
-    "Meaning": "Steel and sweat of the Terai."
+    "Region": "Khokana",
+    "Meaning": "Khokana — A sacred thread in the fabric of the valley."
   },
   {
-    "Region": "Chitwan #35",
-    "Meaning": "Forest of kings and rhino trails."
+    "Region": "Khotang",
+    "Meaning": "Khotang — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Dharan #36",
-    "Meaning": "Gateway of hills, echo of Gurkhas."
+    "Region": "Kirtipur",
+    "Meaning": "A warrior town that never bowed to conquest."
   },
   {
-    "Region": "Hetauda #37",
-    "Meaning": "Where trade and timber meet."
+    "Region": "Lalitpur",
+    "Meaning": "Lalitpur — A town where past and present walk side by side."
   },
   {
-    "Region": "Tansen #38",
-    "Meaning": "Artistry on the hill’s shoulder."
+    "Region": "Lamjung",
+    "Meaning": "Lamjung — A district of spirit and soil."
   },
   {
-    "Region": "Palpa #39",
-    "Meaning": "Where pink dhaka threads tradition."
+    "Region": "Lubhu",
+    "Meaning": "Lubhu — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Gorkha #40",
-    "Meaning": "Birthplace of unifiers and blades."
+    "Region": "Mahottari",
+    "Meaning": "Mahottari — A district of spirit and soil."
   },
   {
-    "Region": "Bhaktapur #41",
-    "Meaning": "City of devotees and divine geometry."
+    "Region": "Makwanpur",
+    "Meaning": "Makwanpur — A district of spirit and soil."
   },
   {
-    "Region": "Kathmandu #42",
-    "Meaning": "Valley of gods and gatherers."
+    "Region": "Manang",
+    "Meaning": "Manang — A district of spirit and soil."
   },
   {
-    "Region": "Lalitpur #43",
-    "Meaning": "Where craftsmanship and dharma entwine."
+    "Region": "Morang",
+    "Meaning": "Morang — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Kirtipur #44",
-    "Meaning": "The hill that remembered its rebellion."
+    "Region": "Mugu",
+    "Meaning": "Mugu — A district of spirit and soil."
   },
   {
-    "Region": "Dolakha #45",
-    "Meaning": "Thunder in the bones of stone."
+    "Region": "Mustang",
+    "Meaning": "Mustang — A district of spirit and soil."
   },
   {
-    "Region": "Sankhu #46",
-    "Meaning": "The eastern gate of the sacred valley."
+    "Region": "Myagdi",
+    "Meaning": "Myagdi — A district of spirit and soil."
   },
   {
-    "Region": "Bungamati #47",
-    "Meaning": "The village that carved gods from wood."
+    "Region": "Nawalpur",
+    "Meaning": "Nawalpur — A district of spirit and soil."
   },
   {
-    "Region": "Khokana #48",
-    "Meaning": "The quiet village that guards ancient oil."
+    "Region": "Nuwakot",
+    "Meaning": "Nuwakot — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Panauti #49",
-    "Meaning": "Where three rivers meet and time pauses."
+    "Region": "Okhaldhunga",
+    "Meaning": "Okhaldhunga — A district of spirit and soil."
   },
   {
-    "Region": "Tokha #50",
-    "Meaning": "Northern throne of milk and battle."
+    "Region": "Palpa",
+    "Meaning": "Palpa — A district of spirit and soil."
   },
   {
-    "Region": "Pokhara #51",
-    "Meaning": "Mirror of mountains in calm waters."
+    "Region": "Panauti",
+    "Meaning": "Panauti — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Janakpur #52",
-    "Meaning": "Land where devotion built palaces."
+    "Region": "Panchthar",
+    "Meaning": "Panchthar — A district of spirit and soil."
   },
   {
-    "Region": "Butwal #53",
-    "Meaning": "Crossroads where hills greet the plains."
+    "Region": "Parbat",
+    "Meaning": "Parbat — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Biratnagar #54",
-    "Meaning": "Steel and sweat of the Terai."
+    "Region": "Parsa",
+    "Meaning": "Parsa — A district of spirit and soil."
   },
   {
-    "Region": "Chitwan #55",
-    "Meaning": "Forest of kings and rhino trails."
+    "Region": "Pyuthan",
+    "Meaning": "Pyuthan — A district of spirit and soil."
   },
   {
-    "Region": "Dharan #56",
-    "Meaning": "Gateway of hills, echo of Gurkhas."
+    "Region": "Ramechhap",
+    "Meaning": "Ramechhap — A district of spirit and soil."
   },
   {
-    "Region": "Hetauda #57",
-    "Meaning": "Where trade and timber meet."
+    "Region": "Rasuwa",
+    "Meaning": "Rasuwa — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Tansen #58",
-    "Meaning": "Artistry on the hill’s shoulder."
+    "Region": "Rautahat",
+    "Meaning": "Rautahat — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Palpa #59",
-    "Meaning": "Where pink dhaka threads tradition."
+    "Region": "Rolpa",
+    "Meaning": "Rolpa — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Gorkha #60",
-    "Meaning": "Birthplace of unifiers and blades."
+    "Region": "Rukum West",
+    "Meaning": "Rukum West — A district of spirit and soil."
   },
   {
-    "Region": "Bhaktapur #61",
-    "Meaning": "City of devotees and divine geometry."
+    "Region": "Rupandehi",
+    "Meaning": "Rupandehi — A district of spirit and soil."
   },
   {
-    "Region": "Kathmandu #62",
-    "Meaning": "Valley of gods and gatherers."
+    "Region": "Salyan",
+    "Meaning": "Salyan — A district of spirit and soil."
   },
   {
-    "Region": "Lalitpur #63",
-    "Meaning": "Where craftsmanship and dharma entwine."
+    "Region": "Sankhu",
+    "Meaning": "Sankhu — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Kirtipur #64",
-    "Meaning": "The hill that remembered its rebellion."
+    "Region": "Sankhuwasabha",
+    "Meaning": "Sankhuwasabha — A district of spirit and soil."
   },
   {
-    "Region": "Dolakha #65",
-    "Meaning": "Thunder in the bones of stone."
+    "Region": "Saptari",
+    "Meaning": "Saptari — A district of spirit and soil."
   },
   {
-    "Region": "Sankhu #66",
-    "Meaning": "The eastern gate of the sacred valley."
+    "Region": "Sarlahi",
+    "Meaning": "Sarlahi — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Bungamati #67",
-    "Meaning": "The village that carved gods from wood."
+    "Region": "Sindhuli",
+    "Meaning": "Sindhuli — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Khokana #68",
-    "Meaning": "The quiet village that guards ancient oil."
+    "Region": "Sindhupalchok",
+    "Meaning": "Sindhupalchok — A district of spirit and soil."
   },
   {
-    "Region": "Panauti #69",
-    "Meaning": "Where three rivers meet and time pauses."
+    "Region": "Siraha",
+    "Meaning": "Siraha — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Tokha #70",
-    "Meaning": "Northern throne of milk and battle."
+    "Region": "Solukhumbu",
+    "Meaning": "Solukhumbu — A district of spirit and soil."
   },
   {
-    "Region": "Pokhara #71",
-    "Meaning": "Mirror of mountains in calm waters."
+    "Region": "Sunsari",
+    "Meaning": "Sunsari — A district of spirit and soil."
   },
   {
-    "Region": "Janakpur #72",
-    "Meaning": "Land where devotion built palaces."
+    "Region": "Surkhet",
+    "Meaning": "Surkhet — A district of spirit and soil."
   },
   {
-    "Region": "Butwal #73",
-    "Meaning": "Crossroads where hills greet the plains."
+    "Region": "Syangja",
+    "Meaning": "Syangja — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Biratnagar #74",
-    "Meaning": "Steel and sweat of the Terai."
+    "Region": "Tanahun",
+    "Meaning": "Tanahun — A district of spirit and soil."
   },
   {
-    "Region": "Chitwan #75",
-    "Meaning": "Forest of kings and rhino trails."
+    "Region": "Taplejung",
+    "Meaning": "Taplejung — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Dharan #76",
-    "Meaning": "Gateway of hills, echo of Gurkhas."
+    "Region": "Tehrathum",
+    "Meaning": "Tehrathum — A district of spirit and soil."
   },
   {
-    "Region": "Hetauda #77",
-    "Meaning": "Where trade and timber meet."
+    "Region": "Thimi",
+    "Meaning": "Thimi — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Tansen #78",
-    "Meaning": "Artistry on the hill’s shoulder."
+    "Region": "Tokha",
+    "Meaning": "Tokha — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Palpa #79",
-    "Meaning": "Where pink dhaka threads tradition."
+    "Region": "Udayapur",
+    "Meaning": "Udayapur — A district of spirit and soil."
   },
   {
-    "Region": "Gorkha #80",
-    "Meaning": "Birthplace of unifiers and blades."
+    "Region": "Anamnagar",
+    "Meaning": "Anamnagar — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Bhaktapur #81",
-    "Meaning": "City of devotees and divine geometry."
+    "Region": "Ason",
+    "Meaning": "Ason — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Kathmandu #82",
-    "Meaning": "Valley of gods and gatherers."
+    "Region": "Babarmahal",
+    "Meaning": "Babarmahal — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Lalitpur #83",
-    "Meaning": "Where craftsmanship and dharma entwine."
+    "Region": "Bafal",
+    "Meaning": "Bafal — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Kirtipur #84",
-    "Meaning": "The hill that remembered its rebellion."
+    "Region": "Bagbazar",
+    "Meaning": "Where books, bargains, and bhajans collide."
   },
   {
-    "Region": "Dolakha #85",
-    "Meaning": "Thunder in the bones of stone."
+    "Region": "Bagdole",
+    "Meaning": "Bagdole — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Sankhu #86",
-    "Meaning": "The eastern gate of the sacred valley."
+    "Region": "Bakhundole",
+    "Meaning": "Bakhundole — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Bungamati #87",
-    "Meaning": "The village that carved gods from wood."
+    "Region": "Balaju",
+    "Meaning": "Wells and wheels, where water once ruled."
   },
   {
-    "Region": "Khokana #88",
-    "Meaning": "The quiet village that guards ancient oil."
+    "Region": "Balambu",
+    "Meaning": "Balambu — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Panauti #89",
-    "Meaning": "Where three rivers meet and time pauses."
+    "Region": "Balkhu",
+    "Meaning": "Balkhu — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Tokha #90",
-    "Meaning": "Northern throne of milk and battle."
+    "Region": "Balkot",
+    "Meaning": "Balkot — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Pokhara #91",
-    "Meaning": "Mirror of mountains in calm waters."
+    "Region": "Balkumari",
+    "Meaning": "Balkumari — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Janakpur #92",
-    "Meaning": "Land where devotion built palaces."
+    "Region": "Baluwatar",
+    "Meaning": "Baluwatar — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Butwal #93",
-    "Meaning": "Crossroads where hills greet the plains."
+    "Region": "Banasthali",
+    "Meaning": "Banasthali — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Biratnagar #94",
-    "Meaning": "Steel and sweat of the Terai."
+    "Region": "Banepa",
+    "Meaning": "A trade crossroad steeped in sacred chants."
   },
   {
-    "Region": "Chitwan #95",
-    "Meaning": "Forest of kings and rhino trails."
+    "Region": "Baneshwor",
+    "Meaning": "Baneshwor — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Dharan #96",
-    "Meaning": "Gateway of hills, echo of Gurkhas."
+    "Region": "Bangemudha",
+    "Meaning": "Bangemudha — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Hetauda #97",
-    "Meaning": "Where trade and timber meet."
+    "Region": "Baniyatar",
+    "Meaning": "Baniyatar — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Tansen #98",
-    "Meaning": "Artistry on the hill’s shoulder."
+    "Region": "Bansbari",
+    "Meaning": "Bansbari — A name whispered in the valley’s living memory."
   },
   {
-    "Region": "Palpa #99",
-    "Meaning": "Where pink dhaka threads tradition."
+    "Region": "Basantapur",
+    "Meaning": "Basantapur — A town where past and present walk side by side."
   },
   {
-    "Region": "Gorkha #100",
-    "Meaning": "Birthplace of unifiers and blades."
+    "Region": "Basundhara",
+    "Meaning": "Basundhara — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Battisputali",
+    "Meaning": "Battisputali — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Bhairahawa",
+    "Meaning": "Bhairahawa — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Bhaisepati",
+    "Meaning": "Bhaisepati — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Bhatbhateni",
+    "Meaning": "Bhatbhateni — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Bhedasingh",
+    "Meaning": "Bhedasingh — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Bhote Bahal",
+    "Meaning": "Bhote Bahal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Bhotechaur",
+    "Meaning": "Bhotechaur — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Bhurunkhel",
+    "Meaning": "Bhurunkhel — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Bijeshwori",
+    "Meaning": "Bijeshwori — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Bijulibazar",
+    "Meaning": "Bijulibazar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Biratnagar",
+    "Meaning": "Biratnagar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Birgunj",
+    "Meaning": "Birgunj — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Birtamod",
+    "Meaning": "Birtamod — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Bishalnagar",
+    "Meaning": "Bishalnagar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Boudha",
+    "Meaning": "A dome of peace rising above devotion."
+  },
+  {
+    "Region": "Golfutar",
+    "Meaning": "Golfutar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "BramhaTole",
+    "Meaning": "BramhaTole — A close-knit neighborhood with roots in kinship."
+  },
+  {
+    "Region": "New Baneshwor",
+    "Meaning": "New Baneshwor — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Budhanilkantha",
+    "Meaning": "Budhanilkantha — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Butwal",
+    "Meaning": "Butwal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Chagall",
+    "Meaning": "Chagall — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Chakrapath",
+    "Meaning": "Chakrapath — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Chakupat",
+    "Meaning": "Chakupat — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Chamati",
+    "Meaning": "Chamati — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Chandol",
+    "Meaning": "Chandol — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Chandragiri",
+    "Meaning": "Chandragiri — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Changunarayan",
+    "Meaning": "Changunarayan — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Chapagaon",
+    "Meaning": "Chapagaon — A peaceful village echoing with old stories."
+  },
+  {
+    "Region": "Sunakkothi",
+    "Meaning": "Sunakkothi — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Chapali",
+    "Meaning": "Chapali — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Charikot",
+    "Meaning": "Charikot — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Chauni",
+    "Meaning": "Chauni — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Chetrapati",
+    "Meaning": "Chetrapati — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Chovar",
+    "Meaning": "Chovar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Chunikhel",
+    "Meaning": "Chunikhel — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Dallu",
+    "Meaning": "Dallu — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Damauli",
+    "Meaning": "Damauli — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Danchhi",
+    "Meaning": "Danchhi — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Dhalko",
+    "Meaning": "Dhalko — A place of layered faith and footsteps."
+  },
+  {
+    "Region": "Dhangadhi",
+    "Meaning": "Dhangadhi — A place of layered faith and footsteps."
+  },
+  {
+    "Region": "Dhangadi",
+    "Meaning": "Dhangadi — A place of layered faith and footsteps."
+  },
+  {
+    "Region": "Dhapakhel",
+    "Meaning": "A quiet pocket breathing old air."
+  },
+  {
+    "Region": "Dhapasi",
+    "Meaning": "Dhapasi — A place of layered faith and footsteps."
+  },
+  {
+    "Region": "Dharan",
+    "Meaning": "Dharan — A place of layered faith and footsteps."
+  },
+  {
+    "Region": "Dharmasthali",
+    "Meaning": "Dharmasthali — A place of layered faith and footsteps."
+  },
+  {
+    "Region": "Dhobighat",
+    "Meaning": "Dhobighat — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Dhulikhel",
+    "Meaning": "Dhulikhel — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Dhumbarahi",
+    "Meaning": "Dhumbarahi — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Dillibazar",
+    "Meaning": "Dillibazar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Dumja",
+    "Meaning": "Dumja — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Ekaltar",
+    "Meaning": "Ekaltar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Gabahal",
+    "Meaning": "Gabahal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Gairidhara",
+    "Meaning": "Gairidhara — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Ganabahal",
+    "Meaning": "Ganabahal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Gatthaghar",
+    "Meaning": "Gatthaghar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Gaurighat",
+    "Meaning": "Gaurighat — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Gaushala",
+    "Meaning": "Gaushala — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Ghattekulo",
+    "Meaning": "Ghattekulo — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Godawari",
+    "Meaning": "Godawari — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Gokarna",
+    "Meaning": "Gokarna — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Goldhunga",
+    "Meaning": "Goldhunga — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Gongabu",
+    "Meaning": "Buzzing bazaar, a pulse of the valley's north."
+  },
+  {
+    "Region": "Gothatar",
+    "Meaning": "Gothatar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Gwarko",
+    "Meaning": "Gwarko — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Gyaneshwor",
+    "Meaning": "Gyaneshwor — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Hadigaon",
+    "Meaning": "Hadigaon — A peaceful village echoing with old stories."
+  },
+  {
+    "Region": "Harisiddhi",
+    "Meaning": "Harisiddhi — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Hattiban",
+    "Meaning": "Hattiban — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Hattigauda",
+    "Meaning": "Hattigauda — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Hattisar",
+    "Meaning": "Hattisar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Hetauda",
+    "Meaning": "Hetauda — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Imadol",
+    "Meaning": "Where new homes rise on ancient soil."
+  },
+  {
+    "Region": "Indrachwok",
+    "Meaning": "Indrachwok — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Itumbahal",
+    "Meaning": "Itumbahal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Jadibuti",
+    "Meaning": "Jadibuti — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Jaisidewal",
+    "Meaning": "Jaisidewal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Janakpur",
+    "Meaning": "Janakpur — A town where past and present walk side by side."
+  },
+  {
+    "Region": "Jawalakhel",
+    "Meaning": "Clay and color merge in the artisan’s square."
+  },
+  {
+    "Region": "Jhamsikhel",
+    "Meaning": "Jhamsikhel — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Jhochhen",
+    "Meaning": "Jhochhen — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Jorpati",
+    "Meaning": "Where schools of thought and tradition converge."
+  },
+  {
+    "Region": "Jyabahal",
+    "Meaning": "Jyabahal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Jyatha",
+    "Meaning": "Jyatha — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Kageshwori",
+    "Meaning": "Kageshwori — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Kalanki",
+    "Meaning": "The restless threshold of the valley."
+  },
+  {
+    "Region": "Kaldhara",
+    "Meaning": "Kaldhara — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Kalimati",
+    "Meaning": "Flavors and fumes from market to temple."
+  },
+  {
+    "Region": "Kalopul",
+    "Meaning": "Kalopul — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Kamaladi",
+    "Meaning": "Kamaladi — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Kamalpokhari",
+    "Meaning": "Kamalpokhari — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Kapan",
+    "Meaning": "Kapan — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Kapurdhara",
+    "Meaning": "Kapurdhara — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Kausaltar",
+    "Meaning": "Kausaltar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Kavresthali",
+    "Meaning": "Kavresthali — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Keltole",
+    "Meaning": "Keltole — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Kharibot",
+    "Meaning": "Kharibot — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Khichapokhari",
+    "Meaning": "Khichapokhari — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Khusibu",
+    "Meaning": "Khusibu — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Kilagal",
+    "Meaning": "Kilagal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Koteshwor",
+    "Meaning": "A junction of journeys and daily devotion."
+  },
+  {
+    "Region": "Kuleshwor",
+    "Meaning": "Where temples sit between traffic and time."
+  },
+  {
+    "Region": "Kumaripati",
+    "Meaning": "Kumaripati — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Kupondole",
+    "Meaning": "Where modern life hums next to ancient alleys."
+  },
+  {
+    "Region": "Kusumbiyalachi",
+    "Meaning": "Kusumbiyalachi — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Kusunti ",
+    "Meaning": "Kusunti  — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Lagan",
+    "Meaning": "Lagan — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Lagankhel",
+    "Meaning": "A central drumbeat in Patan’s melody."
+  },
+  {
+    "Region": "Lagantole",
+    "Meaning": "Lagantole — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Lainchaur",
+    "Meaning": "Lainchaur — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Lazimpat",
+    "Meaning": "A diplomat’s corridor with quiet charm."
+  },
+  {
+    "Region": "Lele",
+    "Meaning": "Lele — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Lokanthali",
+    "Meaning": "Lokanthali — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Machhegaun",
+    "Meaning": "Machhegaun — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Mahaboudha",
+    "Meaning": "Mahaboudha — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Mahapal",
+    "Meaning": "Mahapal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Maharajgunj",
+    "Meaning": "Maharajgunj — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Mahendranagar",
+    "Meaning": "Mahendranagar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Maitidevi",
+    "Meaning": "Maitidevi — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Makhan",
+    "Meaning": "Makhan — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Malekhu",
+    "Meaning": "Malekhu — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Maligaon",
+    "Meaning": "Maligaon — A peaceful village echoing with old stories."
+  },
+  {
+    "Region": "Manamaiju",
+    "Meaning": "Manamaiju — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Mandikatar",
+    "Meaning": "Mandikatar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Mangalbazar",
+    "Meaning": "Mangalbazar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Manikatar",
+    "Meaning": "Manikatar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Maru",
+    "Meaning": "Maru — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Masangalli",
+    "Meaning": "Masangalli — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Matatirtha",
+    "Meaning": "Matatirtha — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Mhepi",
+    "Meaning": "Mhepi — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Minbhawan",
+    "Meaning": "Minbhawan — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Mitranagar",
+    "Meaning": "Mitranagar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Nagarjun",
+    "Meaning": "Nagarjun — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Naghal",
+    "Meaning": "Naghal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Nagpokhari",
+    "Meaning": "Nagpokhari — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Naikap",
+    "Meaning": "Naikap — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Nakhipot",
+    "Meaning": "Nakhipot — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Nardevi",
+    "Meaning": "Nardevi — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Yetkha",
+    "Meaning": "Yetkha — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Nawalparasi",
+    "Meaning": "Nawalparasi — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Naxal",
+    "Meaning": "Chic and charm in Kathmandu’s evolving face."
+  },
+  {
+    "Region": "Nayabazar",
+    "Meaning": "Nayabazar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Nepalgunj",
+    "Meaning": "Nepalgunj — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Nepaltar",
+    "Meaning": "Nepaltar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Thapagaon",
+    "Meaning": "Thapagaon — A peaceful village echoing with old stories."
+  },
+  {
+    "Region": "New Road",
+    "Meaning": "New Road — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Ombahal",
+    "Meaning": "Ombahal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Paknajol",
+    "Meaning": "Paknajol — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Panipokhari",
+    "Meaning": "Panipokhari — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Parwanipur",
+    "Meaning": "Parwanipur — A town where past and present walk side by side."
+  },
+  {
+    "Region": "Pashupati",
+    "Meaning": "Pashupati — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Patan",
+    "Meaning": "The city of artisans, where bronze breathes beauty."
+  },
+  {
+    "Region": "Patan Dhoka",
+    "Meaning": "Patan Dhoka — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Pepsicola",
+    "Meaning": "Pepsicola — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Pharping",
+    "Meaning": "Pharping — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Phutung",
+    "Meaning": "Phutung — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Pokhara",
+    "Meaning": "Pokhara — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Pulchwok",
+    "Meaning": "Pulchwok — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Putalisadak",
+    "Meaning": "Putalisadak — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Rabi Bhawan",
+    "Meaning": "Rabi Bhawan — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Ramechap",
+    "Meaning": "Ramechap — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Ramkot",
+    "Meaning": "Ramkot — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Raniban, Gorkha",
+    "Meaning": "Raniban, Gorkha — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Ranibari, Lazimpat",
+    "Meaning": "Ranibari, Lazimpat — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Ratopul",
+    "Meaning": "Ratopul — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Ravi Bhawan",
+    "Meaning": "Ravi Bhawan — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Richmond",
+    "Meaning": "Richmond — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Rukum",
+    "Meaning": "Rukum — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Samakhusi",
+    "Meaning": "Samakhusi — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Sanepa",
+    "Meaning": "Where calm lanes hide vibrant voices."
+  },
+  {
+    "Region": "Sangla",
+    "Meaning": "Sangla — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Sano Bharyang",
+    "Meaning": "Sano Bharyang — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Sano Thimi",
+    "Meaning": "Sano Thimi — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Satdobato",
+    "Meaning": "The southern turn where games and life collide."
+  },
+  {
+    "Region": "Satungal",
+    "Meaning": "Satungal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Shankhamul",
+    "Meaning": "Shankhamul — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Shantinagar",
+    "Meaning": "Shantinagar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Shantitole",
+    "Meaning": "Shantitole — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Sifal",
+    "Meaning": "Sifal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Sinamangal",
+    "Meaning": "Sinamangal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Sindhupalchwok",
+    "Meaning": "Sindhupalchwok — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Siphal",
+    "Meaning": "Siphal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Sitapaila",
+    "Meaning": "Sitapaila — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Soalteemode",
+    "Meaning": "Soalteemode — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Sorhakhutte",
+    "Meaning": "Sorhakhutte — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Sukedhara",
+    "Meaning": "Sukedhara — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Sundarijal",
+    "Meaning": "Sundarijal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Sundhara",
+    "Meaning": "Sundhara — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Suryavinayak",
+    "Meaning": "Suryavinayak — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Swoyambhu",
+    "Meaning": "Swoyambhu — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Syuchatar",
+    "Meaning": "Syuchatar — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Tahachal",
+    "Meaning": "Tahachal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Tanahu",
+    "Meaning": "Tanahu — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Tangal",
+    "Meaning": "Tangal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Tarkeshwor",
+    "Meaning": "Tarkeshwor — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Tathali",
+    "Meaning": "Tathali — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Taudal",
+    "Meaning": "Taudal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Teku",
+    "Meaning": "Teku — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Tengal",
+    "Meaning": "Tengal — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Thahity",
+    "Meaning": "Thahity — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Thaiba",
+    "Meaning": "Thaiba — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Thamel",
+    "Meaning": "A vibrant maze where the world meets Nepal."
+  },
+  {
+    "Region": "Thankot",
+    "Meaning": "Thankot — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Thapathali",
+    "Meaning": "Thapathali — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Thasikhel",
+    "Meaning": "Thasikhel — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Thecho",
+    "Meaning": "Thecho — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Thokarpa, Sindhupalchowk",
+    "Meaning": "Thokarpa, Sindhupalchowk — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Thulo Bharyang",
+    "Meaning": "Thulo Bharyang — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Tikathali",
+    "Meaning": "Tikathali — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Tinkune",
+    "Meaning": "Tinkune — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Tinthana",
+    "Meaning": "Tinthana — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Tripureshwor",
+    "Meaning": "Tripureshwor — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Trisuli",
+    "Meaning": "Trisuli — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Wotu",
+    "Meaning": "Wotu — A name whispered in the valley’s living memory."
+  },
+  {
+    "Region": "Yangal",
+    "Meaning": "Yangal — A name whispered in the valley’s living memory."
   },
   {
     "Region": "Boston",
-    "Meaning": "Where the Guthi reawakens in a land of innovation."
+    "Meaning": "Boston — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
     "Region": "New York",
-    "Meaning": "Guthi pulse in the city that never sleeps."
-  },
-  {
-    "Region": "Sydney",
-    "Meaning": "Where the southern sun touches Guthi voices."
-  },
-  {
-    "Region": "London",
-    "Meaning": "Old empire meets ancient spirit."
-  },
-  {
-    "Region": "Tokyo",
-    "Meaning": "Stillness beneath speed — Guthi breathes here too."
-  },
-  {
-    "Region": "Singapore",
-    "Meaning": "Precision and prosperity with Guthi roots."
-  },
-  {
-    "Region": "Doha",
-    "Meaning": "Guthi echoes across desert wind."
-  },
-  {
-    "Region": "Lisbon",
-    "Meaning": "Western shore where Guthi dreams sail."
-  },
-  {
-    "Region": "Toronto",
-    "Meaning": "Multitude of cultures, one sacred thread."
-  },
-  {
-    "Region": "Copenhagen",
-    "Meaning": "Where design and dharma align."
-  },
-  {
-    "Region": "Paris",
-    "Meaning": "Art of love meets the art of lineage."
-  },
-  {
-    "Region": "Melbourne",
-    "Meaning": "Creative sparks light ancient memory."
+    "Meaning": "New York — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
     "Region": "Los Angeles",
-    "Meaning": "Guthi wisdom beneath Hollywood glow."
-  },
-  {
-    "Region": "Berlin",
-    "Meaning": "Bold thought cradles ancestral rhythm."
+    "Meaning": "Los Angeles — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
     "Region": "San Francisco",
-    "Meaning": "Where innovation kneels to memory."
+    "Meaning": "San Francisco — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
     "Region": "Seattle",
-    "Meaning": "Rain-fed forests cradle new rituals."
+    "Meaning": "Seattle — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Dallas",
+    "Meaning": "Dallas — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Houston",
+    "Meaning": "Houston — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Chicago",
+    "Meaning": "Chicago — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Atlanta",
+    "Meaning": "Atlanta — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Denver",
+    "Meaning": "Denver — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Toronto",
+    "Meaning": "Toronto — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
     "Region": "Vancouver",
-    "Meaning": "Where mountains witness Guthi hearts."
+    "Meaning": "Vancouver — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Munich",
-    "Meaning": "Engineered precision meets soul ancestry."
+    "Region": "Calgary",
+    "Meaning": "Calgary — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Oslo",
-    "Meaning": "North light and Newar lineage converge."
+    "Region": "Ottawa",
+    "Meaning": "Ottawa — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Montreal",
+    "Meaning": "Montreal — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "London",
+    "Meaning": "London — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Birmingham",
+    "Meaning": "Birmingham — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Manchester",
+    "Meaning": "Manchester — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Leeds",
+    "Meaning": "Leeds — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Liverpool",
+    "Meaning": "Liverpool — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Sydney",
+    "Meaning": "Sydney — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Melbourne",
+    "Meaning": "Melbourne — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Brisbane",
+    "Meaning": "Brisbane — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Perth",
+    "Meaning": "Perth — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Canberra",
+    "Meaning": "Canberra — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Auckland",
+    "Meaning": "Auckland — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Wellington",
+    "Meaning": "Wellington — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Christchurch",
+    "Meaning": "Christchurch — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Tokyo",
+    "Meaning": "Tokyo — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Osaka",
+    "Meaning": "Osaka — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Fukuoka",
+    "Meaning": "Fukuoka — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Singapore",
+    "Meaning": "Singapore — A far branch of the Guthi, thriving beyond the Himalayas."
+  },
+  {
+    "Region": "Kuala Lumpur",
+    "Meaning": "Kuala Lumpur — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
     "Region": "Bangkok",
-    "Meaning": "Where the Guthi wanders with the monks."
+    "Meaning": "Bangkok — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Boston #21",
-    "Meaning": "Where the Guthi reawakens in a land of innovation."
+    "Region": "Doha",
+    "Meaning": "Doha — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "New York #22",
-    "Meaning": "Guthi pulse in the city that never sleeps."
+    "Region": "Dubai",
+    "Meaning": "Dubai — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Sydney #23",
-    "Meaning": "Where the southern sun touches Guthi voices."
+    "Region": "Abu Dhabi",
+    "Meaning": "Abu Dhabi — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "London #24",
-    "Meaning": "Old empire meets ancient spirit."
+    "Region": "Muscat",
+    "Meaning": "Muscat — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Tokyo #25",
-    "Meaning": "Stillness beneath speed — Guthi breathes here too."
+    "Region": "Kuwait City",
+    "Meaning": "Kuwait City — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Singapore #26",
-    "Meaning": "Precision and prosperity with Guthi roots."
+    "Region": "Manama",
+    "Meaning": "Manama — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Doha #27",
-    "Meaning": "Guthi echoes across desert wind."
+    "Region": "Paris",
+    "Meaning": "Paris — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Lisbon #28",
-    "Meaning": "Western shore where Guthi dreams sail."
+    "Region": "Lyon",
+    "Meaning": "Lyon — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Toronto #29",
-    "Meaning": "Multitude of cultures, one sacred thread."
+    "Region": "Marseille",
+    "Meaning": "Marseille — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Copenhagen #30",
-    "Meaning": "Where design and dharma align."
+    "Region": "Berlin",
+    "Meaning": "Berlin — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Paris #31",
-    "Meaning": "Art of love meets the art of lineage."
+    "Region": "Frankfurt",
+    "Meaning": "Frankfurt — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Melbourne #32",
-    "Meaning": "Creative sparks light ancient memory."
+    "Region": "Munich",
+    "Meaning": "Munich — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Los Angeles #33",
-    "Meaning": "Guthi wisdom beneath Hollywood glow."
+    "Region": "Hamburg",
+    "Meaning": "Hamburg — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Berlin #34",
-    "Meaning": "Bold thought cradles ancestral rhythm."
+    "Region": "Stockholm",
+    "Meaning": "Stockholm — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "San Francisco #35",
-    "Meaning": "Where innovation kneels to memory."
+    "Region": "Copenhagen",
+    "Meaning": "Copenhagen — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Seattle #36",
-    "Meaning": "Rain-fed forests cradle new rituals."
+    "Region": "Oslo",
+    "Meaning": "Oslo — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Vancouver #37",
-    "Meaning": "Where mountains witness Guthi hearts."
+    "Region": "Zurich",
+    "Meaning": "Zurich — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Munich #38",
-    "Meaning": "Engineered precision meets soul ancestry."
+    "Region": "Geneva",
+    "Meaning": "Geneva — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Oslo #39",
-    "Meaning": "North light and Newar lineage converge."
+    "Region": "Amsterdam",
+    "Meaning": "Amsterdam — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Bangkok #40",
-    "Meaning": "Where the Guthi wanders with the monks."
+    "Region": "Rotterdam",
+    "Meaning": "Rotterdam — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Boston #41",
-    "Meaning": "Where the Guthi reawakens in a land of innovation."
+    "Region": "The Hague",
+    "Meaning": "The Hague — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "New York #42",
-    "Meaning": "Guthi pulse in the city that never sleeps."
+    "Region": "Brussels",
+    "Meaning": "Brussels — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Sydney #43",
-    "Meaning": "Where the southern sun touches Guthi voices."
+    "Region": "Vienna",
+    "Meaning": "Vienna — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "London #44",
-    "Meaning": "Old empire meets ancient spirit."
+    "Region": "Helsinki",
+    "Meaning": "Helsinki — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Tokyo #45",
-    "Meaning": "Stillness beneath speed — Guthi breathes here too."
+    "Region": "Rome",
+    "Meaning": "Rome — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Singapore #46",
-    "Meaning": "Precision and prosperity with Guthi roots."
+    "Region": "Milan",
+    "Meaning": "Milan — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Doha #47",
-    "Meaning": "Guthi echoes across desert wind."
+    "Region": "Barcelona",
+    "Meaning": "Barcelona — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Lisbon #48",
-    "Meaning": "Western shore where Guthi dreams sail."
+    "Region": "Madrid",
+    "Meaning": "Madrid — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Toronto #49",
-    "Meaning": "Multitude of cultures, one sacred thread."
+    "Region": "Lisbon",
+    "Meaning": "Lisbon — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Copenhagen #50",
-    "Meaning": "Where design and dharma align."
+    "Region": "Warsaw",
+    "Meaning": "Warsaw — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Paris #51",
-    "Meaning": "Art of love meets the art of lineage."
+    "Region": "Prague",
+    "Meaning": "Prague — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Melbourne #52",
-    "Meaning": "Creative sparks light ancient memory."
+    "Region": "Budapest",
+    "Meaning": "Budapest — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Los Angeles #53",
-    "Meaning": "Guthi wisdom beneath Hollywood glow."
+    "Region": "Istanbul",
+    "Meaning": "Istanbul — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Berlin #54",
-    "Meaning": "Bold thought cradles ancestral rhythm."
+    "Region": "Athens",
+    "Meaning": "Athens — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "San Francisco #55",
-    "Meaning": "Where innovation kneels to memory."
+    "Region": "Moscow",
+    "Meaning": "Moscow — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Seattle #56",
-    "Meaning": "Rain-fed forests cradle new rituals."
+    "Region": "Beijing",
+    "Meaning": "Beijing — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Vancouver #57",
-    "Meaning": "Where mountains witness Guthi hearts."
+    "Region": "Shanghai",
+    "Meaning": "Shanghai — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Munich #58",
-    "Meaning": "Engineered precision meets soul ancestry."
+    "Region": "Guangzhou",
+    "Meaning": "Guangzhou — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Oslo #59",
-    "Meaning": "North light and Newar lineage converge."
+    "Region": "Hong Kong",
+    "Meaning": "Hong Kong — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Bangkok #60",
-    "Meaning": "Where the Guthi wanders with the monks."
+    "Region": "Seoul",
+    "Meaning": "Seoul — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Boston #61",
-    "Meaning": "Where the Guthi reawakens in a land of innovation."
+    "Region": "Taipei",
+    "Meaning": "Taipei — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "New York #62",
-    "Meaning": "Guthi pulse in the city that never sleeps."
+    "Region": "Jakarta",
+    "Meaning": "Jakarta — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Sydney #63",
-    "Meaning": "Where the southern sun touches Guthi voices."
+    "Region": "Manila",
+    "Meaning": "Manila — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "London #64",
-    "Meaning": "Old empire meets ancient spirit."
+    "Region": "Colombo",
+    "Meaning": "Colombo — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Tokyo #65",
-    "Meaning": "Stillness beneath speed — Guthi breathes here too."
+    "Region": "Cape Town",
+    "Meaning": "Cape Town — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Singapore #66",
-    "Meaning": "Precision and prosperity with Guthi roots."
+    "Region": "Johannesburg",
+    "Meaning": "Johannesburg — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Doha #67",
-    "Meaning": "Guthi echoes across desert wind."
+    "Region": "Nairobi",
+    "Meaning": "Nairobi — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Lisbon #68",
-    "Meaning": "Western shore where Guthi dreams sail."
+    "Region": "Lagos",
+    "Meaning": "Lagos — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Toronto #69",
-    "Meaning": "Multitude of cultures, one sacred thread."
+    "Region": "Accra",
+    "Meaning": "Accra — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Copenhagen #70",
-    "Meaning": "Where design and dharma align."
+    "Region": "Mexico City",
+    "Meaning": "Mexico City — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Paris #71",
-    "Meaning": "Art of love meets the art of lineage."
+    "Region": "Bogotá",
+    "Meaning": "Bogotá — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Melbourne #72",
-    "Meaning": "Creative sparks light ancient memory."
+    "Region": "São Paulo",
+    "Meaning": "São Paulo — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Los Angeles #73",
-    "Meaning": "Guthi wisdom beneath Hollywood glow."
+    "Region": "Buenos Aires",
+    "Meaning": "Buenos Aires — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Berlin #74",
-    "Meaning": "Bold thought cradles ancestral rhythm."
+    "Region": "Santiago",
+    "Meaning": "Santiago — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "San Francisco #75",
-    "Meaning": "Where innovation kneels to memory."
+    "Region": "Lima",
+    "Meaning": "Lima — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Seattle #76",
-    "Meaning": "Rain-fed forests cradle new rituals."
+    "Region": "Tel Aviv",
+    "Meaning": "Tel Aviv — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Vancouver #77",
-    "Meaning": "Where mountains witness Guthi hearts."
+    "Region": "Jerusalem",
+    "Meaning": "Jerusalem — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Munich #78",
-    "Meaning": "Engineered precision meets soul ancestry."
+    "Region": "Cairo",
+    "Meaning": "Cairo — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Oslo #79",
-    "Meaning": "North light and Newar lineage converge."
+    "Region": "Riyadh",
+    "Meaning": "Riyadh — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Bangkok #80",
-    "Meaning": "Where the Guthi wanders with the monks."
+    "Region": "Jeddah",
+    "Meaning": "Jeddah — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Boston #81",
-    "Meaning": "Where the Guthi reawakens in a land of innovation."
+    "Region": "Bahrain",
+    "Meaning": "Bahrain — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "New York #82",
-    "Meaning": "Guthi pulse in the city that never sleeps."
+    "Region": "Ankara",
+    "Meaning": "Ankara — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Sydney #83",
-    "Meaning": "Where the southern sun touches Guthi voices."
+    "Region": "Izmir",
+    "Meaning": "Izmir — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "London #84",
-    "Meaning": "Old empire meets ancient spirit."
+    "Region": "Tashkent",
+    "Meaning": "Tashkent — A far branch of the Guthi, thriving beyond the Himalayas."
   },
   {
-    "Region": "Tokyo #85",
-    "Meaning": "Stillness beneath speed — Guthi breathes here too."
-  },
-  {
-    "Region": "Singapore #86",
-    "Meaning": "Precision and prosperity with Guthi roots."
-  },
-  {
-    "Region": "Doha #87",
-    "Meaning": "Guthi echoes across desert wind."
-  },
-  {
-    "Region": "Lisbon #88",
-    "Meaning": "Western shore where Guthi dreams sail."
-  },
-  {
-    "Region": "Toronto #89",
-    "Meaning": "Multitude of cultures, one sacred thread."
-  },
-  {
-    "Region": "Copenhagen #90",
-    "Meaning": "Where design and dharma align."
-  },
-  {
-    "Region": "Paris #91",
-    "Meaning": "Art of love meets the art of lineage."
-  },
-  {
-    "Region": "Melbourne #92",
-    "Meaning": "Creative sparks light ancient memory."
-  },
-  {
-    "Region": "Los Angeles #93",
-    "Meaning": "Guthi wisdom beneath Hollywood glow."
-  },
-  {
-    "Region": "Berlin #94",
-    "Meaning": "Bold thought cradles ancestral rhythm."
-  },
-  {
-    "Region": "San Francisco #95",
-    "Meaning": "Where innovation kneels to memory."
-  },
-  {
-    "Region": "Seattle #96",
-    "Meaning": "Rain-fed forests cradle new rituals."
-  },
-  {
-    "Region": "Vancouver #97",
-    "Meaning": "Where mountains witness Guthi hearts."
-  },
-  {
-    "Region": "Munich #98",
-    "Meaning": "Engineered precision meets soul ancestry."
-  },
-  {
-    "Region": "Oslo #99",
-    "Meaning": "North light and Newar lineage converge."
-  },
-  {
-    "Region": "Bangkok #100",
-    "Meaning": "Where the Guthi wanders with the monks."
+    "Region": "Almaty",
+    "Meaning": "Almaty — A far branch of the Guthi, thriving beyond the Himalayas."
   }
 ]
