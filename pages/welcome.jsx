@@ -200,7 +200,7 @@ export default function Welcome() {
           )}
           {confirmedRegion && (
             <p className="mt-2 text-sm text-green-700 italic">
-              ✨ Aha, {confirmedRegion} — {regionList.find(r => r.Region.toLowerCase() === confirmedRegion.toLowerCase())?.Meaning || "not yet in our sacred list. You are the first to speak it here."}
+             ✨ Aha, {regionList.find(r => r.Region.toLowerCase() === confirmedRegion.toLowerCase())?.Meaning || "not yet in our sacred list. You are the first to speak it here."}
             </p>
           )}
         </div>
