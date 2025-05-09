@@ -15,7 +15,11 @@ export default function GuthiDashboard() {
         setLoading(false);
         return;
       }
-      const { data, error } = await supabase.from('users').select('*').eq('uid', storedUid).single();
+     const { data, error } = await supabase
+  .from('users')
+  .select('*')
+  .eq('sporeId', user.uid); // 🔥 Correct column name
+
       if (data) setUserData(data);
       setLoading(false);
     };
