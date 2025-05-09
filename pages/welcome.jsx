@@ -78,7 +78,11 @@ export default function Welcome() {
           <code className="text-lg bg-gray-100 p-2 rounded mt-2 inline-block">{guthiKey}</code>
 
 <div className="mt-6 text-sm text-gray-700">
-  <label className="block font-semibold">📱🔑 Recovery Number (Optional)</label>
+  <label className="block font-semibold">🔑 Recovery 📞 Number (Optional)</label>
+
+  <p className="mt-2 font-medium text-red-700">
+    If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
+  </p>
 
   <input
     type="tel"
@@ -91,12 +95,7 @@ export default function Welcome() {
   <p className="text-xs text-gray-500 mt-2">
     Why do we ask this? It’s not for marketing. Only to help you retrieve your Guthi Key if forgotten.
   </p>
-
-  <p className="mt-3 font-medium text-red-700">
-    If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
-  </p>
 </div>
-
           <button
             onClick={() => router.push('/dashboard')}
             className="mt-6 bg-black text-white px-4 py-2 rounded"
