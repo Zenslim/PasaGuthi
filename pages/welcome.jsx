@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
 import { nanoid } from 'nanoid';
 import tharList from '../data/tharList.json';
+import skillsList from '../data/skillsList-enhanced.json';
 import Fuse from 'fuse.js';
 
 export default function Welcome() {
@@ -17,6 +18,7 @@ export default function Welcome() {
   const [phone, setPhone] = useState('');
   const [suggestedThar, setSuggestedThar] = useState([]);
   const [confirmedThar, setConfirmedThar] = useState('');
+  const [confirmedSkills, setConfirmedSkills] = useState([]);
   const [guthiKey, setGuthiKey] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [regionHistory, setRegionHistory] = useState([]);
@@ -71,6 +73,9 @@ export default function Welcome() {
     const sporeId = localStorage.getItem('sporeId');
     const guthiKey = `${form.name.toLowerCase()}-${form.thar.toLowerCase()}-${form.region.toLowerCase()}-${form.skills.toLowerCase()}-${nanoid(5)}`;
     setGuthiKey(guthiKey);
+
+    const skillList = form.skills.split(',').map(s => s.trim()).filter(Boolean);
+    setConfirmedSkills(skillList);
 
     const { error } = await supabase.from('users').insert([{
       sporeId,
@@ -194,10 +199,25 @@ export default function Welcome() {
 
         <div>
           <label className="block font-semibold">👐 Your Skills</label>
-          <input name="skills" required onChange={handleChange} list="skillsList" placeholder="Your Skills (e.g. farming, design)" value={form.skills} className="border bg-white text-black p-2 w-full rounded" />
+          <input name="skills" required onChange={handleChange} list="skillsList" placeholder="Enter one or more skills (e.g. farming, healing, design)" value={form.skills} className="border bg-white text-black p-2 w-full rounded" />
           <datalist id="skillsList">
             {skillsHistory.map((s, i) => <option key={i} value={s} />)}
           </datalist>
+          <p className="text-xs text-gray-500 mt-1">
+            Separate multiple skills with commas — each will be honored with meaning.
+          </p>
+          {confirmedSkills.length > 0 && (
+            <div className="mt-2 space-y-1 text-sm text-green-700 italic">
+              {confirmedSkills.map((s, i) => {
+                const match = skillsList.find(k => k.Skill.toLowerCase() === s.toLowerCase());
+                return (
+                  <p key={i}>
+                    ✨ Aha, {s} — {match ? match.Meaning : "not yet in our sacred list. You are the first to speak it here."}
+                  </p>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full font-bold">🌿 Generate My Guthi Key</button>
