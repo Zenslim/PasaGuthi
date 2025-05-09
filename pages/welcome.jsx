@@ -20,6 +20,7 @@ export default function Welcome() {
   const [suggestedThar, setSuggestedThar] = useState([]);
   const [suggestedRegion, setSuggestedRegion] = useState([]);
   const [suggestedSkills, setSuggestedSkills] = useState([]);
+  const [skillTags, setSkillTags] = useState([]);
   const [confirmedThar, setConfirmedThar] = useState('');
   const [confirmedSkills, setConfirmedSkills] = useState([]);
   const [confirmedRegion, setConfirmedRegion] = useState('');
@@ -52,9 +53,32 @@ export default function Welcome() {
       setConfirmedRegion('');
     }
     if (name === 'skills') {
-      const entries = value.split(',').map(s => s.trim());
-      const suggestions = entries.flatMap(entry => skillsFuse.search(entry).map(r => r.item.Skill));
-      setSuggestedSkills([...new Set(suggestions)]);
+      const parts = value.split(',');
+      const last = parts[parts.length - 1].trim();
+      if (last.length > 0) {
+        const results = skillsFuse.search(last).map(r => r.item.Skill);
+        setSuggestedSkills(results);
+      } else {
+        setSuggestedSkills([]);
+      }
+    }
+  };
+
+  const handleSkillSelect = (skill) => {
+    const current = form.skills.split(',').map(s => s.trim()).filter(Boolean);
+    if (!current.includes(skill)) {
+      const updated = [...current.slice(0, -1), skill];
+      setForm(prev => ({ ...prev, skills: updated.join(', ') + ', ' }));
+      setSkillTags(updated);
+    }
+    setSuggestedSkills([]);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const finalSkills = form.skills.split(',').map(s => s.trim()).filter(Boolean);
+      setConfirmedSkills(finalSkills);
     }
   };
 
@@ -64,8 +88,6 @@ export default function Welcome() {
     const guthiKey = `${form.name.toLowerCase()}-${form.thar.toLowerCase()}-${form.region.toLowerCase()}-${form.skills.toLowerCase()}-${nanoid(5)}`;
     setGuthiKey(guthiKey);
 
-    const skillList = form.skills.split(',').map(s => s.trim()).filter(Boolean);
-    setConfirmedSkills(skillList);
     setConfirmedRegion(form.region);
 
     const { error } = await supabase.from('users').insert([{
@@ -123,7 +145,7 @@ export default function Welcome() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white text-black p-6">
-      <form onSubmit={handleSubmit} className="w-full max-w-md space-y-5">
+      <form onSubmit={handleSubmit} onKeyDown={handleKeyPress} className="w-full max-w-md space-y-5">
         <h1 className="text-xl font-bold text-center">🌿 The forest welcomes you.</h1>
         <p className="text-center text-sm text-gray-600">Enter your sacred Guthi identity to be remembered.</p>
 
@@ -185,9 +207,16 @@ export default function Welcome() {
 
         <div>
           <label className="block font-semibold">👐 Your Skills</label>
-          <input name="skills" required onChange={handleChange} placeholder="Enter one or more skills (e.g. farming, design, editing)" value={form.skills} className="border bg-white text-black p-2 w-full rounded" />
+          <input name="skills" required onChange={handleChange} value={form.skills} placeholder="e.g. farming, design, healing" className="border bg-white text-black p-2 w-full rounded" />
+          {suggestedSkills.length > 0 && (
+            <ul className="bg-gray-50 border p-2 text-sm rounded mt-1">
+              {suggestedSkills.map((s, i) => (
+                <li key={i} className="cursor-pointer hover:bg-gray-100" onClick={() => handleSkillSelect(s)}>{s}</li>
+              ))}
+            </ul>
+          )}
           <p className="text-xs text-gray-500 mt-1">
-            Separate multiple skills with commas — each will be honored with meaning.
+            Type a skill and press Enter to confirm — each will be honored with meaning.
           </p>
           {confirmedSkills.length > 0 && (
             <div className="mt-2 space-y-1 text-sm text-green-700 italic">
