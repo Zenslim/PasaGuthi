@@ -18,58 +18,43 @@ export default function Welcome() {
   });
   const [phone, setPhone] = useState('');
   const [suggestedThar, setSuggestedThar] = useState([]);
+  const [suggestedRegion, setSuggestedRegion] = useState([]);
+  const [suggestedSkills, setSuggestedSkills] = useState([]);
   const [confirmedThar, setConfirmedThar] = useState('');
   const [confirmedSkills, setConfirmedSkills] = useState([]);
   const [confirmedRegion, setConfirmedRegion] = useState('');
   const [guthiKey, setGuthiKey] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [regionHistory, setRegionHistory] = useState([]);
-  const [skillsHistory, setSkillsHistory] = useState([]);
 
-  const fuse = new Fuse(tharList, {
-    keys: ['Thar'],
-    threshold: 0.3,
-    ignoreLocation: true,
-    includeScore: false,
-    useExtendedSearch: true
-  });
+  const tharFuse = new Fuse(tharList, { keys: ['Thar'], threshold: 0.3 });
+  const regionFuse = new Fuse(regionList, { keys: ['Region'], threshold: 0.3 });
+  const skillsFuse = new Fuse(skillsList, { keys: ['Skill'], threshold: 0.3 });
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const id = localStorage.getItem('sporeId') || crypto.randomUUID();
       localStorage.setItem('sporeId', id);
-      const regions = JSON.parse(localStorage.getItem('regionHistory') || '[]');
-      const skills = JSON.parse(localStorage.getItem('skillsHistory') || '[]');
-      setRegionHistory(regions);
-      setSkillsHistory(skills);
     }
   }, []);
-
-  const detectRegion = () => {
-    if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-      const { latitude, longitude } = pos.coords;
-      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
-      const data = await res.json();
-      if (data?.address?.county || data?.address?.state) {
-        const r = data.address.county || data.address.state;
-        setForm(prev => ({ ...prev, region: r }));
-        setConfirmedRegion(r);
-      }
-    });
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
+
     if (name === 'thar') {
-      const input = value.trim();
-      const results = fuse.search(`^${input}`).map(r => r.item);
+      const results = tharFuse.search(value.trim()).map(r => r.item);
       setSuggestedThar(results);
       setConfirmedThar('');
     }
     if (name === 'region') {
+      const results = regionFuse.search(value.trim()).map(r => r.item);
+      setSuggestedRegion(results);
       setConfirmedRegion('');
+    }
+    if (name === 'skills') {
+      const entries = value.split(',').map(s => s.trim());
+      const suggestions = entries.flatMap(entry => skillsFuse.search(entry).map(r => r.item.Skill));
+      setSuggestedSkills([...new Set(suggestions)]);
     }
   };
 
@@ -94,8 +79,6 @@ export default function Welcome() {
 
     if (!error) {
       localStorage.setItem('guthiKey', guthiKey);
-      localStorage.setItem('regionHistory', JSON.stringify([...new Set([form.region, ...regionHistory])].slice(0, 10)));
-      localStorage.setItem('skillsHistory', JSON.stringify([...new Set([form.skills, ...skillsHistory])].slice(0, 10)));
       setSubmitted(true);
     } else {
       console.error('❌ Supabase insert failed:', error);
@@ -151,28 +134,15 @@ export default function Welcome() {
 
         <div>
           <label className="block font-semibold">🌳 Your Thar</label>
-          <input
-            name="thar"
-            required
-            onChange={handleChange}
-            value={form.thar}
-            placeholder="Thar (Surname)"
-            className="border bg-white text-black p-2 w-full rounded"
-          />
+          <input name="thar" required onChange={handleChange} value={form.thar} placeholder="Thar (Surname)" className="border bg-white text-black p-2 w-full rounded" />
           {suggestedThar.length > 0 && (
             <ul className="bg-gray-50 border p-2 text-sm rounded mt-1">
               {suggestedThar.map((t, i) => (
-                <li
-                  key={i}
-                  className="cursor-pointer hover:bg-gray-100"
-                  onClick={() => {
-                    setForm(prev => ({ ...prev, thar: t.Thar }));
-                    setConfirmedThar(t.Thar);
-                    setSuggestedThar([]);
-                  }}
-                >
-                  {t.Thar}
-                </li>
+                <li key={i} className="cursor-pointer hover:bg-gray-100" onClick={() => {
+                  setForm(prev => ({ ...prev, thar: t.Thar }));
+                  setConfirmedThar(t.Thar);
+                  setSuggestedThar([]);
+                }}>{t.Thar}</li>
               ))}
             </ul>
           )}
@@ -194,21 +164,18 @@ export default function Welcome() {
 
         <div>
           <label className="block font-semibold">🗺️ Your Region</label>
-          <div className="flex space-x-2">
-            <input
-              name="region"
-              required
-              onChange={handleChange}
-              list="regionList"
-              placeholder="Your District/Region"
-              value={form.region}
-              className="border bg-white text-black p-2 w-full rounded"
-            />
-            <datalist id="regionList">
-              {regionHistory.map((r, i) => <option key={i} value={r} />)}
-            </datalist>
-            <button type="button" onClick={detectRegion} className="text-sm text-blue-600 underline">📍 Detect</button>
-          </div>
+          <input name="region" required onChange={handleChange} value={form.region} placeholder="Your District/Region" className="border bg-white text-black p-2 w-full rounded" />
+          {suggestedRegion.length > 0 && (
+            <ul className="bg-gray-50 border p-2 text-sm rounded mt-1">
+              {suggestedRegion.map((r, i) => (
+                <li key={i} className="cursor-pointer hover:bg-gray-100" onClick={() => {
+                  setForm(prev => ({ ...prev, region: r.Region }));
+                  setConfirmedRegion(r.Region);
+                  setSuggestedRegion([]);
+                }}>{r.Region}</li>
+              ))}
+            </ul>
+          )}
           {confirmedRegion && (
             <p className="mt-2 text-sm text-green-700 italic">
               ✨ Aha, {confirmedRegion} — {regionList.find(r => r.Region.toLowerCase() === confirmedRegion.toLowerCase())?.Meaning || "not yet in our sacred list. You are the first to speak it here."}
@@ -218,10 +185,7 @@ export default function Welcome() {
 
         <div>
           <label className="block font-semibold">👐 Your Skills</label>
-          <input name="skills" required onChange={handleChange} list="skillsList" placeholder="Enter one or more skills (e.g. farming, healing, design)" value={form.skills} className="border bg-white text-black p-2 w-full rounded" />
-          <datalist id="skillsList">
-            {skillsHistory.map((s, i) => <option key={i} value={s} />)}
-          </datalist>
+          <input name="skills" required onChange={handleChange} placeholder="Enter one or more skills (e.g. farming, design, editing)" value={form.skills} className="border bg-white text-black p-2 w-full rounded" />
           <p className="text-xs text-gray-500 mt-1">
             Separate multiple skills with commas — each will be honored with meaning.
           </p>
