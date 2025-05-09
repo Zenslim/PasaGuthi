@@ -220,7 +220,7 @@ export default function Welcome() {
           <p className="text-xs text-gray-500 mt-1">
             Type a skill and press Enter to confirm — every offering adds to the sacred weave.
           </p>
-         {confirmedSkills.length > 0 && (
+        {confirmedSkills.length > 0 && (
   <div className="mt-2 space-y-1 text-sm text-green-700 italic">
     {confirmedSkills.map((s, i) => {
       const match = skillsList.find(k => k.Skill.toLowerCase() === s.toLowerCase());
@@ -233,7 +233,7 @@ export default function Welcome() {
   </div>
 )}
 
-{/* 📱 Recovery Phone Input */}
+{/* 📱 Phone input */}
 <div>
   <label className="block font-semibold">📱🔑 Recovery Number (Optional)</label>
   <input
@@ -255,7 +255,5 @@ export default function Welcome() {
 <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full font-bold">
   🌿 Plant My Guthi Seed
 </button>
-      </form>
-    </div>
-  );
-}
+</form> {/* ✅ closes the <form> tag */}
+</div> {/* ✅ closes the outer <div className="min-h-screen ..."> */}
