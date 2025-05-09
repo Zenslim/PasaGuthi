@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
@@ -15,6 +14,7 @@ export default function Welcome() {
     region: '',
     skills: ''
   });
+  const [phone, setPhone] = useState('');
   const [suggestedThar, setSuggestedThar] = useState([]);
   const [guthiKey, setGuthiKey] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -47,28 +47,28 @@ export default function Welcome() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  const sporeId = localStorage.getItem('sporeId');
-  const guthiKey = `${form.name.toLowerCase()}-${form.thar.toLowerCase()}-${form.region.toLowerCase()}-${form.skills.toLowerCase()}-${nanoid(5)}`;
-  setGuthiKey(guthiKey);
+    e.preventDefault();
+    const sporeId = localStorage.getItem('sporeId');
+    const guthiKey = `${form.name.toLowerCase()}-${form.thar.toLowerCase()}-${form.region.toLowerCase()}-${form.skills.toLowerCase()}-${nanoid(5)}`;
+    setGuthiKey(guthiKey);
 
-  const { error, data } = await supabase.from('users').insert([{
-    sporeId,
-    guthiKey,
-    ...form,
-    karma: 0,
-    createdAt: new Date().toISOString()
-  }]);
+    const { error } = await supabase.from('users').insert([{
+      sporeId,
+      guthiKey,
+      phone: phone || null,
+      ...form,
+      karma: 0,
+      createdAt: new Date().toISOString()
+    }]);
 
-  console.log('📤 Insert result:', { error, data }); // Log result
+    if (!error) {
+      localStorage.setItem('guthiKey', guthiKey);
+      setSubmitted(true);
+    } else {
+      console.error('❌ Supabase insert failed:', error);
+    }
+  };
 
-  if (!error) {
-    localStorage.setItem('guthiKey', guthiKey);
-    setSubmitted(true);
-  } else {
-    console.error('❌ Supabase insert failed:', error); // Log failure
-  }
-};
   if (submitted) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white p-6 text-center text-black">
@@ -76,7 +76,20 @@ export default function Welcome() {
           <h1 className="text-2xl font-bold">🌿 Welcome, {form.name}</h1>
           <p className="mt-4">Your Guthi Key:</p>
           <code className="text-lg bg-gray-100 p-2 rounded mt-2 inline-block">{guthiKey}</code>
-          <p className="mt-4 text-green-700">✅ The forest now remembers you.</p>
+
+          <div className="mt-6 text-sm text-gray-700">
+            <p className="font-medium">If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.</p>
+            <label className="block mt-4 font-semibold">📱 Phone Number (Optional)</label>
+            <input
+              type="tel"
+              placeholder="+97798XXXXXXX"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="w-full max-w-sm mt-1 p-2 border rounded"
+            />
+            <p className="text-xs text-gray-500 mt-1">Why do we ask this? It’s not for marketing. Only to help you retrieve your Guthi Key if forgotten.</p>
+          </div>
+
           <button
             onClick={() => router.push('/dashboard')}
             className="mt-6 bg-black text-white px-4 py-2 rounded"
@@ -95,12 +108,12 @@ export default function Welcome() {
         <p className="text-center text-sm text-gray-600">Enter your sacred Guthi identity to be remembered.</p>
 
         <div>
-          <label className="block font-semibold">🪶 Your Name — What should we call your soul when it returns?</label>
+          <label className="block font-semibold">🪶 Your Name</label>
           <input name="name" required onChange={handleChange} placeholder="First Name" className="border bg-white text-black p-2 w-full rounded" />
         </div>
 
         <div>
-          <label className="block font-semibold">🌳 Your Thar — From which branch of the sacred tree do you descend?</label>
+          <label className="block font-semibold">🌳 Your Thar</label>
           <input name="thar" required onChange={handleChange} placeholder="Thar (Surname)" className="border bg-white text-black p-2 w-full rounded" />
           {suggestedThar.length > 0 && (
             <ul className="bg-gray-50 border p-2 text-sm rounded mt-1">
@@ -121,7 +134,7 @@ export default function Welcome() {
         </div>
 
         <div>
-          <label className="block font-semibold">🗺️ Your Region — Which soil has touched your feet?</label>
+          <label className="block font-semibold">🗺️ Your Region</label>
           <div className="flex space-x-2">
             <input name="region" required onChange={handleChange} placeholder="Your District/Region" value={form.region} className="border bg-white text-black p-2 w-full rounded" />
             <button type="button" onClick={detectRegion} className="text-sm text-blue-600 underline">📍 Detect</button>
@@ -129,7 +142,7 @@ export default function Welcome() {
         </div>
 
         <div>
-          <label className="block font-semibold">👐 Your Skills — What gift do you carry in your hands?</label>
+          <label className="block font-semibold">👐 Your Skills</label>
           <input name="skills" required onChange={handleChange} placeholder="Your Skills (e.g. farming, design)" className="border bg-white text-black p-2 w-full rounded" />
         </div>
 
