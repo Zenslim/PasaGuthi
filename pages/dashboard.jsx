@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { db } from '../../lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { supabase } from '../lib/supabase';
 import { motion } from 'framer-motion';
 
 export default function GuthiDashboard() {
@@ -12,12 +11,15 @@ export default function GuthiDashboard() {
     const fetchUserData = async () => {
       const storedUid = localStorage.getItem('guthiUid');
       if (!storedUid) {
-        router.push('/network/welcome');
+        router.push('/welcome');
         return;
       }
-      const docSnap = await getDoc(doc(db, 'users', storedUid));
-      if (docSnap.exists()) setUserData(docSnap.data());
-      else router.push('/network/welcome');
+      const { data, error } = await supabase.from('users').select('*').eq('uid', storedUid).single();
+      if (error || !data) {
+        router.push('/welcome');
+      } else {
+        setUserData(data);
+      }
     };
     fetchUserData();
   }, []);
@@ -30,8 +32,17 @@ export default function GuthiDashboard() {
     );
   }
 
+  const role = userData.guthiRoles?.toLowerCase();
+  const isAdmin = role?.includes('admin');
+  const isElder = role?.includes('elder');
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white p-6">
+    <motion.div 
+      initial={{ opacity: 0, y: 30 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      transition={{ duration: 1.2 }}
+      className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white p-6"
+    >
       <header className="text-center mb-10">
         <h1 className="text-4xl font-bold mb-2">🔱 Pasaguthi Dashboard</h1>
         <p className="text-lg text-purple-300">Welcome, {userData.name} of {userData.thar}</p>
@@ -66,11 +77,25 @@ export default function GuthiDashboard() {
           <button className="bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-xl text-white font-bold shadow-md">🧭 Join a Circle</button>
           <button className="bg-pink-600 hover:bg-pink-700 px-6 py-3 rounded-xl text-white font-bold shadow-md">🗳 Propose a Vow</button>
         </div>
+
+        {isAdmin && (
+          <div className="mt-10 bg-yellow-900/40 p-4 rounded-xl text-yellow-300">
+            <h3 className="text-lg font-bold mb-2">🛡 Admin Console</h3>
+            <p>Access proposals, manage members, and publish DAO votes.</p>
+          </div>
+        )}
+
+        {isElder && (
+          <div className="mt-6 bg-blue-900/40 p-4 rounded-xl text-blue-300">
+            <h3 className="text-lg font-bold mb-2">🕊 Elder Reflections</h3>
+            <p>You are invited to guide the younger generation through whispers and blessings.</p>
+          </div>
+        )}
       </section>
 
       <footer className="mt-16 text-center text-sm text-gray-500">
         Guthi = DAO + Dharma • Pasaguthi.org
       </footer>
-    </div>
+    </motion.div>
   );
 }
