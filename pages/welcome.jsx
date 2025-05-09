@@ -3,7 +3,8 @@ import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
 import { nanoid } from 'nanoid';
 import tharList from '../data/tharList.json';
-import skillsList from '../data/skillsList-enhanced.json';
+import skillsList from '../data/skillsList.json';
+import regionList from '../data/regionList.json';
 import Fuse from 'fuse.js';
 
 export default function Welcome() {
@@ -19,6 +20,7 @@ export default function Welcome() {
   const [suggestedThar, setSuggestedThar] = useState([]);
   const [confirmedThar, setConfirmedThar] = useState('');
   const [confirmedSkills, setConfirmedSkills] = useState([]);
+  const [confirmedRegion, setConfirmedRegion] = useState('');
   const [guthiKey, setGuthiKey] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [regionHistory, setRegionHistory] = useState([]);
@@ -36,7 +38,6 @@ export default function Welcome() {
     if (typeof window !== 'undefined') {
       const id = localStorage.getItem('sporeId') || crypto.randomUUID();
       localStorage.setItem('sporeId', id);
-
       const regions = JSON.parse(localStorage.getItem('regionHistory') || '[]');
       const skills = JSON.parse(localStorage.getItem('skillsHistory') || '[]');
       setRegionHistory(regions);
@@ -51,7 +52,9 @@ export default function Welcome() {
       const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
       const data = await res.json();
       if (data?.address?.county || data?.address?.state) {
-        setForm(prev => ({ ...prev, region: data.address.county || data.address.state }));
+        const r = data.address.county || data.address.state;
+        setForm(prev => ({ ...prev, region: r }));
+        setConfirmedRegion(r);
       }
     });
   };
@@ -59,12 +62,14 @@ export default function Welcome() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
-
     if (name === 'thar') {
       const input = value.trim();
       const results = fuse.search(`^${input}`).map(r => r.item);
       setSuggestedThar(results);
       setConfirmedThar('');
+    }
+    if (name === 'region') {
+      setConfirmedRegion('');
     }
   };
 
@@ -76,6 +81,7 @@ export default function Welcome() {
 
     const skillList = form.skills.split(',').map(s => s.trim()).filter(Boolean);
     setConfirmedSkills(skillList);
+    setConfirmedRegion(form.region);
 
     const { error } = await supabase.from('users').insert([{
       sporeId,
@@ -189,12 +195,25 @@ export default function Welcome() {
         <div>
           <label className="block font-semibold">🗺️ Your Region</label>
           <div className="flex space-x-2">
-            <input name="region" required onChange={handleChange} list="regionList" placeholder="Your District/Region" value={form.region} className="border bg-white text-black p-2 w-full rounded" />
+            <input
+              name="region"
+              required
+              onChange={handleChange}
+              list="regionList"
+              placeholder="Your District/Region"
+              value={form.region}
+              className="border bg-white text-black p-2 w-full rounded"
+            />
             <datalist id="regionList">
               {regionHistory.map((r, i) => <option key={i} value={r} />)}
             </datalist>
             <button type="button" onClick={detectRegion} className="text-sm text-blue-600 underline">📍 Detect</button>
           </div>
+          {confirmedRegion && (
+            <p className="mt-2 text-sm text-green-700 italic">
+              ✨ Aha, {confirmedRegion} — {regionList.find(r => r.Region.toLowerCase() === confirmedRegion.toLowerCase())?.Meaning || "not yet in our sacred list. You are the first to speak it here."}
+            </p>
+          )}
         </div>
 
         <div>
