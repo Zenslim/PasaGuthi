@@ -220,23 +220,41 @@ export default function Welcome() {
           <p className="text-xs text-gray-500 mt-1">
             Type a skill and press Enter to confirm — every offering adds to the sacred weave.
           </p>
-          {confirmedSkills.length > 0 && (
-            <div className="mt-2 space-y-1 text-sm text-green-700 italic">
-              {confirmedSkills.map((s, i) => {
-                const match = skillsList.find(k => k.Skill.toLowerCase() === s.toLowerCase());
-                return (
-                  <p key={i}>
-                    ✨ Aha, {s} — {match ? match.Meaning : "not yet in our sacred list. You are the first to speak it here."}
-                  </p>
-                );
-              })}
-            </div>
-          )}
-        </div>
+         {confirmedSkills.length > 0 && (
+  <div className="mt-2 space-y-1 text-sm text-green-700 italic">
+    {confirmedSkills.map((s, i) => {
+      const match = skillsList.find(k => k.Skill.toLowerCase() === s.toLowerCase());
+      return (
+        <p key={i}>
+          ✨ Aha, {s} — {match ? match.Meaning : "not yet in our sacred list. You are the first to speak it here."}
+        </p>
+      );
+    })}
+  </div>
+)}
 
-        <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full font-bold">
-          🌿 Plant My Guthi Seed
-        </button>
+{/* 📱 Recovery Phone Input */}
+<div>
+  <label className="block font-semibold">📱🔑 Recovery Number (Optional)</label>
+  <input
+    type="tel"
+    placeholder="+97798XXXXXXX"
+    value={phone}
+    onChange={(e) => setPhone(e.target.value)}
+    className="w-full mt-2 p-2 border rounded"
+  />
+  <p className="mt-2 font-medium text-red-700">
+    If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
+  </p>
+  <p className="text-xs text-gray-500 mt-2">
+    Why do we ask this? It’s not for marketing. Only to help you retrieve your Guthi Key if forgotten.
+  </p>
+</div>
+
+{/* 🌿 Submit Button */}
+<button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full font-bold">
+  🌿 Plant My Guthi Seed
+</button>
       </form>
     </div>
   );
