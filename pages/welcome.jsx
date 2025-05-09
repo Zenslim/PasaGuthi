@@ -16,6 +16,7 @@ export default function Welcome() {
   });
   const [phone, setPhone] = useState('');
   const [suggestedThar, setSuggestedThar] = useState([]);
+  const [confirmedThar, setConfirmedThar] = useState('');
   const [guthiKey, setGuthiKey] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [regionHistory, setRegionHistory] = useState([]);
@@ -61,6 +62,7 @@ export default function Welcome() {
       const input = value.trim();
       const results = fuse.search(`^${input}`).map(r => r.item);
       setSuggestedThar(results);
+      setConfirmedThar('');
     }
   };
 
@@ -138,17 +140,34 @@ export default function Welcome() {
 
         <div>
           <label className="block font-semibold">🌳 Your Thar</label>
-          <input name="thar" required onChange={handleChange} placeholder="Thar (Surname)" className="border bg-white text-black p-2 w-full rounded" />
+          <input
+            name="thar"
+            required
+            onChange={handleChange}
+            value={form.thar}
+            placeholder="Thar (Surname)"
+            className="border bg-white text-black p-2 w-full rounded"
+          />
           {suggestedThar.length > 0 && (
             <ul className="bg-gray-50 border p-2 text-sm rounded mt-1">
               {suggestedThar.map((t, i) => (
-                <li key={i} className="cursor-pointer hover:bg-gray-100" onClick={() => setForm(prev => ({ ...prev, thar: t.Thar }))}>{t.Thar}</li>
+                <li
+                  key={i}
+                  className="cursor-pointer hover:bg-gray-100"
+                  onClick={() => {
+                    setForm(prev => ({ ...prev, thar: t.Thar }));
+                    setConfirmedThar(t.Thar);
+                    setSuggestedThar([]);
+                  }}
+                >
+                  {t.Thar}
+                </li>
               ))}
             </ul>
           )}
-          {form.thar && tharList.some(t => t.Thar.toLowerCase() === form.thar.toLowerCase()) && (
+          {confirmedThar && (
             <p className="mt-2 text-sm text-green-700 italic">
-              ✨ {tharList.find(t => t.Thar.toLowerCase() === form.thar.toLowerCase())?.Meaning}
+              ✨ Aha, {confirmedThar} — {tharList.find(t => t.Thar.toLowerCase() === confirmedThar.toLowerCase())?.Meaning}
             </p>
           )}
         </div>
