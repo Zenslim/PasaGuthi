@@ -1,0 +1,526 @@
+[
+  {
+    "Skill": "Farming",
+    "Meaning": "Rhythm of rain and roots."
+  },
+  {
+    "Skill": "Storytelling",
+    "Meaning": "Keeper of the ancestral fire."
+  },
+  {
+    "Skill": "Woodcarving",
+    "Meaning": "Hands that shape the sacred."
+  },
+  {
+    "Skill": "Weaving",
+    "Meaning": "Threading harmony into the fabric of life."
+  },
+  {
+    "Skill": "Cooking",
+    "Meaning": "Alchemist of taste and tradition."
+  },
+  {
+    "Skill": "Singing",
+    "Meaning": "Echo of the soul’s memory."
+  },
+  {
+    "Skill": "Dancing",
+    "Meaning": "Movement in praise of the unseen."
+  },
+  {
+    "Skill": "Metalwork",
+    "Meaning": "Forging spirit into form."
+  },
+  {
+    "Skill": "Painting",
+    "Meaning": "Brushing silence into vision."
+  },
+  {
+    "Skill": "Pottery",
+    "Meaning": "Molding clay into memory."
+  },
+  {
+    "Skill": "Herbalism",
+    "Meaning": "Wisdom of the leaves and roots."
+  },
+  {
+    "Skill": "Blacksmithing",
+    "Meaning": "Strength through fire and steel."
+  },
+  {
+    "Skill": "Architecture",
+    "Meaning": "Building dreams into stone."
+  },
+  {
+    "Skill": "Sculpting",
+    "Meaning": "Chiseling breath into form."
+  },
+  {
+    "Skill": "Teaching",
+    "Meaning": "Lighting fires of understanding."
+  },
+  {
+    "Skill": "Gardening",
+    "Meaning": "Tending life one seed at a time."
+  },
+  {
+    "Skill": "Carpentry",
+    "Meaning": "Joining timber and intention."
+  },
+  {
+    "Skill": "Masonry",
+    "Meaning": "Stacking stories in stone."
+  },
+  {
+    "Skill": "Music",
+    "Meaning": "Translating emotion into sound."
+  },
+  {
+    "Skill": "Tailoring",
+    "Meaning": "Stitching identity into fabric."
+  },
+  {
+    "Skill": "Embroidery",
+    "Meaning": "Weaving beauty into every thread."
+  },
+  {
+    "Skill": "Translation",
+    "Meaning": "Bridging words across worlds."
+  },
+  {
+    "Skill": "Calligraphy",
+    "Meaning": "Writing with reverence."
+  },
+  {
+    "Skill": "Poetry",
+    "Meaning": "Crafting truth with rhythm."
+  },
+  {
+    "Skill": "Spinning",
+    "Meaning": "Twisting thread from wind and wool."
+  },
+  {
+    "Skill": "Beekeeping",
+    "Meaning": "Harmony between sting and sweetness."
+  },
+  {
+    "Skill": "Fishing",
+    "Meaning": "Patience cast in ripples."
+  },
+  {
+    "Skill": "Hunting",
+    "Meaning": "Ancient pact with the wild."
+  },
+  {
+    "Skill": "Falconry",
+    "Meaning": "Calling sky to glove."
+  },
+  {
+    "Skill": "Drumming",
+    "Meaning": "Pulse of earth and heart."
+  },
+  {
+    "Skill": "Ceremony",
+    "Meaning": "Holding time in sacred form."
+  },
+  {
+    "Skill": "Archery",
+    "Meaning": "Stillness in motion."
+  },
+  {
+    "Skill": "Horseback Riding",
+    "Meaning": "Moving as one with the beast."
+  },
+  {
+    "Skill": "Leatherwork",
+    "Meaning": "Taming hide into craft."
+  },
+  {
+    "Skill": "Jewelry Making",
+    "Meaning": "Forging light into adornment."
+  },
+  {
+    "Skill": "Bookbinding",
+    "Meaning": "Binding stories for generations."
+  },
+  {
+    "Skill": "Bird Watching",
+    "Meaning": "Listening to winged wisdom."
+  },
+  {
+    "Skill": "Brewing",
+    "Meaning": "Alchemy of grain and time."
+  },
+  {
+    "Skill": "Fermentation",
+    "Meaning": "Letting time bless the flavor."
+  },
+  {
+    "Skill": "Basket Weaving",
+    "Meaning": "Holding space with strands."
+  },
+  {
+    "Skill": "Ceramics",
+    "Meaning": "Earth kissed by flame."
+  },
+  {
+    "Skill": "Tanning",
+    "Meaning": "Transforming skin with sun and salt."
+  },
+  {
+    "Skill": "Game Making",
+    "Meaning": "Designing delight and challenge."
+  },
+  {
+    "Skill": "Animation",
+    "Meaning": "Giving breath to pixels."
+  },
+  {
+    "Skill": "Acting",
+    "Meaning": "Channeling soul into role."
+  },
+  {
+    "Skill": "Filmmaking",
+    "Meaning": "Capturing dreams in light."
+  },
+  {
+    "Skill": "Photography",
+    "Meaning": "Framing truth in stillness."
+  },
+  {
+    "Skill": "Mixology",
+    "Meaning": "Crafting spirits with spirit."
+  },
+  {
+    "Skill": "Tea Brewing",
+    "Meaning": "Steeping calm into cups."
+  },
+  {
+    "Skill": "Kite Making",
+    "Meaning": "Threads that dance with sky."
+  },
+  {
+    "Skill": "Papermaking",
+    "Meaning": "Turning pulp into pages of memory."
+  },
+  {
+    "Skill": "Logistics",
+    "Meaning": "Moving order through chaos."
+  },
+  {
+    "Skill": "Event Planning",
+    "Meaning": "Orchestrating joy into motion."
+  },
+  {
+    "Skill": "Public Speaking",
+    "Meaning": "Voice shaping the moment."
+  },
+  {
+    "Skill": "Conflict Mediation",
+    "Meaning": "Restoring harmony to hearts."
+  },
+  {
+    "Skill": "Storyboarding",
+    "Meaning": "Drawing the spine of myth."
+  },
+  {
+    "Skill": "Set Design",
+    "Meaning": "Building the stage for dreams."
+  },
+  {
+    "Skill": "Curation",
+    "Meaning": "Choosing stories that shine."
+  },
+  {
+    "Skill": "Museum Work",
+    "Meaning": "Guarding echoes of the past."
+  },
+  {
+    "Skill": "Botany",
+    "Meaning": "Fluent in the language of leaves."
+  },
+  {
+    "Skill": "Zoology",
+    "Meaning": "Interpreter of animal spirit."
+  },
+  {
+    "Skill": "Beadwork",
+    "Meaning": "Tiny orbs holding ancestral codes."
+  },
+  {
+    "Skill": "Stone Carving",
+    "Meaning": "Patience revealed in rock."
+  },
+  {
+    "Skill": "Choreography",
+    "Meaning": "Composing motion into meaning."
+  },
+  {
+    "Skill": "Martial Arts",
+    "Meaning": "Discipline as devotion."
+  },
+  {
+    "Skill": "Leadership",
+    "Meaning": "Guiding with grounded vision."
+  },
+  {
+    "Skill": "Drum Making",
+    "Meaning": "Birthing sound into skin and wood."
+  },
+  {
+    "Skill": "Net Weaving",
+    "Meaning": "Crafting interdependence in thread."
+  },
+  {
+    "Skill": "Fishing Net Repair",
+    "Meaning": "Mending the web that feeds."
+  },
+  {
+    "Skill": "Dye Making",
+    "Meaning": "Color coaxed from nature's secret."
+  },
+  {
+    "Skill": "Welding",
+    "Meaning": "Joining metals with precision and fire."
+  },
+  {
+    "Skill": "Plumbing",
+    "Meaning": "Guiding water through modern life."
+  },
+  {
+    "Skill": "Electric Work",
+    "Meaning": "Wiring power into structure."
+  },
+  {
+    "Skill": "Masonry",
+    "Meaning": "Building stone upon stone with strength."
+  },
+  {
+    "Skill": "Roofing",
+    "Meaning": "Shielding homes from the sky."
+  },
+  {
+    "Skill": "Mechanical Repair",
+    "Meaning": "Restoring motion to machines."
+  },
+  {
+    "Skill": "Car Repair",
+    "Meaning": "Breathing life into engines."
+  },
+  {
+    "Skill": "Computer Repair",
+    "Meaning": "Fixing logic within circuits."
+  },
+  {
+    "Skill": "Coding",
+    "Meaning": "Weaving logic into action."
+  },
+  {
+    "Skill": "Data Entry",
+    "Meaning": "Typing order into chaos."
+  },
+  {
+    "Skill": "Accounting",
+    "Meaning": "Keeping the balance of trade and trust."
+  },
+  {
+    "Skill": "Inventory Management",
+    "Meaning": "Tracking what fuels work."
+  },
+  {
+    "Skill": "CNC Operation",
+    "Meaning": "Guiding machines to precision cut."
+  },
+  {
+    "Skill": "Laser Cutting",
+    "Meaning": "Shaping matter with focused light."
+  },
+  {
+    "Skill": "3D Printing",
+    "Meaning": "Bringing design into form layer by layer."
+  },
+  {
+    "Skill": "Logistics",
+    "Meaning": "Delivering the right thing at the right time."
+  },
+  {
+    "Skill": "Packaging",
+    "Meaning": "Wrapping value for journey."
+  },
+  {
+    "Skill": "Driving",
+    "Meaning": "Commanding wheels with care."
+  },
+  {
+    "Skill": "Truck Operation",
+    "Meaning": "Hauling the weight of the world."
+  },
+  {
+    "Skill": "Surveying",
+    "Meaning": "Measuring the lay of the land."
+  },
+  {
+    "Skill": "Project Management",
+    "Meaning": "Orchestrating people and timelines into completion."
+  },
+  {
+    "Skill": "Spreadsheet Analysis",
+    "Meaning": "Finding meaning in rows and columns."
+  },
+  {
+    "Skill": "Copywriting",
+    "Meaning": "Turning words into action."
+  },
+  {
+    "Skill": "Public Speaking",
+    "Meaning": "Shaping attention with voice."
+  },
+  {
+    "Skill": "Troubleshooting",
+    "Meaning": "Solving problems with calm insight."
+  },
+  {
+    "Skill": "Team Leadership",
+    "Meaning": "Guiding people through purpose."
+  },
+  {
+    "Skill": "Graphic Design",
+    "Meaning": "Communicating through color and shape."
+  },
+  {
+    "Skill": "Customer Service",
+    "Meaning": "Meeting needs with empathy."
+  },
+  {
+    "Skill": "Inventory Tracking",
+    "Meaning": "Knowing what’s where — and why."
+  },
+  {
+    "Skill": "SEO Optimization",
+    "Meaning": "Helping knowledge find its seekers."
+  },
+  {
+    "Skill": "Email Marketing",
+    "Meaning": "Nurturing leads through words and timing."
+  },
+  {
+    "Skill": "Accounting",
+    "Meaning": "Balancing the books of reality."
+  },
+  {
+    "Skill": "Video Editing",
+    "Meaning": "Sculpting time and motion."
+  },
+  {
+    "Skill": "UX Design",
+    "Meaning": "Making tech feel like home."
+  },
+  {
+    "Skill": "UI Design",
+    "Meaning": "Smoothing every surface the eye touches."
+  },
+  {
+    "Skill": "Technical Writing",
+    "Meaning": "Making complexity readable."
+  },
+  {
+    "Skill": "Sales Negotiation",
+    "Meaning": "Turning interest into agreement."
+  },
+  {
+    "Skill": "Conflict Resolution",
+    "Meaning": "Bringing peace to friction."
+  },
+  {
+    "Skill": "Customer Onboarding",
+    "Meaning": "Turning strangers into loyal allies."
+  },
+  {
+    "Skill": "Data Visualization",
+    "Meaning": "Telling stories with charts and clarity."
+  },
+  {
+    "Skill": "Cloud Computing",
+    "Meaning": "Running logic in the ether."
+  },
+  {
+    "Skill": "Network Administration",
+    "Meaning": "Keeping the digital highways clear."
+  },
+  {
+    "Skill": "Agile Development",
+    "Meaning": "Shipping value in adaptive sprints."
+  },
+  {
+    "Skill": "Scrum Leadership",
+    "Meaning": "Guiding rhythm and ritual in team flow."
+  },
+  {
+    "Skill": "DevOps",
+    "Meaning": "Blending code and operations into harmony."
+  },
+  {
+    "Skill": "Software Testing",
+    "Meaning": "Catching flaws before they wake the user."
+  },
+  {
+    "Skill": "Digital Illustration",
+    "Meaning": "Drawing spirit through pixels."
+  },
+  {
+    "Skill": "Social Media Management",
+    "Meaning": "Shaping stories for the stream."
+  },
+  {
+    "Skill": "Market Research",
+    "Meaning": "Listening deeply to a crowd."
+  },
+  {
+    "Skill": "Product Management",
+    "Meaning": "Owning vision through launch and beyond."
+  },
+  {
+    "Skill": "Research Analysis",
+    "Meaning": "Translating data into direction."
+  },
+  {
+    "Skill": "Budgeting",
+    "Meaning": "Guiding resources with foresight."
+  },
+  {
+    "Skill": "Virtual Assistance",
+    "Meaning": "Remote support, real impact."
+  },
+  {
+    "Skill": "Customer Retention",
+    "Meaning": "Turning satisfaction into loyalty."
+  },
+  {
+    "Skill": "Legal Drafting",
+    "Meaning": "Writing the laws of agreement."
+  },
+  {
+    "Skill": "Payroll Processing",
+    "Meaning": "Making work count, paycheck by paycheck."
+  },
+  {
+    "Skill": "Human Resources",
+    "Meaning": "Nurturing the people who build the dream."
+  },
+  {
+    "Skill": "Quality Assurance",
+    "Meaning": "Protecting trust through standards."
+  },
+  {
+    "Skill": "Information Security",
+    "Meaning": "Guarding the gates of the digital realm."
+  },
+  {
+    "Skill": "Server Maintenance",
+    "Meaning": "Keeping machines quietly alive."
+  },
+  {
+    "Skill": "Translation",
+    "Meaning": "Carrying meaning across languages."
+  }
+]
