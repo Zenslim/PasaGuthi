@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
 import { nanoid } from 'nanoid';
 import tharList from '../data/tharList.json';
-skillsList from '../data/skillsList.json';
+import skillsList from '../data/skillsList.json';
 import regionList from '../data/regionList.json';
 import Fuse from 'fuse.js';
 
