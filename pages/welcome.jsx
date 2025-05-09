@@ -77,22 +77,26 @@ export default function Welcome() {
           <p className="mt-4">Your Guthi Key:</p>
           <code className="text-lg bg-gray-100 p-2 rounded mt-2 inline-block">{guthiKey}</code>
 
-         <div className="mt-6 text-sm text-gray-700">
-  <label className="block font-semibold">📱 Phone Number (Optional)</label>
+<div className="mt-6 text-sm text-gray-700">
+  <label className="block font-semibold">📱🔑 Recovery Number (Optional)</label>
+
   <input
     type="tel"
     placeholder="+97798XXXXXXX"
     value={phone}
     onChange={(e) => setPhone(e.target.value)}
-    className="w-full max-w-sm mt-1 p-2 border rounded"
+    className="w-full max-w-sm mt-2 p-2 border rounded"
   />
-  <p className="text-xs text-gray-500 mt-1">
+
+  <p className="text-xs text-gray-500 mt-2">
     Why do we ask this? It’s not for marketing. Only to help you retrieve your Guthi Key if forgotten.
   </p>
+
   <p className="mt-3 font-medium text-red-700">
     If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
   </p>
 </div>
+
           <button
             onClick={() => router.push('/dashboard')}
             className="mt-6 bg-black text-white px-4 py-2 rounded"
