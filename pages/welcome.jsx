@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
 import { nanoid } from 'nanoid';
-import bcrypt from 'bcryptjs';
 import tharList from '../data/tharList.json';
 import skillsList from '../data/skillsList.json';
 import regionList from '../data/regionList.json';
@@ -15,11 +14,9 @@ export default function Welcome() {
     thar: '',
     gender: '',
     region: '',
-    skills: '',
-    password: ''
+    skills: ''
   });
   const [phone, setPhone] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [suggestedThar, setSuggestedThar] = useState([]);
   const [suggestedRegion, setSuggestedRegion] = useState([]);
   const [suggestedSkills, setSuggestedSkills] = useState([]);
@@ -33,13 +30,6 @@ export default function Welcome() {
   const tharFuse = new Fuse(tharList, { keys: ['Thar'], threshold: 0.3 });
   const regionFuse = new Fuse(regionList, { keys: ['Region'], threshold: 0.3 });
   const skillsFuse = new Fuse(skillsList, { keys: ['Skill'], threshold: 0.3 });
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const id = localStorage.getItem('sporeId') || crypto.randomUUID();
-      localStorage.setItem('sporeId', id);
-    }
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -85,16 +75,9 @@ export default function Welcome() {
     }
   };
 
-  const handlePhoneChange = (e) => {
-    const value = e.target.value;
-    setPhone(value);
-    setShowPassword(value.trim().length > 0);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const sporeId = localStorage.getItem('sporeId');
-    const guthiKey = `${form.name.toLowerCase()}-${form.thar.toLowerCase()}-${form.region.toLowerCase()}-${nanoid(5)}`;
+        const guthiKey = `${form.name.toLowerCase()}-${form.thar.toLowerCase()}-${form.region.toLowerCase()}-${form.skills.toLowerCase()}-${nanoid(5)}`;
     setGuthiKey(guthiKey);
     setConfirmedRegion(form.region);
 
@@ -104,11 +87,14 @@ export default function Welcome() {
     }
 
     const { error } = await supabase.from('users').insert([{
-      sporeId,
       guthiKey,
+      name: form.name,
+      thar: form.thar,
+      gender: form.gender,
+      region: form.region,
+      skills: form.skills,
       phone: phone || null,
       password: hashedPassword,
-      ...form,
       createdAt: new Date().toISOString()
     }]);
 
@@ -122,13 +108,16 @@ export default function Welcome() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white text-black p-6 text-center">
+      <div className="min-h-screen flex items-center justify-center bg-white p-6 text-center text-black">
         <div>
-          <h1 className="text-2xl font-bold">🌸 Welcome, {form.name}</h1>
+          <h1 className="text-2xl font-bold">🌿 Welcome, {form.name}</h1>
           <p className="mt-4">Your Guthi Key:</p>
           <code className="text-lg bg-gray-100 p-2 rounded mt-2 inline-block">{guthiKey}</code>
-          <button onClick={() => router.push('/dashboard')} className="mt-6 bg-black text-white px-4 py-2 rounded">
-            ✨ Enter My Guthi Circle
+          <button
+            onClick={() => router.push('/dashboard')}
+            className="mt-6 bg-black text-white px-4 py-2 rounded"
+          >
+            🌀 Enter Your Guthi Dashboard
           </button>
         </div>
       </div>
@@ -227,36 +216,25 @@ export default function Welcome() {
           )}
         </div>
 
+        {/* 📱 Phone input */}
         <div className="mt-4">
           <label className="block font-semibold">📱🔑 Recovery Number (Optional)</label>
           <input
             type="tel"
             placeholder="+97798XXXXXXX"
             value={phone}
-            onChange={handlePhoneChange}
+            onChange={(e) => setPhone(e.target.value)}
             className="w-full mt-2 p-2 border rounded"
           />
-          {showPassword && (
-            <>
-              <label className="block font-semibold mt-3">🔐 Create a Password</label>
-              <input
-                type="password"
-                name="password"
-                required
-                placeholder="Enter a strong password"
-                onChange={handleChange}
-                className="w-full mt-2 p-2 border rounded"
-              />
-              <p className="text-xs text-gray-500 mt-1">This will let you log in on older devices without biometrics.</p>
-            </>
-          )}
-          {!showPassword && (
-            <p className="mt-2 font-medium text-red-700">
-              If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
-            </p>
-          )}
+          <p className="mt-2 font-medium text-red-700">
+            If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
+          </p>
+          <p className="text-xs text-gray-500 mt-2">
+            Why do we ask this? It’s not for marketing. Only to help you retrieve your Guthi Key if forgotten.
+          </p>
         </div>
 
+        {/* 🌿 Submit Button */}
         <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full font-bold">
           🌿 Plant My Guthi Seed
         </button>
