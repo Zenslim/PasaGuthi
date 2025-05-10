@@ -6,7 +6,6 @@ import tharList from '../data/tharList.json';
 import skillsList from '../data/skillsList.json';
 import regionList from '../data/regionList.json';
 import Fuse from 'fuse.js';
-import bcrypt from 'bcryptjs';
 
 export default function Welcome() {
   const router = useRouter();
@@ -85,17 +84,16 @@ export default function Welcome() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-        const guthiKey = `${form.name.toLowerCase()}-${form.thar.toLowerCase()}-${form.region.toLowerCase()}-${form.skills.toLowerCase()}-${nanoid(5)}`;
+    const sporeId = localStorage.getItem('sporeId');
+    const guthiKey = `${form.name.toLowerCase()}-${form.thar.toLowerCase()}-${form.region.toLowerCase()}-${form.skills.toLowerCase()}-${nanoid(5)}`;
     setGuthiKey(guthiKey);
     setConfirmedRegion(form.region);
 
-    const hashedPassword = await bcrypt.hash(form.password, 10);
     const { error } = await supabase.from('users').insert([{
-      
+      sporeId,
       guthiKey,
       phone: phone || null,
       ...form,
-      password: hashedPassword,
       karma: 0,
       createdAt: new Date().toISOString()
     }]);
@@ -226,6 +224,15 @@ export default function Welcome() {
             placeholder="+97798XXXXXXX"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+          />
+          {phone.trim() === '' && (
+            <p className="text-yellow-500 text-sm mt-1 italic">
+              ⚠️ If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
+              <br />
+              Why do we ask this? It’s not for marketing. Only to help you retrieve your Guthi Key if forgotten.
+            </p>
+          )}
+
             className="w-full mt-2 p-2 border rounded"
           />
           <p className="mt-2 font-medium text-red-700">
@@ -235,24 +242,6 @@ export default function Welcome() {
             Why do we ask this? It’s not for marketing. Only to help you retrieve your Guthi Key if forgotten.
           </p>
         </div>
-
-        
-        {/* 🔐 Password input */}
-        <div className="mt-4">
-          <label className="block font-semibold">🔐 Create a Password (for fallback login)</label>
-          <input
-            type="password"
-            name="password"
-            required
-            onChange={(e) => setForm(prev => ({ ...prev, password: e.target.value }))}
-            className="w-full mt-2 p-2 border rounded"
-            placeholder="Create a secure password"
-          />
-          <p className="text-xs text-gray-500 mt-2">
-            This will let you log in from older devices without biometrics.
-          </p>
-        </div>
-
 
         {/* 🌿 Submit Button */}
         <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full font-bold">
