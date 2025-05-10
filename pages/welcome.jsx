@@ -75,7 +75,13 @@ export default function Welcome() {
     }
   };
 
-  const handleSubmit = async (e) => {
+  
+  const handlePhoneChange = (e) => {
+    const value = e.target.value;
+    setPhone(value);
+    setShowPassword(value.trim().length > 0);
+  };
+const handleSubmit = async (e) => {
     e.preventDefault();
         const guthiKey = `${form.name.toLowerCase()}-${form.thar.toLowerCase()}-${form.region.toLowerCase()}-${form.skills.toLowerCase()}-${nanoid(5)}`;
     setGuthiKey(guthiKey);
