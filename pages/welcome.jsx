@@ -229,9 +229,29 @@ const handleSubmit = async (e) => {
             type="tel"
             placeholder="+97798XXXXXXX"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={handlePhoneChange}
             className="w-full mt-2 p-2 border rounded"
           />
+{showPassword && (
+  <>
+    <label className="block font-semibold mt-3">🔐 Create a Password</label>
+    <input
+      type="password"
+      name="password"
+      required
+      placeholder="Enter a strong password"
+      onChange={handleChange}
+      className="w-full mt-2 p-2 border rounded"
+    />
+    <p className="text-xs text-gray-500 mt-1">This will let you log in on older devices without biometrics.</p>
+  </>
+)}
+{!showPassword && (
+  <p className="mt-2 font-medium text-red-700">
+    If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
+  </p>
+)}
+
           <p className="mt-2 font-medium text-red-700">
             If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
           </p>
