@@ -11,24 +11,28 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const sporeId = localStorage.getItem('sporeId');
-      if (!sporeId) return;
+      const guthiKey = localStorage.getItem('guthiKey');
+      if (!guthiKey) {
+        console.warn('No guthiKey found in localStorage');
+        return;
+      }
 
       const { data, error } = await supabase
         .from('users')
         .select('*')
-        .eq('sporeId', sporeId);
+        .eq('guthiKey', guthiKey)
+        .single();
 
       if (error) {
         console.error('❌ Supabase fetch error:', error);
-      } else if (data?.[0]) {
-        setUserData(data[0]);
+      } else if (data) {
+        setUserData(data);
         setForm({
-          name: data[0].name,
-          thar: data[0].thar,
-          region: data[0].region,
-          skills: data[0].skills,
-          phone: data[0].phone
+          name: data.name,
+          thar: data.thar,
+          region: data.region,
+          skills: data.skills,
+          phone: data.phone
         });
       }
       setLoading(false);
@@ -43,11 +47,11 @@ export default function Dashboard() {
   };
 
   const handleUpdate = async () => {
-    const sporeId = localStorage.getItem('sporeId');
+    const guthiKey = localStorage.getItem('guthiKey');
     const { error } = await supabase
       .from('users')
       .update(form)
-      .eq('sporeId', sporeId);
+      .eq('guthiKey', guthiKey);
 
     if (!error) {
       setUserData({ ...userData, ...form });
