@@ -221,18 +221,20 @@ export default function Welcome() {
         <div className="mt-4">
           <label className="block font-semibold">📱🔑 Recovery Number (Optional)</label>
           <input
-            type="tel"
-            placeholder="+97798XXXXXXX"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
-          {phone.trim() === '' && (
-            <p className="text-yellow-500 text-sm mt-1 italic">
-              ⚠️ If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
-              <br />
-              Why do we ask this? It’s not for marketing. Only to help you retrieve your Guthi Key if forgotten.
-            </p>
-          )}
+          type="tel"
+          name="phone"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          className="w-full mt-2 p-2 border rounded"
+        />
+
+        {phone.trim() === '' && (
+          <p className="mt-2 font-medium text-red-700">
+            If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
+            <br />
+            Why do we ask this? It’s not for marketing. Only to help you retrieve your Guthi Key if forgotten.
+          </p>
+        )}
 
             className="w-full mt-2 p-2 border rounded"
           />
