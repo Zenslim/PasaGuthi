@@ -57,7 +57,7 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen bg-black text-white flex items-center justify-center text-lg">
         🌙 Summoning your Guthi Circle...
       </div>
     );
@@ -65,34 +65,63 @@ export default function Dashboard() {
 
   if (!userData) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        ❌ No Guthi member found. Please join first.
+      <div className="min-h-screen bg-black text-white flex items-center justify-center text-center text-red-400 text-lg">
+        ❌ No Guthi member found. <br /> Please complete your welcome ritual.
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 space-y-4">
-      <h1 className="text-2xl font-bold">🌸 Welcome, {userData.name}</h1>
-      {editMode ? (
-        <div className="space-y-3">
-          <input name="name" value={form.name} onChange={handleChange} className="w-full p-2 rounded text-black" />
-          <input name="thar" value={form.thar} onChange={handleChange} className="w-full p-2 rounded text-black" />
-          <input name="region" value={form.region} onChange={handleChange} className="w-full p-2 rounded text-black" />
-          <input name="skills" value={form.skills} onChange={handleChange} className="w-full p-2 rounded text-black" />
-          <input name="phone" value={form.phone} onChange={handleChange} className="w-full p-2 rounded text-black" />
-          <button onClick={handleUpdate} className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-white">Save</button>
-        </div>
-      ) : (
-        <div className="space-y-1">
-          <p><strong>Thar:</strong> {userData.thar}</p>
-          <p><strong>Region:</strong> {userData.region}</p>
-          <p><strong>Skills:</strong> {userData.skills}</p>
-          <p><strong>Phone:</strong> {userData.phone}</p>
-          <p><strong>Karma:</strong> {userData.karma}</p>
-          <button onClick={() => setEditMode(true)} className="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white">Edit Profile</button>
-        </div>
-      )}
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-black/50 rounded-xl shadow-xl p-6 border border-green-700 space-y-4">
+        <h1 className="text-pink-400 text-2xl font-bold text-center">
+          🌸 Welcome, {userData.name}
+        </h1>
+
+        {editMode ? (
+          <div className="space-y-3">
+            <InputField label="Name" name="name" value={form.name} onChange={handleChange} />
+            <InputField label="Thar" name="thar" value={form.thar} onChange={handleChange} />
+            <InputField label="Region" name="region" value={form.region} onChange={handleChange} />
+            <InputField label="Skills" name="skills" value={form.skills} onChange={handleChange} />
+            <InputField label="Phone" name="phone" value={form.phone} onChange={handleChange} />
+            <button
+              onClick={handleUpdate}
+              className="w-full bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-white font-semibold"
+            >
+              💾 Save Changes
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-2 text-green-300 text-sm">
+            <p><strong>Thar:</strong> {userData.thar}</p>
+            <p><strong>Region:</strong> {userData.region}</p>
+            <p><strong>Skills:</strong> {userData.skills}</p>
+            <p><strong>Phone:</strong> {userData.phone}</p>
+            <p><strong>Karma:</strong> {userData.karma}</p>
+            <button
+              onClick={() => setEditMode(true)}
+              className="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white font-semibold"
+            >
+              ✏️ Edit Profile
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function InputField({ label, name, value, onChange }) {
+  return (
+    <div>
+      <label className="block text-xs text-gray-400 mb-1">{label}</label>
+      <input
+        name={name}
+        value={value}
+        onChange={onChange}
+        className="w-full p-2 rounded bg-white text-black focus:outline-none focus:ring-2 focus:ring-green-400"
+      />
     </div>
   );
 }
