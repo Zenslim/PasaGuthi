@@ -19,7 +19,7 @@ export default function SignIn() {
     const { data, error: fetchError } = await supabase
       .from('users')
       .select('*')
-      .eq(key, identifier)
+      .eq(key, identifier.trim())
       .limit(1)
       .single();
 
