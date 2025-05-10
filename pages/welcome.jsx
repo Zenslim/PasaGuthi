@@ -85,8 +85,7 @@ export default function Welcome() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const sporeId = localStorage.getItem('sporeId');
-    const guthiKey = `${form.name.toLowerCase()}-${form.thar.toLowerCase()}-${form.region.toLowerCase()}-${form.skills.toLowerCase()}-${nanoid(5)}`;
+        const guthiKey = `${form.name.toLowerCase()}-${form.thar.toLowerCase()}-${form.region.toLowerCase()}-${form.skills.toLowerCase()}-${nanoid(5)}`;
     setGuthiKey(guthiKey);
 
     setConfirmedRegion(form.region);
@@ -98,6 +97,7 @@ export default function Welcome() {
       phone: phone || null,
       ...form,
       password: hashedPassword,
+      karma: 0,
       createdAt: new Date().toISOString()
     }]);
 
@@ -241,9 +241,9 @@ export default function Welcome() {
             type="password"
             name="password"
             required
-            onChange={e => setForm(prev => ({ ...prev, password: e.target.value }))}
-            placeholder="Create a secure password"
+            onChange={(e) => setForm(prev => ({ ...prev, password: e.target.value }))}
             className="border bg-white text-black p-2 w-full rounded"
+            placeholder="Create a secure password"
           />
         </div>
 
