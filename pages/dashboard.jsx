@@ -17,11 +17,7 @@ export default function Dashboard() {
       const { data, error } = await supabase
         .from('users')
         .select('*')
-        .eq('sporeid', sporeId);
-
-      console.log("SporeId from localStorage:", sporeId);
-      console.log("Fetched Supabase Data:", data);
-      console.log("Error:", error);
+        .eq('sporeId', sporeId);
 
       if (error) {
         console.error('❌ Supabase fetch error:', error);
@@ -51,7 +47,7 @@ export default function Dashboard() {
     const { error } = await supabase
       .from('users')
       .update(form)
-      .eq('sporeid', sporeId);
+      .eq('sporeId', sporeId);
 
     if (!error) {
       setUserData({ ...userData, ...form });
