@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import bcrypt from 'bcryptjs';
 import { supabase } from '../lib/supabaseClient';
 import { nanoid } from 'nanoid';
 import tharList from '../data/tharList.json';
