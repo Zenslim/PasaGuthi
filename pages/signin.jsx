@@ -1,4 +1,3 @@
-// pages/signin.jsx
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
@@ -13,7 +12,7 @@ export default function SignInPage() {
     const { data, error } = await supabase
       .from('users')
       .select('*')
-      .filter('uid', 'eq', key.trim());
+      .filter('uid', 'eq', key.trim()); // ✅ FIXED LINE
 
     if (error || !data || data.length === 0) {
       setError('Invalid Guthi Key. Please check and try again.');
