@@ -13,14 +13,13 @@ export default function SignIn() {
     e.preventDefault();
     setError('');
 
-    const isPhone = identifier.startsWith('+');
+    const isPhone = identifier.trim().startsWith('+');
     const key = isPhone ? 'phone' : 'guthiKey';
 
     const { data, error: fetchError } = await supabase
       .from('users')
       .select('*')
-      .eq(key, identifier.trim())
-      .limit(1)
+      .match({ [key]: identifier.trim() })
       .single();
 
     if (fetchError || !data) {
