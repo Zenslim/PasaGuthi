@@ -12,7 +12,7 @@ export default function SignInPage() {
     const { data, error } = await supabase
       .from('users')
       .select('*')
-      .filter('uid', 'eq', key.trim()); // ✅ FIXED LINE
+      .filter('uid', 'eq', key.trim()); // ✅ safe for long UID strings
 
     if (error || !data || data.length === 0) {
       setError('Invalid Guthi Key. Please check and try again.');
