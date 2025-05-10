@@ -1,5 +1,7 @@
+// pages/dashboard.jsx
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
+import Link from 'next/link';
 
 export default function Dashboard() {
   const [userData, setUserData] = useState(null);
@@ -105,6 +107,12 @@ export default function Dashboard() {
             >
               ✏️ Edit Profile
             </button>
+
+            <Link href="/grove/ritual" legacyBehavior>
+              <a className="block mt-6 text-center text-green-400 hover:text-green-600 underline text-sm">
+                🌿 Visit Ritual Garden
+              </a>
+            </Link>
           </div>
         )}
       </div>
