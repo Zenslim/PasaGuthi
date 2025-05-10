@@ -10,30 +10,33 @@ export default function Dashboard() {
   const [form, setForm] = useState({ name: '', thar: '', region: '', skills: '', phone: '' });
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const sporeId = localStorage.getItem('sporeId');
-      if (!sporeId) return;
+   const fetchUser = async () => {
+  const sporeId = localStorage.getItem('sporeId');
+  if (!sporeId) return;
 
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('sporeId', sporeId);
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('sporeId', sporeId);
 
-      if (error) {
-        console.error('❌ Supabase fetch error:', error);
-      } else if (data?.[0]) {
-        setUserData(data[0]);
-        setForm({
-          name: data[0].name,
-          thar: data[0].thar,
-          region: data[0].region,
-          skills: data[0].skills,
-          phone: data[0].phone
-        });
-      }
-      setLoading(false);
-    };
+  console.log("SporeId from localStorage:", sporeId);
+  console.log("Fetched Supabase Data:", data);
+  console.log("Error:", error);
 
+  if (error) {
+    console.error('❌ Supabase fetch error:', error);
+  } else if (data?.[0]) {
+    setUserData(data[0]);
+    setForm({
+      name: data[0].name,
+      thar: data[0].thar,
+      region: data[0].region,
+      skills: data[0].skills,
+      phone: data[0].phone
+    });
+  }
+  setLoading(false);
+};
     fetchUser();
   }, []);
 
