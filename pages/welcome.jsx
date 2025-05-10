@@ -17,6 +17,7 @@ export default function Welcome() {
     skills: ''
   });
   const [phone, setPhone] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [suggestedThar, setSuggestedThar] = useState([]);
   const [suggestedRegion, setSuggestedRegion] = useState([]);
   const [suggestedSkills, setSuggestedSkills] = useState([]);
