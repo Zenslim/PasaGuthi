@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
 import bcrypt from 'bcryptjs';
-import withAuth from '../lib/withAuth';
+import withAuth from '../components/withAuth';
+
 
 function EditProfile() {
   const router = useRouter();
