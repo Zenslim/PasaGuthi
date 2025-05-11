@@ -12,10 +12,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchUser = async () => {
       const guthiKey = localStorage.getItem('guthiKey');
-      if (!guthiKey) {
-        console.warn('No guthiKey found in localStorage');
-        return;
-      }
+      if (!guthiKey) return;
 
       const { data, error } = await supabase
         .from('users')
@@ -23,8 +20,8 @@ export default function Dashboard() {
         .match({ guthiKey: guthiKey.trim() })
         .limit(1);
 
-      if (error || !data || data.length === 0) {
-        console.error('❌ Supabase fetch error or no user found:', error);
+      if (error || !Array.isArray(data) || data.length === 0) {
+        console.error('❌ Supabase fetch error or no user found:', error || 'No data');
         return;
       }
 
