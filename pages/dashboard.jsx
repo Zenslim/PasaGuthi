@@ -1,4 +1,4 @@
-// pages/dashboard.jsx
+
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import Link from 'next/link';
@@ -20,21 +20,23 @@ export default function Dashboard() {
       const { data, error } = await supabase
         .from('users')
         .select('*')
-        .match({ guthiKey })
-        .single();
+        .match({ guthiKey: guthiKey.trim() })
+        .limit(1);
 
-      if (error) {
-        console.error('❌ Supabase fetch error:', error);
-      } else if (data) {
-        setUserData(data);
-        setForm({
-          name: data.name,
-          thar: data.thar,
-          region: data.region,
-          skills: data.skills,
-          phone: data.phone
-        });
+      if (error || !data || data.length === 0) {
+        console.error('❌ Supabase fetch error or no user found:', error);
+        return;
       }
+
+      const user = data[0];
+      setUserData(user);
+      setForm({
+        name: user.name,
+        thar: user.thar,
+        region: user.region,
+        skills: user.skills,
+        phone: user.phone
+      });
       setLoading(false);
     };
 
@@ -51,7 +53,7 @@ export default function Dashboard() {
     const { error } = await supabase
       .from('users')
       .update(form)
-     .match({ guthiKey });
+      .match({ guthiKey: guthiKey.trim() });
 
     if (!error) {
       setUserData({ ...userData, ...form });
