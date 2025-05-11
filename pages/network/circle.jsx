@@ -6,23 +6,33 @@ import withAuth from '../../components/withAuth';
 function GuthiCircle() {
   const router = useRouter();
   const [userData, setUserData] = useState(null);
+  const [circle, setCircle] = useState([]);
+  const [guthiKey, setGuthiKey] = useState('');
 
   useEffect(() => {
-    const guthiKey = localStorage.getItem('guthiKey');
-    if (!guthiKey) return;
+    const key = localStorage.getItem('guthiKey');
+    if (!key) return;
+    setGuthiKey(key);
 
-    const fetchData = async () => {
-      const { data, error } = await supabase
+    const fetchUser = async () => {
+      const { data } = await supabase
         .from('users')
         .select('*')
-        .eq('guthiKey', guthiKey)
+        .eq('guthiKey', key)
         .single();
-
       if (data) setUserData(data);
-      else console.warn('Guthi data not found');
     };
 
-    fetchData();
+    const fetchCircle = async () => {
+      const { data } = await supabase
+        .from('users')
+        .select('name, karma, thar, region, guthiKey')
+        .order('karma', { ascending: false });
+      if (data) setCircle(data);
+    };
+
+    fetchUser();
+    fetchCircle();
   }, []);
 
   if (!userData) {
@@ -41,20 +51,35 @@ function GuthiCircle() {
         </h1>
 
         <p className="text-lg text-center mb-4">
-          🌿 Namaste, <span className="text-green-400">{userData.name}</span>. You stand within the circle of ancestors and dreamers. 
+          🌿 Namaste, <span className="text-green-400">{userData.name}</span>. You stand among your kin.
         </p>
 
-        <ul className="text-center text-sm space-y-2">
-          <li>🪶 Thar: <span className="text-green-300">{userData.thar}</span></li>
-          <li>🌍 Region: <span className="text-blue-300">{userData.region}</span></li>
-          <li>🔧 Skills: <span className="text-purple-300">{userData.skills}</span></li>
-          <li>📞 Phone: <span className="text-orange-300">{userData.phone}</span></li>
-          <li>✨ Karma: <span className="text-pink-300">{userData.karma}</span></li>
+        <h2 className="text-xl text-pink-300 font-semibold mt-6 mb-3 text-center">✨ Karma Leaderboard</h2>
+        <ul className="space-y-2 text-sm">
+          {circle.map((member, i) => (
+            <li
+              key={member.guthiKey}
+              className={`p-3 rounded-md border ${
+                member.guthiKey === guthiKey
+                  ? 'border-pink-400 bg-pink-950'
+                  : 'border-slate-700'
+              }`}
+            >
+              <div className="flex justify-between items-center">
+                <div>
+                  {member.guthiKey === guthiKey ? '💠 ' : ''}
+                  <span className="text-green-300 font-bold">{member.name}</span>{' '}
+                  <span className="text-gray-400">({member.thar}, {member.region})</span>
+                </div>
+                <span className="text-yellow-300 font-mono">+{member.karma} karma</span>
+              </div>
+            </li>
+          ))}
         </ul>
 
         <div className="mt-8 text-center">
           <p className="italic text-gray-400">
-            “You are not alone. Each whisper, each gift, and each action in this circle shapes the future of our people.”
+            “Each good action echoes through your Guthi Circle.”
           </p>
         </div>
       </div>
