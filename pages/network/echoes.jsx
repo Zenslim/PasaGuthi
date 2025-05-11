@@ -12,7 +12,7 @@ export default function Echoes() {
 
   useEffect(() => {
     const fetchWhispers = async () => {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('reflections')
         .select('text, created_at')
         .order('created_at', { ascending: false })
@@ -21,7 +21,6 @@ export default function Echoes() {
     };
 
     fetchWhispers();
-
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % whispers.length);
     }, 7000);
@@ -29,23 +28,39 @@ export default function Echoes() {
     return () => clearInterval(interval);
   }, [whispers.length]);
 
+  const incrementKarmaWithFallback = async (userId) => {
+    try {
+      const rpcResult = await supabase.rpc('increment_karma', { guthikey: userId });
+      if (rpcResult.error) throw rpcResult.error;
+    } catch (error) {
+      const { data: userData } = await supabase
+        .from('users')
+        .select('karma')
+        .eq('guthiKey', userId)
+        .single();
+
+      const newKarma = (userData?.karma || 0) + 1;
+      await supabase
+        .from('users')
+        .update({ karma: newKarma })
+        .eq('guthiKey', userId);
+    }
+  };
+
   const handleSubmit = async () => {
     if (!newWhisper.trim()) return;
     setLoading(true);
 
     const userId = localStorage.getItem('guthiKey') || 'anonymous';
-    const planet = 'Saturn'; // Future: randomize or tie to karma
-    const { error } = await supabase
-      .from('reflections')
-      .insert([{ text: newWhisper, userId }]);
+    const planet = 'Saturn';
+
+    await supabase.from('reflections').insert([{ text: newWhisper, userId }]);
 
     const echo = await generateEchoReply({ text: newWhisper, userId, planet });
     setResponse(echo.reply);
     setNewWhisper('');
+    await incrementKarmaWithFallback(userId);
     setLoading(false);
-
-    // Optional: increment karma
-    await supabase.rpc('increment_karma', { guthikey: userId });
   };
 
   const currentWhisper = whispers[currentIndex];
