@@ -87,11 +87,11 @@ function Dashboard() {
             <p><strong>Karma:</strong> {userData.karma}</p>
 
             <button
-              onClick={() => setIsEditing(true)}
-              className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-            >
-              ✏️ Edit Profile
-            </button>
+  onClick={() => router.push('/edit-profile')}
+  className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+>
+  ✏️ Edit Profile
+</button>
             <div className="mt-4 text-center">
               <a href="/grove/ritual" className="text-green-400 underline">🌿 Visit Ritual Garden</a>
             </div>
