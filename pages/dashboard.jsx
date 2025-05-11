@@ -152,3 +152,5 @@ function InputField({ label, name, value, onChange }) {
     </div>
   );
 }
+// Last line of the file:
+export default withAuth(Dashboard);
