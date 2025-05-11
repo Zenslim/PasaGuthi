@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import Link from 'next/link';
@@ -5,7 +6,8 @@ import withAuth from '../components/withAuth';
 
 function Dashboard() {
   const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
+ const router = useRouter();
+ const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState({ name: '', thar: '', region: '', skills: '', phone: '' });
   const [errorMessage, setErrorMessage] = useState('');
@@ -112,21 +114,13 @@ function Dashboard() {
             >
               💾 Save Changes
             </button>
-          </div>
-        ) : (
-          <div className="space-y-2 text-green-300 text-sm">
-            <p><strong>Thar:</strong> {userData.thar}</p>
-            <p><strong>Region:</strong> {userData.region}</p>
-            <p><strong>Skills:</strong> {userData.skills}</p>
-            <p><strong>Phone:</strong> {userData.phone}</p>
-            <p><strong>Karma:</strong> {userData.karma}</p>
-            <button
-              onClick={() => setEditMode(true)}
-              className="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white font-semibold"
-            >
-              ✏️ Edit Profile
-            </button>
-
+         <button
+  onClick={() => router.push('/edit-profile')}
+  className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+>
+  ✏️ Edit Profile
+</button>
+ 
             <Link href="/grove/ritual" legacyBehavior>
               <a className="block mt-6 text-center text-green-400 hover:text-green-600 underline text-sm">
                 🌿 Visit Ritual Garden
