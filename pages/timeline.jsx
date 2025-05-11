@@ -55,7 +55,7 @@ export default function Timeline() {
           {reflections.map((entry, index) => (
             <div key={index} className="relative p-4 border-l-4 border-indigo-500 pl-6">
               <div className="absolute left-0 top-4">
-                <div className={\`\${styles.auraRing} \${getDepthStyle(entry.depth)}\`} />
+                <div className={`${styles.auraRing} ${getDepthStyle(entry.depth)}`} />
               </div>
               <p className="text-sm text-gray-400">{new Date(entry.created_at).toLocaleString()}</p>
               <p className="text-green-300 italic">“{entry.text.slice(0, 100)}{entry.text.length > 100 ? '…' : ''}”</p>
