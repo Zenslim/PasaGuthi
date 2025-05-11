@@ -8,11 +8,16 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState({ name: '', thar: '', region: '', skills: '', phone: '' });
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const fetchUser = async () => {
       const guthiKey = localStorage.getItem('guthiKey');
-      if (!guthiKey) return;
+      if (!guthiKey) {
+        setErrorMessage("⚠️ No Guthi Key found. Please re-enter the circle through the Welcome page.");
+        setLoading(false);
+        return;
+      }
 
       const { data, error } = await supabase
         .from('users')
@@ -22,6 +27,8 @@ export default function Dashboard() {
 
       if (error || !Array.isArray(data) || data.length === 0) {
         console.error('❌ Supabase fetch error or no user found:', error || 'No data');
+        setErrorMessage("❌ We could not find your Guthi identity. Please revisit the welcome ritual.");
+        setLoading(false);
         return;
       }
 
@@ -68,10 +75,19 @@ export default function Dashboard() {
     );
   }
 
-  if (!userData) {
+  if (errorMessage) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center text-center text-red-400 text-lg">
-        ❌ No Guthi member found. <br /> Please complete your welcome ritual.
+      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center text-center p-6 space-y-4">
+        <p className="text-red-400 text-lg">{errorMessage}</p>
+        <button
+          onClick={() => {
+            localStorage.removeItem('guthiKey');
+            window.location.href = '/welcome';
+          }}
+          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold"
+        >
+          🔁 Restart Welcome Ritual
+        </button>
       </div>
     );
   }
