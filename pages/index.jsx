@@ -1,13 +1,11 @@
 import Link from 'next/link';
 import MycelialTracker from '../components/MycelialTracker';
-import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 export default function Home() {
   return (
     <>
-      <Navbar dark={true} />
-      <main className="min-h-screen bg-black text-white flex flex-col justify-center items-center px-6 py-24">
+           <main className="min-h-screen bg-black text-white flex flex-col justify-center items-center px-6 py-24">
         {/* Centered Logo */}
         <img
           src="/pasaguthi-logo.png"
