@@ -2,12 +2,14 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { generateEchoReply } from '../../lib/echoSpiritEngineDeepseek';
+import DepthAura from '../../components/DepthAura';
 
 export default function Echoes() {
   const [whispers, setWhispers] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [newWhisper, setNewWhisper] = useState('');
   const [response, setResponse] = useState('');
+  const [depth, setDepth] = useState('');
   const [loading, setLoading] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -58,6 +60,7 @@ export default function Echoes() {
     const echo = await generateEchoReply({ text: newWhisper, userId, planet });
 
     setResponse(echo.reply);
+    setDepth(echo.depth);
     setNewWhisper('');
     await incrementKarmaWithFallback(userId);
     setRefreshKey((k) => k + 1);
@@ -100,6 +103,8 @@ export default function Echoes() {
           <div className="mt-6 p-4 border border-pink-500 rounded bg-pink-950 text-left">
             <p className="text-pink-300 font-semibold">🌬 The Guthi whispers back:</p>
             <p className="mt-2 text-white">{response}</p>
+            {depth && <p className="mt-2 text-sm text-blue-400 italic">Reflection Depth: {depth}</p>}
+            <DepthAura level={depth} />
           </div>
         )}
       </div>

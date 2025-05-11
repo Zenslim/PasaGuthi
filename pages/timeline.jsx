@@ -1,39 +1,69 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
-import withAuth from '../components/withAuth';
+import { calculateReflectionDepth } from '../lib/calculateReflectionDepth';
+import styles from '../styles/depthAura.module.css';
 
-function TimelinePage() {
+export default function Timeline() {
   const [reflections, setReflections] = useState([]);
 
   useEffect(() => {
-    const load = async () => {
+    const fetchData = async () => {
       const guthiKey = localStorage.getItem('guthiKey');
+      if (!guthiKey) return;
+
       const { data } = await supabase
         .from('reflections')
-        .select('*')
-        .eq('guthiKey', guthiKey)
-        .order('createdAt', { ascending: false });
-      setReflections(data || []);
+        .select('text, created_at')
+        .eq('userId', guthiKey)
+        .order('created_at', { ascending: true });
+
+      if (data) {
+        const enriched = data.map(item => ({
+          ...item,
+          depth: calculateReflectionDepth(item.text)
+        }));
+        setReflections(enriched);
+      }
     };
-    load();
+
+    fetchData();
   }, []);
 
+  const getDepthStyle = (depth) => {
+    switch (depth) {
+      case '🪶 Very Light':
+        return styles.veryLight;
+      case '🌿 Light':
+        return styles.light;
+      case '🔥 Deep':
+        return styles.deep;
+      case '🌌 Very Deep':
+        return styles.veryDeep;
+      default:
+        return styles.light;
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-white text-black p-6">
-      <h1 className="text-xl font-bold mb-6">🕰️ Your Reflection Timeline</h1>
-      <div className="space-y-4 max-w-2xl mx-auto">
-        {reflections.map((r) => (
-          <div key={r.id} className="border rounded p-4 shadow">
-            <div className="text-sm text-gray-600">{new Date(r.createdAt).toLocaleString()}</div>
-            <div className="text-lg mt-1">{r.message}</div>
-            {r.mood && <div className="text-xl mt-2">{r.mood}</div>}
-          </div>
-        ))}
-        {reflections.length === 0 && <p className="text-center text-gray-500">No reflections yet.</p>}
-      </div>
+    <div className="min-h-screen bg-black text-white p-6">
+      <h1 className="text-3xl text-center font-bold text-yellow-300 mb-8">📜 Your Living Timeline</h1>
+      {reflections.length === 0 ? (
+        <p className="text-center text-gray-500">No whispers yet... the circle is waiting.</p>
+      ) : (
+        <div className="flex flex-col gap-6 max-w-2xl mx-auto">
+          {reflections.map((entry, index) => (
+            <div key={index} className="relative p-4 border-l-4 border-indigo-500 pl-6">
+              <div className="absolute left-0 top-4">
+                <div className={\`\${styles.auraRing} \${getDepthStyle(entry.depth)}\`} />
+              </div>
+              <p className="text-sm text-gray-400">{new Date(entry.created_at).toLocaleString()}</p>
+              <p className="text-green-300 italic">“{entry.text.slice(0, 100)}{entry.text.length > 100 ? '…' : ''}”</p>
+              <p className="text-blue-400 text-sm mt-1">Depth: {entry.depth}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
-
-export default withAuth(TimelinePage);

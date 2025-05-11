@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
 import withAuth from '../components/withAuth';
+import EchoArchive from '../components/EchoArchive';
+import DAOGate from '../components/DAOGate';
 
 function Dashboard() {
   const router = useRouter();
@@ -61,17 +63,18 @@ function Dashboard() {
           <p>✨ Karma: <span className="text-pink-300 font-mono">{userData.karma}</span></p>
         </div>
 
-        <div className="grid gap-3">
+        <div className="grid gap-3 mb-6">
           <NavButton emoji="🔙" label="Back to Profile" href="/edit-profile" />
           <NavButton emoji="🌌" label="Guthi Echoes" href="/network/echoes" />
           <NavButton emoji="📜" label="My Timeline" href="/timeline" />
           <NavButton emoji="🧘" label="Reflect Again" href="/reflect" />
-          <NavButton
-            emoji="🕸"
-            label="DAO Proposals"
-            href="/proposals"
-            locked={userData.karma < 13}
-          />
+          <NavButton emoji="🕸" label="Enter Guthi Circle" href="/network/circle" />
+          <NavButton emoji="🌿" label="Visit Ritual Garden" href="/grove/ritual" />
+        </div>
+
+        <EchoArchive userId={userData.guthiKey} />
+        <div className="mt-6">
+          <DAOGate />
         </div>
 
         <div className="mt-6 text-center text-sm italic text-gray-400">

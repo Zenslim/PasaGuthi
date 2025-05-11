@@ -1,0 +1,45 @@
+
+.auraContainer {
+  position: relative;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auraRing {
+  border-radius: 50%;
+  position: absolute;
+  opacity: 0.5;
+  animation: pulse 3s infinite;
+}
+
+.veryLight {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.light {
+  width: 60px;
+  height: 60px;
+  background: rgba(173, 216, 230, 0.3);
+}
+
+.deep {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 140, 0, 0.4);
+}
+
+.veryDeep {
+  width: 100px;
+  height: 100px;
+  background: rgba(138, 43, 226, 0.5);
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.3); opacity: 0.2; }
+  100% { transform: scale(1); opacity: 0.6; }
+}
