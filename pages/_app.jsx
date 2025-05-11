@@ -2,7 +2,7 @@
 import '../styles/globals.css';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
-import NavBar from '../components/NavBar';
+import NavBar from '../components/Navabar';
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
