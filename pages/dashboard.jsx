@@ -1,9 +1,9 @@
-
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import Link from 'next/link';
+import withAuth from '../components/withAuth';
 
- {
+function Dashboard() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
@@ -152,5 +152,5 @@ function InputField({ label, name, value, onChange }) {
     </div>
   );
 }
-// Last line of the file:
+
 export default withAuth(Dashboard);
