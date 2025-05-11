@@ -9,6 +9,7 @@ export default function Echoes() {
   const [newWhisper, setNewWhisper] = useState('');
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     const fetchWhispers = async () => {
@@ -26,7 +27,7 @@ export default function Echoes() {
     }, 7000);
 
     return () => clearInterval(interval);
-  }, [whispers.length]);
+  }, [refreshKey]);
 
   const incrementKarmaWithFallback = async (userId) => {
     try {
@@ -38,7 +39,6 @@ export default function Echoes() {
         .select('karma')
         .eq('guthiKey', userId)
         .single();
-
       const newKarma = (userData?.karma || 0) + 1;
       await supabase
         .from('users')
@@ -55,11 +55,12 @@ export default function Echoes() {
     const planet = 'Saturn';
 
     await supabase.from('reflections').insert([{ text: newWhisper, userId }]);
-
     const echo = await generateEchoReply({ text: newWhisper, userId, planet });
+
     setResponse(echo.reply);
     setNewWhisper('');
     await incrementKarmaWithFallback(userId);
+    setRefreshKey((k) => k + 1);
     setLoading(false);
   };
 
@@ -104,4 +105,3 @@ export default function Echoes() {
       </div>
     </div>
   );
-}
