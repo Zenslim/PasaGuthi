@@ -20,7 +20,7 @@ export default function Dashboard() {
       const { data, error } = await supabase
         .from('users')
         .select('*')
-        .eq('guthiKey', guthiKey)
+        .match({ guthiKey })
         .single();
 
       if (error) {
@@ -51,7 +51,7 @@ export default function Dashboard() {
     const { error } = await supabase
       .from('users')
       .update(form)
-      .eq('guthiKey', guthiKey);
+     .match({ guthiKey });
 
     if (!error) {
       setUserData({ ...userData, ...form });
