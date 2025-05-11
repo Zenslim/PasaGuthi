@@ -14,27 +14,36 @@ export default function SignIn() {
     e.preventDefault();
     setError('');
 
-    const isPhone = identifier.trim().startsWith('+');
+    const isPhone = identifier.startsWith('+');
     const key = isPhone ? 'phone' : 'guthiKey';
 
     const { data, error: fetchError } = await supabase
       .from('users')
       .select('*')
-      .match({ [key]: identifier.trim() })
-      .single();
+      .eq(key, identifier.trim())
+      .limit(1);
 
-    if (fetchError || !data) {
+    console.log('🔍 Fetch result:', data, fetchError);
+
+    if (fetchError || !Array.isArray(data) || data.length === 0) {
       setError('❌ User not found. Please check your Guthi Key or phone.');
       return;
     }
 
-    const match = await bcrypt.compare(password, data.password || '');
+    const user = data[0];
+
+    if (!user.password) {
+      setError('❌ This Guthi identity was created without a password.');
+      return;
+    }
+
+    const match = await bcrypt.compare(password, user.password);
     if (!match) {
       setError('❌ Incorrect password.');
       return;
     }
 
-    localStorage.setItem('guthiKey', data.guthiKey);
+    localStorage.setItem('guthiKey', user.guthiKey);
     router.push('/dashboard');
   };
 
@@ -51,7 +60,7 @@ export default function SignIn() {
           <input
             type="text"
             required
-            placeholder="e.g., maya-shrestha-bhaktapur-42UH5 or +97798XXXXXXX"
+            placeholder="e.g., maya-shrestha-bhaktapur-abc12 or +97798XXXXXXX"
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
             className="w-full p-2 border rounded"
