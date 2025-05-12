@@ -253,22 +253,17 @@ else {
     If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
   </p>
 )}
-
-          <p className="mt-2 font-medium text-red-700">
-            If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
-          </p>
-          <p className="text-xs text-gray-500 mt-2">
-            Why do we ask this? It’s not for marketing. Only to help you retrieve your Guthi Key if forgotten.
-          </p>
-        </div>
-
-        {/* 🌿 Submit Button */}
+return (
+  <div className="min-h-screen flex items-center justify-center bg-white text-black p-6">
+    {showDemographic ? (
+      <DemographicInline guthiKey={guthiKey} />
+    ) : (
+      <form onSubmit={handleSubmit} onKeyDown={handleKeyPress} className="w-full max-w-md space-y-5">
+        {/* ...your full form contents here... */}
         <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full font-bold">
           🌿 Plant My Guthi Seed
         </button>
-        </form>
-      )}
-      {showDemographic && <DemographicInline guthiKey={guthiKey} />}
-    </div>
-  );
-}
+      </form>
+    )}
+  </div>
+);
