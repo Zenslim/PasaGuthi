@@ -127,6 +127,12 @@ export default function SignIn() {
             🔓 Use Biometric Login
           </button>
         )}
+        <p className="text-center text-sm mt-2 text-gray-600">
+  First time?{' '}
+  <a href="/register-biometric" className="text-blue-600 underline hover:text-blue-800">
+    🔒 Register your biometric
+  </a>
+</p>
       </form>
     </div>
   );
