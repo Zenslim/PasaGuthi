@@ -22,7 +22,23 @@ export default function FAQ() {
             </p>
           </div>
 
-          <div>
+         <div>
+  <h2 className="text-xl font-semibold text-purple-300 mb-2">🇳🇵 Is Pasaguthi trying to make Nepal great again?</h2>
+  <p className="text-sm text-gray-300">
+    Yes — but not by politics or pride. By **reawakening what made Nepal great in the first place**:  
+    the Guthi spirit of cooperation, beauty, mutual aid, and cultural brilliance.  
+    When Newars unite, Nepal remembers itself.
+  </p>
+</div>
+
+<div>
+  <h2 className="text-xl font-semibold text-purple-300 mb-2">🔥 Is this just for Newars?</h2>
+  <p className="text-sm text-gray-300">
+    It is rooted in Newar culture — but open to all who walk with respect, love, and curiosity.  
+    Like any temple: it has a guardian door, but the fire inside can warm the whole village.
+  </p>
+</div>
+ <div>
             <h2 className="text-xl font-semibold text-purple-300 mb-2">🧬 What is a Guthi Key?</h2>
             <p className="text-sm text-gray-300">
               It is your sacred digital identity. It holds your name, Thar, region, and karma.  
