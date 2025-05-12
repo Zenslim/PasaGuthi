@@ -3,9 +3,8 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 
-const TodayCard = dynamic(() => import('@/components/nepalsambat-calendar/TodayCard_dynamic_fixed'), { ssr: false });
-const WeekView = dynamic(() => import('@/components/nepalsambat-calendar/WeekView_dynamic_fixed'), { ssr: false });
-const MonthView = dynamic(() => import('@/components/nepalsambat-calendar/MonthView_dynamic_fixed'), { ssr: false });
+const TodayCard = dynamic(() => import('@/components/nepalsambat-calendar/TodayCard'), { ssr: false });
+const MonthView = dynamic(() => import('@/components/nepalsambat-calendar/MonthView'), { ssr: false });
 
 export default function NepalSambatPage() {
   return (
