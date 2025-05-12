@@ -1,122 +1,98 @@
+
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
-import bcrypt from 'bcryptjs';
-import withAuth from '../components/withAuth';
 
-
-function EditProfile() {
+export default function EditProfile() {
   const router = useRouter();
-  const [form, setForm] = useState({
-    name: '',
-    thar: '',
-    region: '',
-    skills: '',
-    phone: '',
-    password: ''
+  const [formData, setFormData] = useState({
+    bio: "",
+    education_level: "",
+    employment_status: "",
+    marital_status: "",
+    dob: "",
+    language: ""
   });
   const [loading, setLoading] = useState(true);
+  const [guthiKey, setGuthiKey] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      const guthiKey = localStorage.getItem('guthiKey');
-      if (!guthiKey) return;
-
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('guthiKey', guthiKey)
-        .single();
-
-      if (data) {
-        setForm({
-          name: data.name,
-          thar: data.thar,
-          region: data.region,
-          skills: data.skills,
-          phone: data.phone || '',
-          password: ''
-        });
-      }
-
+    const loadUser = async () => {
+      const key = localStorage.getItem('guthiKey');
+      if (!key) return router.push('/welcome');
+      setGuthiKey(key);
+      const { data, error } = await supabase.from('users').select('*').eq('guthiKey', key).single();
+      if (error || !data) return console.error("User not found:", error);
+      setFormData({
+        bio: data.bio || '',
+        education_level: data.education_level || '',
+        employment_status: data.employment_status || '',
+        marital_status: data.marital_status || '',
+        dob: data.dob || '',
+        language: data.language || ''
+      });
       setLoading(false);
     };
-    fetchData();
+    loadUser();
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const guthiKey = localStorage.getItem('guthiKey');
-    if (!guthiKey) return;
-
-    let updateData = {
-      name: form.name,
-      thar: form.thar,
-      region: form.region,
-      skills: form.skills,
-      phone: form.phone
+    const update = {
+      ...formData,
+      language: formData.language, // as string
     };
-
-    if (form.password.trim()) {
-      updateData.password = await bcrypt.hash(form.password.trim(), 10);
-    }
-
-    const { error } = await supabase
-      .from('users')
-      .update(updateData)
-      .eq('guthiKey', guthiKey);
-
-    if (!error) {
-      localStorage.setItem('userName', form.name);
-      router.push('/dashboard');
-    } else {
-      console.error('❌ Update failed:', error);
-    }
+    const { error } = await supabase.from('users').update(update).eq('guthiKey', guthiKey);
+    if (error) return alert("Update failed");
+    router.push('/dashboard');
   };
 
   if (loading) {
-    return <div className="p-6 text-center">🌿 Loading your profile...</div>;
+    return <div className="min-h-screen flex items-center justify-center text-gray-600">Loading profile...</div>;
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white text-black px-6">
-      <form onSubmit={handleSave} className="w-full max-w-md space-y-4">
-        <h1 className="text-2xl font-bold text-center mb-2">📝 Edit Guthi Profile</h1>
+    <form onSubmit={handleSubmit} className="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow space-y-5 text-black">
+      <h2 className="text-2xl font-bold text-purple-800 text-center">🛠️ Edit Your Sacred Profile</h2>
 
-        {['name', 'thar', 'region', 'skills', 'phone'].map((field) => (
-          <input
-            key={field}
-            name={field}
-            value={form[field]}
-            onChange={handleChange}
-            placeholder={field[0].toUpperCase() + field.slice(1)}
-            className="w-full p-2 border rounded"
-          />
-        ))}
+      <div>
+        <label className="block font-semibold">📝 Short Bio</label>
+        <textarea name="bio" onChange={handleChange} value={formData.bio} placeholder="e.g., A healer walking between worlds..." className="w-full border p-2 rounded" />
+      </div>
 
-        <input
-          type="password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-          placeholder="New Password (optional)"
-          className="w-full p-2 border rounded"
-        />
+      <div>
+        <label className="block font-semibold">🎓 Education Level</label>
+        <input name="education_level" onChange={handleChange} value={formData.education_level} placeholder="e.g., Master's in Anthropology" className="w-full border p-2 rounded" />
+      </div>
 
-        <button
-          type="submit"
-          className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-        >
-          💾 Save Profile
-        </button>
-      </form>
-    </div>
+      <div>
+        <label className="block font-semibold">💼 Employment Status</label>
+        <input name="employment_status" onChange={handleChange} value={formData.employment_status} placeholder="e.g., Independent Artisan" className="w-full border p-2 rounded" />
+      </div>
+
+      <div>
+        <label className="block font-semibold">💍 Marital Status</label>
+        <input name="marital_status" onChange={handleChange} value={formData.marital_status} placeholder="e.g., Married, Single, etc." className="w-full border p-2 rounded" />
+      </div>
+
+      <div>
+        <label className="block font-semibold">📅 Date of Birth</label>
+        <input name="dob" type="date" onChange={handleChange} value={formData.dob} className="w-full border p-2 rounded" />
+      </div>
+
+      <div>
+        <label className="block font-semibold">🗣️ Languages You Speak</label>
+        <input name="language" onChange={handleChange} value={formData.language} placeholder="e.g., Nepal Bhasa, English" className="w-full border p-2 rounded" />
+      </div>
+
+      <button type="submit" className="w-full mt-4 bg-purple-700 hover:bg-purple-800 text-white py-2 rounded font-semibold text-lg">
+        💾 Save Changes
+      </button>
+    </form>
   );
 }
-
-export default withAuth(EditProfile);
