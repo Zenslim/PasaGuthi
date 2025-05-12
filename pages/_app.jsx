@@ -3,6 +3,7 @@ import '../styles/globals.css';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import NavBar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
