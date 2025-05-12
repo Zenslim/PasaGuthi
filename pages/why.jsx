@@ -39,7 +39,7 @@ export default function WhyPasaGuthi() {
             <p className="text-sm text-gray-300">
               Newars are now everywhere — Boston, Berlin, Bhaktapur.  
               But our digital heart was missing. Until now.  
-              PasaGuthi reconnects us — name, Thar, karma, purpose.
+              PasaGuthi reconnects us — Name, Thar, Karma, Purpose (Ikigai).
             </p>
           </div>
 
