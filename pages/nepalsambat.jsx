@@ -1,39 +1,43 @@
-import { useEffect, useState } from 'react';
-import TodayCard from '../components/nepalsambat-calendar/TodayCard';
-import WeekView from '../components/nepalsambat-calendar/WeekView';
+
+import React, { useEffect, useState } from 'react';
 import MonthView from '../components/nepalsambat-calendar/MonthView';
+import TodayCard from '../components/nepalsambat-calendar/TodayCard';
 import FestivalList from '../components/nepalsambat-calendar/FestivalList';
+import DateConverter from '../components/nepalsambat-calendar/DateConverter';
+import { getTodayNS } from '../lib/NSDateUtils';
 
 export default function NepalSambatPage() {
-  const [calendar, setCalendar] = useState([]);
-  const [today, setToday] = useState(null);
-  const [tab, setTab] = useState('today');
+  const [todayEntry, setTodayEntry] = useState(null);
 
   useEffect(() => {
-    fetch('/ns-calendar-enriched-2024-2034.json')
-      .then(res => res.json())
-      .then(data => {
-        setCalendar(data);
-        const now = new Date().toISOString().split('T')[0];
-        const match = data.find(e => e.gregorian === now);
-        setToday(match);
-      });
+    const todayData = getTodayNS();
+    setTodayEntry(todayData);
   }, []);
 
   return (
-    <div className="min-h-screen bg-yellow-100 text-gray-800 px-4 py-6">
-      <h1 className="text-3xl font-bold text-yellow-700 mb-4 text-center">📅 Nepal Sambat Calendar</h1>
-      <div className="flex justify-center gap-4 mb-6">
-        {['today', 'week', 'month', 'festivals'].map(t => (
-          <button key={t} className={`px-4 py-2 rounded ${tab === t ? 'bg-yellow-600 text-white' : 'bg-yellow-200'}`} onClick={() => setTab(t)}>
-            {t.charAt(0).toUpperCase() + t.slice(1)}
-          </button>
-        ))}
-      </div>
-      {tab === 'today' && today && <TodayCard today={today} />}
-      {tab === 'week' && <WeekView calendar={calendar} />}
-      {tab === 'month' && today && <MonthView calendar={calendar} currentMonth={today.nepal_sambat.month} />}
-      {tab === 'festivals' && <FestivalList calendar={calendar} />}
+    <div className="min-h-screen bg-yellow-50 text-gray-900 p-4">
+      <h1 className="text-3xl font-bold text-center mb-4">📅 Nepal Sambat Calendar</h1>
+
+      {todayEntry && (
+        <div className="mb-6">
+          <TodayCard entry={todayEntry} />
+        </div>
+      )}
+
+      <section className="mb-6">
+        <h2 className="text-2xl font-semibold mb-2">🗓️ This Month</h2>
+        <MonthView />
+      </section>
+
+      <section className="mb-6">
+        <h2 className="text-2xl font-semibold mb-2">🎊 Annual Festivals</h2>
+        <FestivalList />
+      </section>
+
+      <section className="mb-6">
+        <h2 className="text-2xl font-semibold mb-2">🔁 Date Converter</h2>
+        <DateConverter />
+      </section>
     </div>
   );
 }
