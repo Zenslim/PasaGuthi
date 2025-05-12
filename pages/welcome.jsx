@@ -120,27 +120,18 @@ else {
     }
   };
 
-  if (submitted) {
-    {showDemographic && <DemographicInline guthiKey={guthiKey} />}
-return (
-      <div className="min-h-screen flex items-center justify-center bg-white p-6 text-center text-black">
-        <div>
-          <h1 className="text-2xl font-bold">
-  🌿 Welcome, {form.name} of the {form.thar} lineage
-</h1>
-          <p className="mt-4">Your Guthi Key:</p>
-          <code className="text-lg bg-gray-100 p-2 rounded mt-2 inline-block">{guthiKey}</code>
-          <button
-            onClick={() => router.push('/dashboard')}
-            className="mt-6 bg-black text-white px-4 py-2 rounded"
-          >
-            🌀 Enter Your Guthi Dashboard
-          </button>
-        </div>
+  if (submitted && !showDemographic) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-white p-6 text-center text-black">
+      <div>
+        <h1 className="text-2xl font-bold">🌿 Welcome, {form.name} of the {form.thar} lineage</h1>
+        <p className="mt-4">Your Guthi Key:</p>
+        <code className="text-lg bg-gray-100 p-2 rounded mt-2 inline-block">{guthiKey}</code>
+        <p className="mt-4 text-purple-700 italic">🌸 Now let's complete your profile to join the Guthi family.</p>
       </div>
-    );
-  }
-
+    </div>
+  );
+}
   return (
     <div className="min-h-screen flex items-center justify-center bg-white text-black p-6">
       <form onSubmit={handleSubmit} onKeyDown={handleKeyPress} className="w-full max-w-md space-y-5">
