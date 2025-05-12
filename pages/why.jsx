@@ -1,15 +1,15 @@
 import Head from 'next/head';
 
-export default function WhyPasaguthi() {
+export default function WhyPasaGuthi() {
   return (
     <>
       <Head>
-        <title>Why Pasaguthi? — Sacred Return</title>
+        <title>Why PasaGuthi? — Sacred Return</title>
       </Head>
       <div className="min-h-screen bg-gradient-to-b from-purple-900 via-black to-gray-900 text-white px-6 py-16 text-center">
-        <h1 className="text-4xl font-extrabold mb-6">✨ Why Pasaguthi?</h1>
+        <h1 className="text-4xl font-extrabold mb-6">✨ Why PasaGuthi?</h1>
         <p className="text-lg max-w-2xl mx-auto text-purple-300 mb-12">
-          Pasaguthi is not just a platform. It is a sacred remembering.  
+          PasaGuthi is not just a platform. It is a sacred remembering.  
           A return to what our ancestors knew:  
           🧬 <em>Guthi is the soul of a civilization.</em>
         </p>
@@ -30,7 +30,7 @@ export default function WhyPasaguthi() {
             <p className="text-sm text-gray-300">
               Long before Web3, we shared land, memory, and responsibility  
               through sacred cooperatives.  
-              Pasaguthi brings that back — not with tech hype, but soul alignment.
+              PasaGuthi brings that back — not with tech hype, but soul alignment.
             </p>
           </div>
 
@@ -39,7 +39,7 @@ export default function WhyPasaguthi() {
             <p className="text-sm text-gray-300">
               Newars are now everywhere — Boston, Berlin, Bhaktapur.  
               But our digital heart was missing. Until now.  
-              Pasaguthi reconnects us — name, Thar, karma, purpose.
+              PasaGuthi reconnects us — name, Thar, karma, purpose.
             </p>
           </div>
 
@@ -48,7 +48,7 @@ export default function WhyPasaguthi() {
             <p className="text-sm text-gray-300">
               Our children need more than screens.  
               They need identity, rhythm, belonging, and myth.  
-              Pasaguthi is their compass — grounded, glowing, and alive.
+              PasaGuthi is their compass — grounded, glowing, and alive.
             </p>
           </div>
 
@@ -67,7 +67,7 @@ export default function WhyPasaguthi() {
             <p className="text-sm text-gray-300">
               Our calendar — Nepal Sambat — outlives kings and empires.  
               We marked time not with wars, but with festivals, rituals, and sacred continuity.  
-              Pasaguthi honors that rhythm.
+              PasaGuthi honors that rhythm.
             </p>
           </div>
 
@@ -82,7 +82,7 @@ export default function WhyPasaguthi() {
 
         <p className="mt-16 text-purple-400 text-md italic">
           “To forget Guthi is to forget who we are.  
-          Pasaguthi is not built. It is remembered.”
+          PasaGuthi is not built. It is remembered.”
         </p>
       </div>
     </>
