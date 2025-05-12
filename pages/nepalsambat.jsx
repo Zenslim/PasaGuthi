@@ -3,9 +3,9 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 
-const TodayCard = dynamic(() => import('../components/nepalsambat-calendar/TodayCard_dynamic'), { ssr: false });
-const WeekView = dynamic(() => import('../components/nepalsambat-calendar/WeekView_dynamic'), { ssr: false });
-const MonthView = dynamic(() => import('../components/nepalsambat-calendar/MonthView_dynamic'), { ssr: false });
+const TodayCard = dynamic(() => import('../components/nepalsambat-calendar/TodayCard'), { ssr: false });
+const WeekView = dynamic(() => import('../components/nepalsambat-calendar/WeekView'), { ssr: false });
+const MonthView = dynamic(() => import('../components/nepalsambat-calendar/MonthView'), { ssr: false });
 
 export default function NepalSambatPage() {
   return (
