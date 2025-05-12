@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -34,20 +35,15 @@ export default function NavBar({ user }) {
   return (
     <>
       <nav className="w-full flex items-center justify-between px-4 py-3 bg-gray-900 text-white shadow-md">
-        {/* Hamburger */}
         <button
           className="text-2xl mr-3 focus:outline-none"
           onClick={() => setMenuOpen(true)}
         >
           ☰
         </button>
-
-        {/* Logo */}
         <Link href="/" className="font-bold text-lg tracking-wide">
           PasaGuthi
         </Link>
-
-        {/* Right Auth */}
         <div>
           {user ? (
             <>
@@ -66,7 +62,6 @@ export default function NavBar({ user }) {
         </div>
       </nav>
 
-      {/* Overlay */}
       <AnimatePresence>
         {menuOpen && (
           <>
@@ -86,7 +81,6 @@ export default function NavBar({ user }) {
             >
               <div className="p-5 border-b font-bold text-xl">🌸 Menu</div>
               <ul className="p-4 space-y-4">
-                {/* Core Links */}
                 {coreLinks.map(({ emoji, label, href }) => (
                   <li key={href}>
                     <Link
@@ -98,10 +92,7 @@ export default function NavBar({ user }) {
                     </Link>
                   </li>
                 ))}
-
                 <hr className="my-4 border-gray-300" />
-
-                {/* Supporting Links */}
                 {supportLinks.map(({ emoji, label, href }) => (
                   <li key={href}>
                     <Link
@@ -113,7 +104,6 @@ export default function NavBar({ user }) {
                     </Link>
                   </li>
                 ))}
-
                 <li className="pt-6 border-t">
                   {user ? (
                     <button
