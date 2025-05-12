@@ -17,7 +17,7 @@ export default function Footer() {
         One Heritage. Many Homes. Infinite Connections.
       </p>
 
-      <div className="hidden md:flex justify-center flex-wrap gap-6 text-sm">
+    <div className="flex flex-wrap justify-center gap-4 text-sm mt-4">
         {supportLinks.map(({ emoji, label, href }) => (
           <Link
             key={href}
