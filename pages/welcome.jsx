@@ -133,16 +133,19 @@ else {
   );
 }
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white text-black p-6">
+  <div className="min-h-screen flex items-center justify-center bg-white text-black p-6">
+    {!showDemographic ? (
       <form onSubmit={handleSubmit} onKeyDown={handleKeyPress} className="w-full max-w-md space-y-5">
         <h1 className="text-2xl font-semibold text-center">🌸 PasaGuthi welcomes you.</h1>
         <p className="text-center text-sm text-gray-600 mt-1">Step into a living network of memory, meaning, and belonging.</p>
 
+        {/* Name */}
         <div>
           <label className="block font-semibold">🪶 What name do the winds call you by?</label>
           <input name="name" required onChange={handleChange} placeholder="e.g., Nabin" className="border bg-white text-black p-2 w-full rounded" />
         </div>
 
+        {/* Thar */}
         <div>
           <label className="block font-semibold">🌳 Your Thar (Lineage)</label>
           <p className="text-sm text-gray-500 italic mb-1">This binds you to your ancestral tree.</p>
@@ -165,6 +168,7 @@ else {
           )}
         </div>
 
+        {/* Gender */}
         <div>
           <label className="block font-semibold">🌸 How shall the Guthi greet you?</label>
           <select name="gender" required onChange={handleChange} className="border bg-white text-black p-2 w-full rounded">
@@ -174,6 +178,7 @@ else {
           </select>
         </div>
 
+        {/* Region */}
         <div>
           <label className="block font-semibold">🌍 Where do your roots now breathe?</label>
           <p className="text-sm text-gray-500 italic mb-1">This will blossom with meaning.</p>
@@ -196,6 +201,7 @@ else {
           )}
         </div>
 
+        {/* Skills */}
         <div>
           <label className="block font-semibold">🤲 What gifts do you offer the Guthi?</label>
           <p className="text-sm text-gray-500 italic mb-1">Each gift will be honored with a whisper.</p>
@@ -207,67 +213,45 @@ else {
               ))}
             </ul>
           )}
-          <p className="text-xs text-gray-500 mt-1">
-            Type a skill and press Enter to confirm — every offering adds to the sacred weave.
-          </p>
+          <p className="text-xs text-gray-500 mt-1">Type a skill and press Enter to confirm — every offering adds to the sacred weave.</p>
           {confirmedSkills.length > 0 && (
             <div className="mt-2 space-y-1 text-sm text-green-700 italic">
               {confirmedSkills.map((s, i) => {
                 const match = skillsList.find(k => k.Skill.toLowerCase() === s.toLowerCase());
                 return (
-                  <p key={i}>
-                    ✨ Aha, {s} — {match ? match.Meaning : "not yet in our sacred list. You are the first to speak it here."}
-                  </p>
+                  <p key={i}>✨ Aha, {s} — {match ? match.Meaning : "not yet in our sacred list. You are the first to speak it here."}</p>
                 );
               })}
             </div>
           )}
         </div>
 
-        {/* 📱 Phone input */}
+        {/* Phone + Password */}
         <div className="mt-4">
           <label className="block font-semibold">📱🔑 Recovery Number (Optional)</label>
-          <input
-            type="tel"
-            placeholder="+97798XXXXXXX"
-            value={phone}
-            onChange={handlePhoneChange}
-            className="w-full mt-2 p-2 border rounded"
-          />
-{showPassword && (
-  <>
-    <label className="block font-semibold mt-3">🔐 Create a Password</label>
-    <input
-      type="password"
-      name="password"
-      required
-      placeholder="Enter a strong password"
-      onChange={handleChange}
-      className="w-full mt-2 p-2 border rounded"
-    />
-    <p className="text-xs text-gray-500 mt-1">This will let you log in on older devices without biometrics.</p>
-  </>
-)}
-{!showPassword && (
-  <p className="mt-2 font-medium text-red-700">
-    If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
-  </p>
-)}
-return (
-  <div className="min-h-screen flex items-center justify-center bg-white text-black p-6">
-    {showDemographic ? (
-      <DemographicInline guthiKey={guthiKey} />
-    ) : (
-      <form onSubmit={handleSubmit} onKeyDown={handleKeyPress} className="w-full max-w-md space-y-5">
-        {/* ...your full form contents here... */}
+          <input type="tel" placeholder="+97798XXXXXXX" value={phone} onChange={handlePhoneChange} className="w-full mt-2 p-2 border rounded" />
+          {showPassword && (
+            <>
+              <label className="block font-semibold mt-3">🔐 Create a Password</label>
+              <input type="password" name="password" required placeholder="Enter a strong password" onChange={handleChange} className="w-full mt-2 p-2 border rounded" />
+              <p className="text-xs text-gray-500 mt-1">This will let you log in on older devices without biometrics.</p>
+            </>
+          )}
+          {!showPassword && (
+            <p className="mt-2 font-medium text-red-700">
+              If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
+            </p>
+          )}
+          <p className="text-xs text-gray-500 mt-2">Why do we ask this? It’s not for marketing. Only to help you retrieve your Guthi Key if forgotten.</p>
+        </div>
+
+        {/* Submit */}
         <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full font-bold">
           🌿 Plant My Guthi Seed
         </button>
-    </form>
-)}
-
-{showDemographic && <DemographicInline guthiKey={guthiKey} />}
-
-</div>
+      </form>
+    ) : (
+      <DemographicInline guthiKey={guthiKey} />
+    )}
+  </div>
 );
-}
