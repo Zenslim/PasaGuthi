@@ -57,7 +57,7 @@ export default function Guthyars() {
             placeholder="Search name, skill, region, or thar..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded shadow-sm"
+            className="w-full p-3 border border-gray-300 rounded shadow-sm bg-white text-black"
           />
           <select
             value={regionFilter}
@@ -86,7 +86,7 @@ export default function Guthyars() {
 
         <div className="text-center mt-6">
           <button
-            onClick={() => router.push('/network/demographic-form')}
+            onClick={() => router.push('/network/profile-form')}
             className="text-purple-700 underline hover:text-purple-900"
           >
             🌱 Not listed yet? Complete your profile.
