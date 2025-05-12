@@ -86,7 +86,7 @@ export default function Guthyars() {
 
         <div className="text-center mt-6">
           <button
-            onClick={() => router.push('/network/profile-form')}
+            onClick={() => router.push('/network/demographic-form')}
             className="text-purple-700 underline hover:text-purple-900"
           >
             🌱 Not listed yet? Complete your profile.
