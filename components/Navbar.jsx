@@ -18,8 +18,8 @@ export default function NavBar({ user }) {
 
   const coreLinks = [
     { emoji: '✨', label: 'Why Pasaguthi?', href: '/why' },
-    { emoji: '🧬', label: 'Guthi Key', href: '/guthi' },
-    { emoji: '🌿', label: 'Guthyars', href: '/guthyars' },
+    { emoji: '🧬', label: 'What is Guthi?', href: '/guthi' },
+    { emoji: '🌿', label: 'View our Guthyars', href: '/guthyars' },
     { emoji: '🪔', label: 'Whisper', href: '/whisper' },
     { emoji: '☀️', label: 'Join the Circle', href: '/welcome' },
   ];
