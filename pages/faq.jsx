@@ -4,7 +4,7 @@ export default function FAQ() {
   return (
     <>
       <Head>
-        <title>Questions — Pasaguthi FAQ</title>
+        <title>Questions — PasaGuthi FAQ</title>
       </Head>
       <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white px-6 py-16 text-center">
         <h1 className="text-4xl font-extrabold mb-6">❓ Questions You Carry</h1>
@@ -16,14 +16,14 @@ export default function FAQ() {
         <div className="max-w-3xl mx-auto space-y-8 text-left">
 
           <div>
-            <h2 className="text-xl font-semibold text-purple-300 mb-2">🔐 Do I need to sign in to use Pasaguthi?</h2>
+            <h2 className="text-xl font-semibold text-purple-300 mb-2">🔐 Do I need to sign in to use PasaGuthi?</h2>
             <p className="text-sm text-gray-300">
               No. You are free to explore. But to whisper, reflect, earn karma, or join projects — you’ll need a Guthi Key.
             </p>
           </div>
 
          <div>
-  <h2 className="text-xl font-semibold text-purple-300 mb-2">🇳🇵 Is Pasaguthi trying to make Nepal great again?</h2>
+  <h2 className="text-xl font-semibold text-purple-300 mb-2">🇳🇵 Is PasaGuthi trying to make Nepal great again?</h2>
   <p className="text-sm text-gray-300">
     Yes — but not by politics or pride. By **reawakening what made Nepal great in the first place**:  
     the Guthi spirit of cooperation, beauty, mutual aid, and cultural brilliance.  
@@ -68,7 +68,7 @@ export default function FAQ() {
           <div>
             <h2 className="text-xl font-semibold text-purple-300 mb-2">📮 Why is there no contact form or help email?</h2>
             <p className="text-sm text-gray-300">
-              Because Pasaguthi is not a service. It is a circle.  
+              Because PasaGuthi is not a service. It is a circle.  
               Your questions become whispers. Your participation brings clarity.  
               Instead of contacting, you contribute — and the Guthi responds.
             </p>
@@ -83,7 +83,7 @@ export default function FAQ() {
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-purple-300 mb-2">👥 Who runs Pasaguthi?</h2>
+            <h2 className="text-xl font-semibold text-purple-300 mb-2">👥 Who runs PasaGuthi?</h2>
             <p className="text-sm text-gray-300">
               A small team of Newars started it. But soon, the DAO will take over.  
               It will be run by the community — not by a company.
@@ -103,7 +103,7 @@ export default function FAQ() {
             <p className="text-sm text-gray-300">
               If you feel Newar in your bones, if you’ve longed to belong,  
               if you’ve felt forgotten by the systems of the world —  
-              then yes, Pasaguthi is for you.
+              then yes, PasaGuthi is for you.
             </p>
           </div>
 
