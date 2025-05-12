@@ -10,7 +10,7 @@ export default function FAQ() {
         <h1 className="text-4xl font-extrabold mb-6">❓ Questions You Carry</h1>
         <p className="text-lg max-w-2xl mx-auto text-gray-300 mb-12">
           These are not just FAQs.  
-          These are the gentle answers to the quiet questions in your heart.
+          These are the quiet questions in your heart — and the gentle answers we carry together.
         </p>
 
         <div className="max-w-3xl mx-auto space-y-8 text-left">
@@ -18,66 +18,84 @@ export default function FAQ() {
           <div>
             <h2 className="text-xl font-semibold text-purple-300 mb-2">🔐 Do I need to sign in to use Pasaguthi?</h2>
             <p className="text-sm text-gray-300">
-              No. You can read stories, see others, and explore freely.  
-              But if you want to whisper, earn karma, or join projects — yes, you need a Guthi Key.
+              No. You are free to explore. But to whisper, reflect, earn karma, or join projects — you’ll need a Guthi Key.
             </p>
           </div>
 
           <div>
             <h2 className="text-xl font-semibold text-purple-300 mb-2">🧬 What is a Guthi Key?</h2>
             <p className="text-sm text-gray-300">
-              It is your digital identity in our network.  
-              It includes your name, Thar (family name), skills, and region.  
-              You get it once — like a blessing.
+              It is your sacred digital identity. It holds your name, Thar, region, and karma.  
+              It is not a password. It is a promise to belong.
             </p>
           </div>
 
           <div>
             <h2 className="text-xl font-semibold text-purple-300 mb-2">🪔 What is a Whisper?</h2>
             <p className="text-sm text-gray-300">
-              A whisper is a small message from your heart — a thought, a memory, a vow.  
-              It helps you reflect and also helps the community grow.
+              A whisper is a reflection — a short message from your heart.  
+              You can write joy, grief, questions, or visions.  
+              Each whisper nourishes the Guthi.
             </p>
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-purple-300 mb-2">📜 What is Karma?</h2>
+            <h2 className="text-xl font-semibold text-purple-300 mb-2">🕸️ What is a DAO?</h2>
             <p className="text-sm text-gray-300">
-              Karma is not money. It is love in action.  
-              You earn it by writing, helping, creating, or participating.  
-              The more karma, the more trusted you are in the Guthi.
+              DAO means *Decentralized Autonomous Organization*.  
+              But for us, it means **Digital Ancestral Order**.  
+              Like old Guthis, but powered by tech.  
+              Everyone has a voice. Decisions are made together — not by a boss.
             </p>
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-purple-300 mb-2">🌏 I live outside Nepal. Can I still join?</h2>
+            <h2 className="text-xl font-semibold text-purple-300 mb-2">📮 Why is there no contact form or help email?</h2>
             <p className="text-sm text-gray-300">
-              Of course. Pasaguthi is made for the global Newar family.  
-              Whether you are in New York or Newroad, you are home here.
+              Because Pasaguthi is not a service. It is a circle.  
+              Your questions become whispers. Your participation brings clarity.  
+              Instead of contacting, you contribute — and the Guthi responds.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="text-xl font-semibold text-purple-300 mb-2">🌾 What if I don’t contribute? Will I be excluded?</h2>
+            <p className="text-sm text-gray-300">
+              No one is pushed out. But those who give will unlock more.  
+              In our culture, silence is honored — but offering is sacred.
             </p>
           </div>
 
           <div>
             <h2 className="text-xl font-semibold text-purple-300 mb-2">👥 Who runs Pasaguthi?</h2>
             <p className="text-sm text-gray-300">
-              It is run by a growing circle of Newars — artists, coders, farmers, priests, mothers, and dreamers.  
-              Soon it will become a DAO — a Guthi that governs itself.
+              A small team of Newars started it. But soon, the DAO will take over.  
+              It will be run by the community — not by a company.
             </p>
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-purple-300 mb-2">🌸 What if I don’t know my Thar?</h2>
+            <h2 className="text-xl font-semibold text-purple-300 mb-2">🧘 Is this religious or spiritual?</h2>
             <p className="text-sm text-gray-300">
-              That’s okay. We will help you find it gently.  
-              Your story matters even if the past is unclear.
+              It is cultural. It honors our gods, festivals, and ancestors.  
+              But it welcomes all kinds of belief — or even questions.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="text-xl font-semibold text-purple-300 mb-2">🤔 Is this really for me?</h2>
+            <p className="text-sm text-gray-300">
+              If you feel Newar in your bones, if you’ve longed to belong,  
+              if you’ve felt forgotten by the systems of the world —  
+              then yes, Pasaguthi is for you.
             </p>
           </div>
 
         </div>
 
         <p className="mt-16 text-purple-400 text-sm italic">
-          “A question is not a doubt. It is a doorway.”  
-          If your question is not listed, whisper it to us. We will listen.
+          “Some answers are not given. They are lived.”  
+          If your question remains — leave a whisper.
         </p>
       </div>
     </>
