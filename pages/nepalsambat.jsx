@@ -7,6 +7,7 @@ export default function NepalSambatCalendar() {
   const [yearFilter, setYearFilter] = useState('All');
   const [monthFilter, setMonthFilter] = useState('All');
   const [festivalOnly, setFestivalOnly] = useState(false);
+  const [todayEntry, setTodayEntry] = useState(null);
 
   useEffect(() => {
     async function fetchCalendar() {
@@ -14,6 +15,10 @@ export default function NepalSambatCalendar() {
       const data = await res.json();
       setCalendar(data);
       setFiltered(data);
+
+      const today = new Date().toISOString().split('T')[0];
+      const match = data.find(entry => entry.gregorian === today);
+      setTodayEntry(match);
     }
     fetchCalendar();
   }, []);
@@ -27,7 +32,7 @@ export default function NepalSambatCalendar() {
       result = result.filter(entry => entry.nepal_sambat.month === monthFilter);
     }
     if (festivalOnly) {
-      result = result.filter(entry => entry.festival);
+      result = result.filter(entry => entry.festival && entry.festival.trim() !== '');
     }
     setFiltered(result);
   }, [yearFilter, monthFilter, festivalOnly, calendar]);
@@ -44,7 +49,17 @@ export default function NepalSambatCalendar() {
         <title>Nepal Sambat Calendar — Pasaguthi</title>
       </Head>
       <div className="min-h-screen bg-gradient-to-b from-yellow-100 via-white to-yellow-50 text-gray-900 px-4 py-8">
-        <h1 className="text-3xl font-extrabold text-yellow-700 text-center mb-6">📅 Nepal Sambat Calendar (2024–2034)</h1>
+        <h1 className="text-3xl font-extrabold text-yellow-700 text-center mb-4">📅 Nepal Sambat Calendar (2024–2034)</h1>
+
+        {todayEntry && (
+          <div className="bg-yellow-200 text-yellow-900 max-w-xl mx-auto text-center px-4 py-3 rounded-xl mb-8 shadow">
+            <h2 className="text-lg font-semibold">📌 Today — {todayEntry.nepal_sambat.month}{todayEntry.nepal_sambat.fortnight} {todayEntry.nepal_sambat.tithi}</h2>
+            <p className="text-sm">N.S. {todayEntry.nepal_sambat.year}, B.S. {todayEntry.bikram_sambat.year}, {todayEntry.gregorian} ({todayEntry.nepal_sambat.weekday})</p>
+            {todayEntry.festival && (
+              <p className="mt-2 text-yellow-800 font-medium">🎊 {todayEntry.festival}</p>
+            )}
+          </div>
+        )}
 
         <div className="flex flex-wrap justify-center gap-4 mb-6 text-sm">
           <select className="border px-2 py-1" onChange={e => setYearFilter(e.target.value)} value={yearFilter}>
@@ -70,7 +85,7 @@ export default function NepalSambatCalendar() {
                 <th className="border p-2">Tithi</th>
                 <th className="border p-2">Weekday</th>
                 <th className="border p-2">B.S. Date</th>
-                <th className="border p-2">Festival</th>
+                <th className="border p-2">Festivals</th>
               </tr>
             </thead>
             <tbody>
@@ -86,7 +101,7 @@ export default function NepalSambatCalendar() {
                     <td className="border px-2 py-1">{ns.tithi}</td>
                     <td className="border px-2 py-1">{ns.weekday}</td>
                     <td className="border px-2 py-1">B.S. {bs.year} {bs.month} {bs.day}</td>
-                    <td className="border px-2 py-1">{entry.festival || '-'}</td>
+                    <td className="border px-2 py-1 whitespace-pre-line">{entry.festival || '-'}</td>
                   </tr>
                 );
               })}
