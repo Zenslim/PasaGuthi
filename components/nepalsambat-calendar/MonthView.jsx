@@ -1,25 +1,25 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { resolveNSDate } from '../lib/resolveNSDate';
 import { motion } from 'framer-motion';
-import enrichedCalendar from '../../public/ns-calendar-enriched-2024-2034.json';
 
 export default function MonthView() {
-  const today = new Date().toISOString().slice(0, 10);
-  const [currentMonth, setCurrentMonth] = useState([]);
-  const [monthName, setMonthName] = useState('');
-  const [nsYear, setNsYear] = useState('');
+  const [days, setDays] = useState([]);
 
   useEffect(() => {
-    const todayEntry = enrichedCalendar.find(entry => entry.gregorian === today);
-    if (todayEntry) {
-      const { year, month } = todayEntry.nepal_sambat;
-      const monthData = enrichedCalendar.filter(
-        entry => entry.nepal_sambat.year === year && entry.nepal_sambat.month === month
-      );
-      setCurrentMonth(monthData);
-      setMonthName(month);
-      setNsYear(year);
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth(); // 0-based
+
+    const promises = [];
+    for (let day = 1; day <= 31; day++) {
+      const date = new Date(year, month, day);
+      if (date.getMonth() !== month) break; // Skip overflow days
+      const iso = date.toISOString().slice(0, 10);
+      promises.push(resolveNSDate(iso));
     }
+
+    Promise.all(promises).then(setDays);
   }, []);
 
   return (
@@ -30,17 +30,14 @@ export default function MonthView() {
       transition={{ duration: 0.6 }}
     >
       <h3 className="text-lg font-bold mb-4 text-center">
-        📆 {monthName} {nsYear}
+        📆 This Month (Dynamic NS)
       </h3>
       <div className="grid grid-cols-4 gap-3 text-sm">
-        {currentMonth.map((entry, idx) => (
-          <div
-            key={idx}
-            className="p-2 rounded-lg border hover:border-yellow-400 shadow-sm bg-yellow-50"
-          >
-            <div className="font-bold">NS: {entry.nepal_sambat.day}</div>
-            <div className="text-xs text-gray-600">Tithi: {entry.nepal_sambat.tithi}</div>
-            {entry.festival && (
+        {days.map((entry, idx) => (
+          <div key={idx} className="p-2 rounded-lg border hover:border-yellow-400 shadow-sm bg-yellow-50">
+            <div className="font-bold">NS: {entry?.ns?.day}</div>
+            <div className="text-xs text-gray-600">Tithi: {entry?.tithi}</div>
+            {entry?.festival && (
               <div className="text-red-500 text-xs mt-1">🎉 {entry.festival}</div>
             )}
           </div>

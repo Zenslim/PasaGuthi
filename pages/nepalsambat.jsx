@@ -1,43 +1,35 @@
 
-import React, { useEffect, useState } from 'react';
-import MonthView from '../components/nepalsambat-calendar/MonthView';
-import TodayCard from '../components/nepalsambat-calendar/TodayCard';
-import FestivalList from '../components/nepalsambat-calendar/FestivalList';
-import DateConverter from '../components/nepalsambat-calendar/DateConverter';
-import { getTodayNS } from '../lib/NSDateUtils';
+import React from 'react';
+import dynamic from 'next/dynamic';
+import { motion } from 'framer-motion';
+
+const TodayCard = dynamic(() => import('../components/nepalsambat-calendar/TodayCard_dynamic'), { ssr: false });
+const WeekView = dynamic(() => import('../components/nepalsambat-calendar/WeekView_dynamic'), { ssr: false });
+const MonthView = dynamic(() => import('../components/nepalsambat-calendar/MonthView_dynamic'), { ssr: false });
 
 export default function NepalSambatPage() {
-  const [todayEntry, setTodayEntry] = useState(null);
-
-  useEffect(() => {
-    const todayData = getTodayNS();
-    setTodayEntry(todayData);
-  }, []);
-
   return (
     <div className="min-h-screen bg-yellow-50 text-gray-900 p-4">
-      <h1 className="text-3xl font-bold text-center mb-4">📅 Nepal Sambat Calendar</h1>
+      <motion.h1
+        className="text-3xl font-bold text-center mb-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        📅 Nepal Sambat Calendar (Live Panchanga)
+      </motion.h1>
 
-      {todayEntry && (
-        <div className="mb-6">
-          <TodayCard entry={todayEntry} />
-        </div>
-      )}
+      <div className="mb-6">
+        <TodayCard />
+      </div>
 
-      <section className="mb-6">
-        <h2 className="text-2xl font-semibold mb-2">🗓️ This Month</h2>
+      <div className="mb-6">
+        <WeekView />
+      </div>
+
+      <div className="mb-6">
         <MonthView />
-      </section>
-
-      <section className="mb-6">
-        <h2 className="text-2xl font-semibold mb-2">🎊 Annual Festivals</h2>
-        <FestivalList />
-      </section>
-
-      <section className="mb-6">
-        <h2 className="text-2xl font-semibold mb-2">🔁 Date Converter</h2>
-        <DateConverter />
-      </section>
+      </div>
     </div>
   );
 }
