@@ -7,6 +7,8 @@ import tharList from '../data/tharList.json';
 import skillsList from '../data/skillsList.json';
 import regionList from '../data/regionList.json';
 import Fuse from 'fuse.js';
+import DemographicInline from '../components/DemographicInline';
+
 
 export default function Welcome() {
   const router = useRouter();
@@ -28,6 +30,7 @@ export default function Welcome() {
   const [confirmedRegion, setConfirmedRegion] = useState('');
   const [guthiKey, setGuthiKey] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [showDemographic, setShowDemographic] = useState(false);
 
   const tharFuse = new Fuse(tharList, { keys: ['Thar'], threshold: 0.3 });
   const regionFuse = new Fuse(regionList, { keys: ['Region'], threshold: 0.3 });
@@ -106,19 +109,25 @@ const handleSubmit = async (e) => {
       createdAt: new Date().toISOString()
     }]);
 
-    if (!error) {
-      localStorage.setItem('guthiKey', guthiKey);
-      setSubmitted(true);
-    } else {
+   if (!error) {
+  localStorage.setItem('guthiKey', guthiKey);
+  setGuthiKey(guthiKey);
+  setSubmitted(true);
+  setShowDemographic(true);
+}
+else {
       console.error('❌ Supabase insert failed:', error);
     }
   };
 
   if (submitted) {
-    return (
+    {showDemographic && <DemographicInline guthiKey={guthiKey} />}
+return (
       <div className="min-h-screen flex items-center justify-center bg-white p-6 text-center text-black">
         <div>
-          <h1 className="text-2xl font-bold">🌿 Welcome, {form.name}</h1>
+          <h1 className="text-2xl font-bold">
+  🌿 Welcome, {form.name} of the {form.thar} lineage
+</h1>
           <p className="mt-4">Your Guthi Key:</p>
           <code className="text-lg bg-gray-100 p-2 rounded mt-2 inline-block">{guthiKey}</code>
           <button
