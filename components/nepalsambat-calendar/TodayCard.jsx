@@ -1,24 +1,26 @@
-export default function TodayCard({ today }) {
-  const ns = today.nepal_sambat;
-  const bs = today.bikram_sambat;
+
+import React from 'react';
+import { motion } from 'framer-motion';
+
+export default function TodayCard({ entry }) {
+  const { nepal_sambat, gregorian, bikram_sambat, festival } = entry;
 
   return (
-    <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded shadow mb-6 max-w-2xl mx-auto">
-      <h2 className="text-xl font-bold text-yellow-800 mb-1">
-        🌞 Today: N.S. {ns.year} {ns.month}{ns.fortnight} {ns.day}
-      </h2>
-      <p className="text-sm text-gray-700">
-        {ns.tithi}, {ns.weekday}<br />
-        B.S.: {bs.year} {bs.month} {bs.day}<br />
-        Gregorian: {today.gregorian}
-      </p>
-      {today.festival && (
-        <div className="mt-2 text-yellow-800 text-sm">
-          {today.festival.split(" | ").map((f, i) => (
-            <div key={i}>🎊 {f}</div>
-          ))}
-        </div>
+    <motion.div
+      className="bg-white rounded-2xl shadow-lg p-6 border border-yellow-300"
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <h2 className="text-xl font-bold mb-2">📍 Today</h2>
+      <p><strong>Gregorian:</strong> {gregorian}</p>
+      <p><strong>BS:</strong> {bikram_sambat.year} {bikram_sambat.month} {bikram_sambat.day}</p>
+      <p><strong>NS:</strong> {nepal_sambat.year} {nepal_sambat.month} {nepal_sambat.day}</p>
+      <p><strong>Tithi:</strong> {nepal_sambat.tithi} ({nepal_sambat.fortnight})</p>
+      <p><strong>Weekday:</strong> {nepal_sambat.weekday}</p>
+      {festival && (
+        <p className="mt-3 text-red-600 font-semibold">🎉 Festival: {festival}</p>
       )}
-    </div>
+    </motion.div>
   );
 }

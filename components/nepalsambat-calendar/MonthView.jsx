@@ -1,44 +1,51 @@
-import React from 'react';
 
-export default function MonthGrid({ calendar }) {
-  const todayDate = new Date().toISOString().split('T')[0];
-  const todayObj = calendar.find(e => e.gregorian === todayDate);
-  if (!todayObj) return <p className="text-center">Today's date not found in calendar.</p>;
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import enrichedCalendar from '../../public/ns-calendar-enriched-2024-2034.json';
 
-  const currentMonth = todayObj.nepal_sambat.month;
-  const currentYear = todayObj.nepal_sambat.year;
+export default function MonthView() {
+  const today = new Date().toISOString().slice(0, 10);
+  const [currentMonth, setCurrentMonth] = useState([]);
+  const [monthName, setMonthName] = useState('');
+  const [nsYear, setNsYear] = useState('');
 
-  const filtered = calendar.filter(e =>
-    e.nepal_sambat.year === currentYear &&
-    e.nepal_sambat.month === currentMonth &&
-    e.gregorian >= todayDate
-  );
+  useEffect(() => {
+    const todayEntry = enrichedCalendar.find(entry => entry.gregorian === today);
+    if (todayEntry) {
+      const { year, month } = todayEntry.nepal_sambat;
+      const monthData = enrichedCalendar.filter(
+        entry => entry.nepal_sambat.year === year && entry.nepal_sambat.month === month
+      );
+      setCurrentMonth(monthData);
+      setMonthName(month);
+      setNsYear(year);
+    }
+  }, []);
 
   return (
-    <div className="p-4">
-      <h2 className="text-center text-xl font-bold text-yellow-800 mb-4">
-        {currentMonth} {currentYear}
-      </h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        {filtered.map((entry, idx) => (
-          <div key={idx} className="bg-white border rounded shadow p-3 hover:shadow-lg transition">
-            <div className="text-yellow-700 font-semibold text-sm">
-              N.S. {entry.nepal_sambat.day} {entry.nepal_sambat.fortnight}
-            </div>
-            <div className="text-xs text-gray-600">
-              {entry.nepal_sambat.tithi}, {entry.nepal_sambat.weekday}
-            </div>
-            <div className="text-xs text-gray-500">AD: {entry.gregorian}</div>
+    <motion.div
+      className="bg-white border border-yellow-300 rounded-xl p-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+    >
+      <h3 className="text-lg font-bold mb-4 text-center">
+        📆 {monthName} {nsYear}
+      </h3>
+      <div className="grid grid-cols-4 gap-3 text-sm">
+        {currentMonth.map((entry, idx) => (
+          <div
+            key={idx}
+            className="p-2 rounded-lg border hover:border-yellow-400 shadow-sm bg-yellow-50"
+          >
+            <div className="font-bold">NS: {entry.nepal_sambat.day}</div>
+            <div className="text-xs text-gray-600">Tithi: {entry.nepal_sambat.tithi}</div>
             {entry.festival && (
-              <div className="mt-1 text-yellow-700 text-xs">
-                {entry.festival.split(" | ").map((f, i) => (
-                  <div key={i}>🎊 {f}</div>
-                ))}
-              </div>
+              <div className="text-red-500 text-xs mt-1">🎉 {entry.festival}</div>
             )}
           </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
