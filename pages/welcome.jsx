@@ -266,7 +266,9 @@ else {
         <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full font-bold">
           🌿 Plant My Guthi Seed
         </button>
-      </form>
+        </form>
+      )}
+      {showDemographic && <DemographicInline guthiKey={guthiKey} />}
     </div>
   );
 }
