@@ -1,7 +1,5 @@
-
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { resolveNSDate } from '@/lib/resolveNSDate';
-import { motion } from 'framer-motion';
 
 export default function MonthView() {
   const [days, setDays] = useState([]);
@@ -9,40 +7,48 @@ export default function MonthView() {
   useEffect(() => {
     const today = new Date();
     const year = today.getFullYear();
-    const month = today.getMonth(); // 0-based
+    const month = today.getMonth(); // 0-indexed
 
-    const promises = [];
-    for (let day = 1; day <= 31; day++) {
+    const numDays = new Date(year, month + 1, 0).getDate();
+
+    const monthDays = [];
+    for (let day = 1; day <= numDays; day++) {
       const date = new Date(year, month, day);
-      if (date.getMonth() !== month) break; // Skip overflow days
-      const iso = date.toISOString().slice(0, 10);
-      promises.push(resolveNSDate(iso));
+      const iso = date.toISOString().split('T')[0];
+      const ns = resolveNSDate(iso);
+      monthDays.push({ date: iso, ns });
     }
 
-    Promise.all(promises).then(setDays);
+    setDays(monthDays);
   }, []);
 
   return (
-    <motion.div
-      className="bg-white border border-yellow-300 rounded-xl p-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-    >
-      <h3 className="text-lg font-bold mb-4 text-center">
-        📆 This Month (Dynamic NS)
-      </h3>
-      <div className="grid grid-cols-4 gap-3 text-sm">
-        {days.map((entry, idx) => (
-          <div key={idx} className="p-2 rounded-lg border hover:border-yellow-400 shadow-sm bg-yellow-50">
-            <div className="font-bold">NS: {entry?.ns?.day}</div>
-            <div className="text-xs text-gray-600">Tithi: {entry?.tithi}</div>
-            {entry?.festival && (
-              <div className="text-red-500 text-xs mt-1">🎉 {entry.festival}</div>
+    <div className="bg-white dark:bg-slate-900 p-4 rounded-lg shadow">
+      <h2 className="text-xl font-bold mb-4 text-center text-indigo-500">📅 This Month in Nepal Sambat</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 text-sm text-gray-700 dark:text-gray-200">
+        {days.map(({ date, ns }) => (
+          <div
+            key={date}
+            className="p-3 border border-gray-300 dark:border-gray-700 rounded hover:bg-indigo-50 dark:hover:bg-slate-800"
+          >
+            <div className="font-semibold">{date}</div>
+            {ns ? (
+              <>
+                <div className="text-green-500">📅 NS: {ns.ns}</div>
+                {ns.events?.length > 0 && (
+                  <ul className="mt-1 list-disc list-inside text-xs text-pink-400">
+                    {ns.events.map((e, i) => (
+                      <li key={i}>{e}</li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            ) : (
+              <div className="text-red-500 text-xs">NS date not found</div>
             )}
           </div>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
