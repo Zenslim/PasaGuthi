@@ -21,11 +21,7 @@ export default function NepalSambatPage() {
         <TodayCard />
       </div>
 
-      <div className="mb-6">
-        <WeekView />
-      </div>
-
-      <div>
+         <div>
         <MonthView />
       </div>
     </div>
