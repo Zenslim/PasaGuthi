@@ -2,20 +2,21 @@ import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import TodayCard from '@/components/nepalsambat-calendar/TodayCard';
 import FestivalList from '@/components/nepalsambat-calendar/FestivalList';
+import MonthView from '@/components/nepalsambat-calendar/MonthView';
 
 export default function NepalSambatPage() {
   const [today, setToday] = useState(null);
 
   useEffect(() => {
     const now = new Date();
-    const ad = now.toISOString().split('T')[0]; // format YYYY-MM-DD
+    const ad = now.toISOString().split('T')[0]; // YYYY-MM-DD
     import('@/lib/resolveNSDate')
       .then(({ resolveNSDate }) => {
         const ns = resolveNSDate(ad);
         setToday(ns);
       })
       .catch((err) => {
-        console.error("Failed to load resolveNSDate", err);
+        console.error("Failed to load NS date", err);
       });
   }, []);
 
@@ -29,12 +30,16 @@ export default function NepalSambatPage() {
           📅 Nepal Sambat Calendar
         </h1>
 
-        <div className="mb-8">
+        <div className="mb-6">
           {today ? (
             <TodayCard nsDate={today} />
           ) : (
             <p className="text-center text-gray-400">Loading today’s NS date...</p>
           )}
+        </div>
+
+        <div className="mb-6">
+          <MonthView />
         </div>
 
         <div className="border-t border-gray-600 pt-6">
