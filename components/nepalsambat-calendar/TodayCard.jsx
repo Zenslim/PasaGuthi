@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { resolveNSDate } from '../lib/resolveNSDate';
+import { resolveNSDate } from '@/lib/resolveNSDate';
 import { motion } from 'framer-motion';
 
 export default function TodayCard() {
