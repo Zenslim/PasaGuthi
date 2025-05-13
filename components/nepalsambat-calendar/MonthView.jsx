@@ -7,7 +7,7 @@ export default function MonthView() {
   useEffect(() => {
     const now = new Date();
     const y = now.getFullYear();
-    const m = now.getMonth(); // 0-indexed
+    const m = now.getMonth();
     const daysInMonth = new Date(y, m + 1, 0).getDate();
 
     const fetchData = async () => {
@@ -27,10 +27,7 @@ export default function MonthView() {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3 text-sm">
       {days.map((d, idx) => (
-        <div
-          key={idx}
-          className="p-3 border rounded-lg bg-slate-800 text-white hover:bg-slate-700 transition"
-        >
+        <div key={idx} className="p-3 border rounded-lg bg-slate-800 text-white hover:bg-slate-700 transition">
           <div className="font-bold text-yellow-300">{d.ad}</div>
           <div className="text-green-300 text-xs">{d.ns?.ns || '—'}</div>
           {d.ns?.events?.length > 0 && (

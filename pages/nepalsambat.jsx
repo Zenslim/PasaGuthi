@@ -3,6 +3,7 @@ import Head from 'next/head';
 import TodayCard from '@/components/nepalsambat-calendar/TodayCard';
 import FestivalList from '@/components/nepalsambat-calendar/FestivalList';
 import MonthView from '@/components/nepalsambat-calendar/MonthView';
+import resolveNSDate from '@/lib/resolveNSDate';
 
 export default function NepalSambatPage() {
   const [today, setToday] = useState(null);
@@ -10,15 +11,7 @@ export default function NepalSambatPage() {
   useEffect(() => {
     const now = new Date();
     const ad = now.toISOString().split('T')[0];
-    import('@/lib/resolveNSDate')
-      .then(async (module) => {
-        const resolveNSDate = module.default;
-        const ns = await resolveNSDate(ad);
-        setToday(ns);
-      })
-      .catch((err) => {
-        console.error("Failed to load NS date", err);
-      });
+    resolveNSDate(ad).then(setToday);
   }, []);
 
   return (
