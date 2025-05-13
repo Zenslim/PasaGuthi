@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { resolveNSDate } from '@/lib/resolveNSDate';
+import resolveNSDate from '@/lib/resolveNSDate';
 
 export default function MonthView() {
   const [days, setDays] = useState([]);
@@ -10,15 +10,18 @@ export default function MonthView() {
     const m = now.getMonth(); // 0-indexed
     const daysInMonth = new Date(y, m + 1, 0).getDate();
 
-    const allDays = [];
-    for (let i = 1; i <= daysInMonth; i++) {
-      const date = new Date(y, m, i);
-      const ad = date.toISOString().split('T')[0];
-      const ns = resolveNSDate(ad);
-      allDays.push({ ad, ns });
-    }
+    const fetchData = async () => {
+      const allDays = [];
+      for (let i = 1; i <= daysInMonth; i++) {
+        const date = new Date(y, m, i);
+        const ad = date.toISOString().split('T')[0];
+        const ns = await resolveNSDate(ad);
+        allDays.push({ ad, ns });
+      }
+      setDays(allDays);
+    };
 
-    setDays(allDays);
+    fetchData();
   }, []);
 
   return (

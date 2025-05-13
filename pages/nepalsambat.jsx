@@ -9,11 +9,11 @@ export default function NepalSambatPage() {
 
   useEffect(() => {
     const now = new Date();
-    const ad = now.toISOString().split('T')[0]; // YYYY-MM-DD
+    const ad = now.toISOString().split('T')[0];
     import('@/lib/resolveNSDate')
-      .then((module) => {
+      .then(async (module) => {
         const resolveNSDate = module.default;
-        const ns = resolveNSDate(ad);
+        const ns = await resolveNSDate(ad);
         setToday(ns);
       })
       .catch((err) => {
