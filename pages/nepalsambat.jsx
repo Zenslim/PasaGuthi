@@ -1,28 +1,16 @@
-import React from 'react';
-import dynamic from 'next/dynamic';
-import { motion } from 'framer-motion';
-
-const TodayCard = dynamic(() => import('@/components/nepalsambat-calendar/TodayCard'), { ssr: false });
-const MonthView = dynamic(() => import('@/components/nepalsambat-calendar/MonthView'), { ssr: false });
+import TodayCard from '@/components/nepalsambat-calendar/TodayCard';
+import MonthView from '@/components/nepalsambat-calendar/MonthView';
+import FestivalList from '@/components/nepalsambat-calendar/FestivalList';
 
 export default function NepalSambatPage() {
   return (
-    <div className="min-h-screen bg-yellow-50 text-gray-900 px-4 py-6">
-      <motion.h1
-        className="text-3xl font-bold text-center mb-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-      >
-        🕰️ Living Nepal Sambat Calendar
-      </motion.h1>
+    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-gray-200 dark:from-black dark:via-slate-900 dark:to-slate-800 p-4 text-gray-900 dark:text-white">
+      <div className="max-w-5xl mx-auto space-y-8">
+        <h1 className="text-3xl font-bold text-center text-indigo-600 dark:text-indigo-300">🗓️ Nepal Sambat Calendar</h1>
 
-      <div className="mb-6 max-w-xl mx-auto">
         <TodayCard />
-      </div>
-
-         <div>
         <MonthView />
+        <FestivalList />
       </div>
     </div>
   );
