@@ -11,7 +11,8 @@ export default function NepalSambatPage() {
     const now = new Date();
     const ad = now.toISOString().split('T')[0]; // YYYY-MM-DD
     import('@/lib/resolveNSDate')
-      .then(({ resolveNSDate }) => {
+      .then((module) => {
+        const resolveNSDate = module.default;
         const ns = resolveNSDate(ad);
         setToday(ns);
       })
