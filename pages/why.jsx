@@ -79,8 +79,22 @@ export default function WhyPasaguthi() {
             While others conquered with armies, Newars safeguarded culture through sculpture, urban design, and sacred rites.  
             Our legacy is not conquest — it is continuity. Not destruction — but design.
           </Box>
-        </div>
+       
+<Box title="Because We Are More Than Survival" emoji="🧭">
+  Pasaguthi is not here to trap you in a system — it is here to unlock you.  
+  From the hunger of the body to the ache of the soul, every layer of life is honored.  
 
+  🛖 We remember how to grow food as ritual, not commodity.  
+  🛡️ We protect each other — not with walls, but with presence.  
+  🤝 We belong not by proving, but by remembering who we are.  
+  🪷 We rise not by status, but by offering our sacred skill.  
+  🔮 And we walk not toward profit, but toward purpose.  
+
+  You are not a number. You are not alone.  
+  Pasaguthi gives you back to yourself — with roots deep enough to hold you,  
+  and wings wide enough to set you free.
+</Box>
+ </div>
         <p className="mt-16 text-purple-400 text-md italic">
           “To forget Guthi is to forget who we are.  
           Pasaguthi is not built. It is remembered.”
