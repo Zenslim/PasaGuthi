@@ -9,7 +9,7 @@ export default function HowPasaguthi() {
       <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white px-6 py-16 text-center">
         <h1 className="text-4xl font-extrabold mb-6">📖 How Pasaguthi Works</h1>
         <p className="text-lg max-w-2xl mx-auto text-gray-300 mb-12">
-          Pasaguthi is a sacred flow — from identity to offering, from reflection to rebirth.  
+          Pasaguthi is a sacred flow, from identity to offering, from reflection to rebirth.  
           Here's how you move within the Guthi web.
         </p>
 
@@ -62,10 +62,34 @@ export default function HowPasaguthi() {
               Pasaguthi is a portal for service + sovereignty.
             </p>
           </div>
-        </div>
+       <div className="mt-20 max-w-3xl mx-auto text-purple-300 text-base leading-relaxed space-y-4 text-left">
+  <p>
+    Pasaguthi is not just about connection — it's about liberation.
+    In a world that sells sickness and monetizes loneliness, we choose to heal together.
+  </p>
+
+  <p>
+    We don’t call it healthcare. We call it remembering:  
+    🧘‍♂️ Bio-Psycho-Social-Spiritual alignment (BPSS) to awaken true wholeness.  
+    ❤️‍🔥 Ikigai to light the fire of why you're really here.
+  </p>
+
+  <p>
+    You are not a patient. You are not a user.  
+    You are a story, a rhythm, a sacred thread in the loom of your people.  
+    And Pasaguthi exists to help you walk again — without crutches.
+  </p>
+
+  <p>
+  <div className="mt-8 space-y-2 text-purple-200">
+  <div>🩺 This is health without fear.</div>
+  <div>🫂 Belonging without performance.</div>
+  <div>🔥 Purpose without pressure.</div>
+</div>
+
 
         <p className="mt-16 text-indigo-400 text-md italic">
-          “You do not join Pasaguthi. You remember it.”  
+          “You do not join Pasaguthi. You remember it like a breath you forgot you were holding.”  
         </p>
       </div>
     </>
