@@ -82,18 +82,24 @@ export default function WhyPasaguthi() {
        
 <Box title="Because We Are More Than Survival" emoji="🧭">
   Pasaguthi is not here to trap you in a system — it is here to unlock you.  
-  From the hunger of the body to the ache of the soul, every layer of life is honored.  
+  From the hunger of the body to the ache of the soul, every layer of life is honored:
 
-  🛖 We remember how to grow food as ritual, not commodity.  
-  🛡️ We protect each other — not with walls, but with presence.  
-  🤝 We belong not by proving, but by remembering who we are.  
-  🪷 We rise not by status, but by offering our sacred skill.  
-  🔮 And we walk not toward profit, but toward purpose.  
+  <ul className="list-disc list-inside mt-4 space-y-2 text-purple-200">
+    <li>🛖 We remember how to grow food as ritual, not commodity.</li>
+    <li>🛡️ We protect each other — not with walls, but with presence.</li>
+    <li>🤝 We belong not by proving, but by remembering who we are.</li>
+    <li>🪷 We rise not by status, but by offering our sacred skill.</li>
+    <li>🌿 We seek true health — where body, mind, heart, and spirit are in balance, and purpose flows from within.</li>
+  </ul>
 
-  You are not a number. You are not alone.  
-  Pasaguthi gives you back to yourself — with roots deep enough to hold you,  
-  and wings wide enough to set you free.
+  <p className="mt-6">
+    You are not a number. You are not alone.  
+    Pasaguthi gives you back to yourself —  
+    with roots deep enough to hold you,  
+    and wings wide enough to set you free.
+  </p>
 </Box>
+
  </div>
         <p className="mt-16 text-purple-400 text-md italic">
           “To forget Guthi is to forget who we are.  
