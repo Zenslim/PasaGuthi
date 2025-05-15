@@ -86,8 +86,7 @@ export default function HowPasaguthi() {
   <div>🫂 Belonging without performance.</div>
   <div>🔥 Purpose without pressure.</div>
 </div>
-
-
+</div>
         <p className="mt-16 text-indigo-400 text-md italic">
           “You do not join Pasaguthi. You remember it like a breath you forgot you were holding.”  
         </p>
