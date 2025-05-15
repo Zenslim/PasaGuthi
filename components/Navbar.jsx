@@ -17,20 +17,20 @@ export default function NavBar({ user }) {
   };
 
   const coreLinks = [
-    { emoji: '✨', label: 'Why Pasaguthi?', href: '/why' },
+    { emoji: '✨', label: 'What is Pasaguthi?', href: '/why' },
     { emoji: '🧬', label: 'What is Guthi?', href: '/guthi' },
-    { emoji: '🌿', label: 'View our Guthyars', href: '/yellowpages' },
-    { emoji: '📆', label: 'Nepal Sambat', href: '/nepalsambat' },
-    { emoji: '🪔', label: 'Whisper', href: '/whisper' },
-    { emoji: '☀️', label: 'Join the Circle', href: '/welcome' },
+    { emoji: '🌿', label: 'Our Members', href: '/yellowpages' },
+    { emoji: '📆', label: 'Nepal Sambat Calendar', href: '/nepalsambat' },
+    { emoji: '🪔', label: 'Whisper Something', href: '/whisper' },
+    { emoji: '☀️', label: 'Become a Member', href: '/welcome' },
   ];
 
   const supportLinks = [
-    { emoji: '🔭', label: 'Vision', href: '/vision' },
-    { emoji: '📖', label: 'How It Works', href: '/how' },
-    { emoji: '🕰️', label: 'Revival Journal', href: '/journal' },
+    { emoji: '🔭', label: 'Our Vision', href: '/vision' },
+    { emoji: '📖', label: 'How Pasaguthi Works', href: '/how' },
+    { emoji: '🕰️', label: 'Member Reflections', href: '/journal' },
     { emoji: '🌍', label: 'Diaspora Stories', href: '/diaspora' },
-    { emoji: '❓', label: 'Questions', href: '/faq' },
+    { emoji: '❓', label: 'Frequently Asked Questions', href: '/faq' },
   ];
 
   return (
