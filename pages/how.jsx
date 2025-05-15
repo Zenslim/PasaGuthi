@@ -63,34 +63,34 @@ export default function HowPasaguthi() {
             </p>
           </div>
        <div className="mt-20 max-w-3xl mx-auto text-purple-300 text-base leading-relaxed space-y-4 text-left">
-  <p>
-    Pasaguthi is not just about connection — it's about liberation.
-    In a world that sells sickness and monetizes loneliness, we choose to heal together.
-  </p>
+  <div>
+    Pasaguthi is not a system to trap you, it is a memory to set you free.  
+    From the hunger of the body to the quiet ache of the soul, every layer of your being is seen, honored, and nourished.
+  </div>
 
-  <p>
+  <div>
     We don’t call it healthcare. We call it remembering:  
     🧘‍♂️ Bio-Psycho-Social-Spiritual alignment (BPSS) to awaken true wholeness.  
     ❤️‍🔥 Ikigai to light the fire of why you're really here.
-  </p>
+  </div>
 
-  <p>
+  <div>
     You are not a patient. You are not a user.  
     You are a story, a rhythm, a sacred thread in the loom of your people.  
-    And Pasaguthi exists to help you walk again — without crutches.
-  </p>
+    And Pasaguthi exists to help you walk again without crutches.
+  </div>
 
-  <p>
   <div className="mt-8 space-y-2 text-purple-200">
-  <div>🩺 This is health without fear.</div>
-  <div>🫂 Belonging without performance.</div>
-  <div>🔥 Purpose without pressure.</div>
+    <div>🩺 This is health without fear.</div>
+    <div>🫂 Belonging without performance.</div>
+    <div>🔥 Purpose without pressure.</div>
+  </div>
 </div>
+
+<div className="mt-16 text-indigo-400 text-md italic">
+  “You do not join Pasaguthi. You remember it like a breath you forgot you were holding.”
 </div>
-        <p className="mt-16 text-indigo-400 text-md italic">
-          “You do not join Pasaguthi. You remember it like a breath you forgot you were holding.”  
-        </p>
-      </div>
+
     </>
   );
 }
