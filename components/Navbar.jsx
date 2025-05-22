@@ -56,8 +56,8 @@ export default function NavBar({ user }) {
               </button>
             </>
           ) : (
-            <Link href="/signin" className="hover:underline">
-              🔐 Sign In
+            <Link href="/signin" className="hover">
+              🔐 LOGIN
             </Link>
           )}
         </div>
@@ -122,7 +122,7 @@ export default function NavBar({ user }) {
                       className="text-base block hover:text-blue-600"
                       onClick={() => setMenuOpen(false)}
                     >
-                      🔐 Sign In
+                      🔐LOGIN
                     </Link>
                   )}
                 </li>
