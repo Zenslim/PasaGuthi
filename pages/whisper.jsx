@@ -1,3 +1,12 @@
+<Head>
+        <title>Whisper to the Guthi — Pasaguthi Reflections</title>
+        <meta name="description" content="Share reflections, images, and voice messages to the universe. Let your soul speak into the sacred Pasaguthi mirror." />
+        <meta property="og:title" content="Whisper to the Guthi — Pasaguthi Reflections" />
+        <meta property="og:description" content="Share reflections, images, and voice messages to the universe. Let your soul speak into the sacred Pasaguthi mirror." />
+        <meta property="og:url" content="https://www.pasaguthi.org/whisper" />
+        <meta property="og:type" content="website" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Whisper to Pasaguthi', 'url': 'https://www.pasaguthi.org/whisper', 'description': 'Send a whisper of your thoughts, prayers, or poetry to Pasaguthi. Let the mirror reply with sacred insight.'}) } />
+    </Head>
 'use client';
 
 import { useState, useRef } from 'react';

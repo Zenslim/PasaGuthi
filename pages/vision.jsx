@@ -5,6 +5,14 @@ export default function Vision() {
     <>
       <Head>
         <title>Vision — Where Are We Going?</title>
+        <meta name="description" content="Pasaguthi envisions healing gardens, digital temples, and a DAO for cultural revival across the Newar world." />
+        <meta property="og:title" content="Vision — Where Are We Going?" />
+        <meta property="og:description" content="Pasaguthi envisions healing gardens, digital temples, and a DAO for cultural revival across the Newar world." />
+        <meta property="og:url" content="https://www.pasaguthi.org/vision" />
+        <meta property="og:type" content="website" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Vision', 'url': 'https://www.pasaguthi.org/vision', 'description': 'Discover the long-term vision of Pasaguthi — a DAO of healing gardens, digital temples, and cultural sovereignty.'}) } />
+    
+        <title>Vision — Where Are We Going?</title>
       </Head>
       <div className="min-h-screen bg-gradient-to-b from-indigo-900 to-black text-white px-6 py-16 text-center">
         <h1 className="text-4xl font-extrabold mb-6">🔭 Vision</h1>

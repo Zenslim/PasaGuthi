@@ -5,6 +5,14 @@ export default function DiasporaStories() {
     <>
       <Head>
         <title>Diaspora Stories — Newars Around the World</title>
+        <meta name="description" content="Explore stories and rituals of the Newar diaspora across continents. Reconnect with your Guthi no matter where you live." />
+        <meta property="og:title" content="Diaspora Stories — Newars Around the World" />
+        <meta property="og:description" content="Explore stories and rituals of the Newar diaspora across continents. Reconnect with your Guthi no matter where you live." />
+        <meta property="og:url" content="https://www.pasaguthi.org/diaspora" />
+        <meta property="og:type" content="website" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Diaspora Stories', 'url': 'https://www.pasaguthi.org/diaspora', 'description': 'Stories of Newars in diaspora — how Pasaguthi helps them reconnect to ancestral identity, culture, and community.'}) } />
+    
+        <title>Diaspora Stories — Newars Around the World</title>
       </Head>
       <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white px-6 py-16 text-center">
         <h1 className="text-4xl font-extrabold mb-6">🌍 Diaspora Stories</h1>

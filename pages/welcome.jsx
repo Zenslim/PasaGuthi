@@ -1,3 +1,12 @@
+<Head>
+        <title>Join the Guthi — Pasaguthi Welcome</title>
+        <meta name="description" content="Create your Guthi Key, choose your lineage, and step into Pasaguthi — a sacred Newar network of memory and service." />
+        <meta property="og:title" content="Join the Guthi — Pasaguthi Welcome" />
+        <meta property="og:description" content="Create your Guthi Key, choose your lineage, and step into Pasaguthi — a sacred Newar network of memory and service." />
+        <meta property="og:url" content="https://www.pasaguthi.org/welcome" />
+        <meta property="og:type" content="website" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Welcome to Pasaguthi', 'url': 'https://www.pasaguthi.org/welcome', 'description': 'Onboard into Pasaguthi by selecting your Thar, skills, and region to create your sacred Guthi identity.'}) } />
+    </Head>
 import bcrypt from 'bcryptjs';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';

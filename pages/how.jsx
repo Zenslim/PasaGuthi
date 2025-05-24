@@ -5,12 +5,19 @@ export default function HowPasaguthi() {
     <>
       <Head>
         <title>How Pasaguthi Works — Flow of Belonging</title>
+        <meta name="description" content="Pasaguthi flows like a river — from Guthi Key to karma, whispers to sacred projects. Here's how it all works." />
+        <meta property="og:title" content="How Pasaguthi Works — Flow of Belonging" />
+        <meta property="og:description" content="Pasaguthi flows like a river — from Guthi Key to karma, whispers to sacred projects. Here's how it all works." />
+        <meta property="og:url" content="https://www.pasaguthi.org/how" />
+        <meta property="og:type" content="website" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'How Pasaguthi Works', 'url': 'https://www.pasaguthi.org/how', 'description': 'Learn how Pasaguthi functions as a cultural DAO — through whispers, karma, diaspora rituals, and sacred offerings.'}) } />
+    
+        <title>How Pasaguthi Works — Flow of Belonging</title>
       </Head>
-
       <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white px-6 py-16 text-center">
         <h1 className="text-4xl font-extrabold mb-6">📖 How Pasaguthi Works</h1>
         <p className="text-lg max-w-2xl mx-auto text-gray-300 mb-12">
-          Pasaguthi is a sacred flow, from identity to offering, from reflection to rebirth.  
+          Pasaguthi is a sacred flow — from identity to offering, from reflection to rebirth.  
           Here's how you move within the Guthi web.
         </p>
 
@@ -65,35 +72,9 @@ export default function HowPasaguthi() {
           </div>
         </div>
 
-        {/* ADDITIONAL SECTION - BPSS / HEALTH SOVEREIGNTY */}
-        <div className="mt-20 max-w-3xl mx-auto text-purple-300 text-base leading-relaxed space-y-4 text-left">
-          <div>
-            Pasaguthi is not a system to trap you, it is a memory to set you free.  
-            From the hunger of the body to the quiet ache of the soul, every layer of your being is seen, honored, and nourished.
-          </div>
-
-          <div>
-            We don’t call it healthcare. We call it remembering:  
-            🧘‍♂️ Bio-Psycho-Social-Spiritual alignment (BPSS) to awaken true wholeness.  
-            ❤️‍🔥 Ikigai to light the fire of why you're really here.
-          </div>
-
-          <div>
-            You are not a patient. You are not a user.  
-            You are a story, a rhythm, a sacred thread in the loom of your people.  
-            And Pasaguthi exists to help you walk again without crutches.
-          </div>
-
-          <div className="mt-8 space-y-2 text-purple-200">
-            <div>🩺 This is health without fear.</div>
-            <div>🫂 Belonging without performance.</div>
-            <div>🔥 Purpose without pressure.</div>
-          </div>
-        </div>
-
-        <div className="mt-16 text-indigo-400 text-md italic">
-          “You do not join Pasaguthi. You remember it like a breath you forgot you were holding.”
-        </div>
+        <p className="mt-16 text-indigo-400 text-md italic">
+          “You do not join Pasaguthi. You remember it.”  
+        </p>
       </div>
     </>
   );

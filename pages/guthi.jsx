@@ -5,6 +5,14 @@ export default function WhatIsGuthi() {
     <>
       <Head>
         <title>What is Guthi? — Remembering the Sacred System</title>
+        <meta name="description" content="Guthi is not a form or login. It is the soul of Newar civilization — a living DAO encoded in ritual and rhythm." />
+        <meta property="og:title" content="What is Guthi? — Remembering the Sacred System" />
+        <meta property="og:description" content="Guthi is not a form or login. It is the soul of Newar civilization — a living DAO encoded in ritual and rhythm." />
+        <meta property="og:url" content="https://www.pasaguthi.org/guthi" />
+        <meta property="og:type" content="website" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'What is Guthi?', 'url': 'https://www.pasaguthi.org/guthi', 'description': 'Discover the sacred system of Guthi — a cultural DAO of roles, rituals, and belonging passed through generations.'}) } />
+    
+        <title>What is Guthi? — Remembering the Sacred System</title>
       </Head>
       <div className="min-h-screen bg-gradient-to-b from-purple-900 via-black to-gray-900 text-white px-6 py-16 text-center">
         <h1 className="text-4xl font-extrabold mb-6">🔑 What Is Guthi?</h1>
