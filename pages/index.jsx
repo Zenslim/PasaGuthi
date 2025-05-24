@@ -2,6 +2,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import MycelialTracker from '../components/MycelialTracker';
+import { motion } from 'framer-motion';
 import Footer from '../components/Footer';
 import WhyContent from './why';
 import HowContent from './how';
