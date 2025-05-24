@@ -13,7 +13,9 @@ export default function HowPasaguthi() {
         <link rel="canonical" href="https://www.pasaguthi.org/how" />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'How Pasaguthi Works', 'url': 'https://www.pasaguthi.org/how', 'description': "Pasaguthi flows like a river — from Guthi Key to karma, whispers to sacred projects. Here's how it all works."}) }
+          dangerouslySetInnerHTML={ {
+            __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'How Pasaguthi Works', 'url': 'https://www.pasaguthi.org/how', 'description': "Pasaguthi flows like a river — from Guthi Key to karma, whispers to sacred projects. Here's how it all works."})
+          } }
         />
     
         <title>How Pasaguthi Works — Flow of Belonging</title>

@@ -13,7 +13,9 @@ export default function Vision() {
         <link rel="canonical" href="https://www.pasaguthi.org/vision" />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Vision', 'url': 'https://www.pasaguthi.org/vision', 'description': 'Pasaguthi envisions healing gardens, digital temples, and a DAO for cultural revival across the Newar world.'}) }
+          dangerouslySetInnerHTML={ {
+            __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Vision', 'url': 'https://www.pasaguthi.org/vision', 'description': 'Pasaguthi envisions healing gardens, digital temples, and a DAO for cultural revival across the Newar world.'})
+          } }
         />
     
         <title>Vision — Where Are We Going?</title>

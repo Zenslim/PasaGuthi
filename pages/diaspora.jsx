@@ -13,7 +13,9 @@ export default function DiasporaStories() {
         <link rel="canonical" href="https://www.pasaguthi.org/diaspora" />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Diaspora Stories', 'url': 'https://www.pasaguthi.org/diaspora', 'description': 'Explore stories and rituals of the Newar diaspora across continents. Reconnect with your Guthi no matter where you live.'}) }
+          dangerouslySetInnerHTML={ {
+            __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Diaspora Stories', 'url': 'https://www.pasaguthi.org/diaspora', 'description': 'Explore stories and rituals of the Newar diaspora across continents. Reconnect with your Guthi no matter where you live.'})
+          } }
         />
     
         <title>Diaspora Stories — Newars Around the World</title>
