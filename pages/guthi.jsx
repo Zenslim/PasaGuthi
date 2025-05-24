@@ -10,7 +10,15 @@ export default function WhatIsGuthi() {
         <meta property="og:description" content="Guthi is not a form or login. It is the soul of Newar civilization — a living DAO encoded in ritual and rhythm." />
         <meta property="og:url" content="https://www.pasaguthi.org/guthi" />
         <meta property="og:type" content="website" />
-        <script type="application/ld+json" dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'What is Guthi?', 'url': 'https://www.pasaguthi.org/guthi', 'description': 'Discover the sacred system of Guthi — a cultural DAO of roles, rituals, and belonging passed through generations.'}) } />
+        <link rel="canonical" href="https://www.pasaguthi.org/guthi" />
+        
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={
+            __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'What is Guthi?', 'url': 'https://www.pasaguthi.org/guthi', 'description': 'Discover the sacred system of Guthi — a cultural DAO of roles, rituals, and belonging passed through generations.'})
+          }
+        />
+    
     
         <title>What is Guthi? — Remembering the Sacred System</title>
       </Head>

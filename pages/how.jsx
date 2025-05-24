@@ -10,7 +10,15 @@ export default function HowPasaguthi() {
         <meta property="og:description" content="Pasaguthi flows like a river — from Guthi Key to karma, whispers to sacred projects. Here's how it all works." />
         <meta property="og:url" content="https://www.pasaguthi.org/how" />
         <meta property="og:type" content="website" />
-        <script type="application/ld+json" dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'How Pasaguthi Works', 'url': 'https://www.pasaguthi.org/how', 'description': 'Learn how Pasaguthi functions as a cultural DAO — through whispers, karma, diaspora rituals, and sacred offerings.'}) } />
+        <link rel="canonical" href="https://www.pasaguthi.org/how" />
+        
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={
+            __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'How Pasaguthi Works', 'url': 'https://www.pasaguthi.org/how', 'description': 'Learn how Pasaguthi functions as a cultural DAO — through whispers, karma, diaspora rituals, and sacred offerings.'})
+          }
+        />
+    
     
         <title>How Pasaguthi Works — Flow of Belonging</title>
       </Head>

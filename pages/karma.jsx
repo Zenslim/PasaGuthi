@@ -1,12 +1,3 @@
-<Head>
-        <title>Offer Gratitude — Karma in Pasaguthi</title>
-        <meta name="description" content="Contribute energy to the Guthi. Offering karma means offering attention, presence, and gratitude to the community." />
-        <meta property="og:title" content="Offer Gratitude — Karma in Pasaguthi" />
-        <meta property="og:description" content="Contribute energy to the Guthi. Offering karma means offering attention, presence, and gratitude to the community." />
-        <meta property="og:url" content="https://www.pasaguthi.org/karma" />
-        <meta property="og:type" content="website" />
-        <script type="application/ld+json" dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Karma in Pasaguthi', 'url': 'https://www.pasaguthi.org/karma', 'description': 'Participate in the cooperative circle by offering karma. Pasaguthi honors every act of gratitude and service.'}) } />
-    </Head>
 
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';

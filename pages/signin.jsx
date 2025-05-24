@@ -1,12 +1,3 @@
-<Head>
-        <title>Enter the Guthi — Pasaguthi Login</title>
-        <meta name="description" content="Use your Guthi Key or Phone and Password to access your Pasaguthi dashboard and join the digital sacred circle." />
-        <meta property="og:title" content="Enter the Guthi — Pasaguthi Login" />
-        <meta property="og:description" content="Use your Guthi Key or Phone and Password to access your Pasaguthi dashboard and join the digital sacred circle." />
-        <meta property="og:url" content="https://www.pasaguthi.org/signin" />
-        <meta property="og:type" content="website" />
-        <script type="application/ld+json" dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Sign In to Pasaguthi', 'url': 'https://www.pasaguthi.org/signin', 'description': 'Log in to Pasaguthi using your phone or Guthi Key to access sacred reflections, karma, and your Guthi dashboard.'}) } />
-    </Head>
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
