@@ -10,7 +10,11 @@ export default function Vision() {
         <meta property="og:description" content="Pasaguthi envisions healing gardens, digital temples, and a DAO for cultural revival across the Newar world." />
         <meta property="og:url" content="https://www.pasaguthi.org/vision" />
         <meta property="og:type" content="website" />
-        <script type="application/ld+json" dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Vision', 'url': 'https://www.pasaguthi.org/vision', 'description': 'Discover the long-term vision of Pasaguthi — a DAO of healing gardens, digital temples, and cultural sovereignty.'}) } />
+        <link rel="canonical" href="https://www.pasaguthi.org/vision" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Vision', 'url': 'https://www.pasaguthi.org/vision', 'description': 'Pasaguthi envisions healing gardens, digital temples, and a DAO for cultural revival across the Newar world.'}) }
+        />
     
         <title>Vision — Where Are We Going?</title>
       </Head>

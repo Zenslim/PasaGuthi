@@ -1,12 +1,3 @@
-<Head>
-        <title>Your Timeline — Pasaguthi Reflections Log</title>
-        <meta name="description" content="See your sacred journaling journey unfold. Every whisper, reflection, and insight creates your Guthi timeline." />
-        <meta property="og:title" content="Your Timeline — Pasaguthi Reflections Log" />
-        <meta property="og:description" content="See your sacred journaling journey unfold. Every whisper, reflection, and insight creates your Guthi timeline." />
-        <meta property="og:url" content="https://www.pasaguthi.org/timeline" />
-        <meta property="og:type" content="website" />
-        <script type="application/ld+json" dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Pasaguthi Timeline', 'url': 'https://www.pasaguthi.org/timeline', 'description': 'Track your sacred journaling timeline within Pasaguthi. View reflection depths, timestamps, and personal growth.'}) } />
-    </Head>
 
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';

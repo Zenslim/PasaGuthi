@@ -11,14 +11,10 @@ export default function DiasporaStories() {
         <meta property="og:url" content="https://www.pasaguthi.org/diaspora" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="https://www.pasaguthi.org/diaspora" />
-        
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={
-            __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Diaspora Stories', 'url': 'https://www.pasaguthi.org/diaspora', 'description': 'Stories of Newars in diaspora — how Pasaguthi helps them reconnect to ancestral identity, culture, and community.'})
-          }
+          dangerouslySetInnerHTML={ __html: JSON.stringify({'@context': 'https://schema.org', '@type': 'WebPage', 'name': 'Diaspora Stories', 'url': 'https://www.pasaguthi.org/diaspora', 'description': 'Explore stories and rituals of the Newar diaspora across continents. Reconnect with your Guthi no matter where you live.'}) }
         />
-    
     
         <title>Diaspora Stories — Newars Around the World</title>
       </Head>
