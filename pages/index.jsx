@@ -1,11 +1,39 @@
+// pages/index.jsx
+import Head from 'next/head';
 import Link from 'next/link';
 import MycelialTracker from '../components/MycelialTracker';
 import Footer from '../components/Footer';
 
 export default function Home() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Pasaguthi — A DAO with a Soul",
+    "url": "https://www.pasaguthi.org",
+    "description": "Pasaguthi is a sacred remembering. A digital Guthi to reunite Newars through whispers, karma, and cosmic purpose."
+  };
+
   return (
     <>
-           <main className="min-h-screen bg-black text-white flex flex-col justify-center items-center px-6 py-24">
+      <Head>
+        <title>Pasaguthi — A DAO with a Soul</title>
+        <meta name="description" content="Pasaguthi is a sacred remembering. A digital Guthi to reunite Newars through whispers, karma, and cosmic purpose." />
+        <meta property="og:title" content="Pasaguthi — A DAO with a Soul" />
+        <meta property="og:description" content="Pasaguthi reawakens the Guthi system as a decentralized, sacred cooperative for the Newar nation and diaspora." />
+        <meta property="og:url" content="https://www.pasaguthi.org" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://www.pasaguthi.org/og/main.jpg" />
+        <link rel="canonical" href="https://www.pasaguthi.org" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schema)
+          }}
+        />
+      </Head>
+
+      <main className="min-h-screen bg-black text-white flex flex-col justify-center items-center px-6 py-24">
         {/* Centered Logo */}
         <img
           src="/pasaguthi-logo.png"
@@ -40,6 +68,7 @@ export default function Home() {
           </p>
         </div>
       </main>
+
       <Footer />
     </>
   );
