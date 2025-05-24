@@ -67,19 +67,13 @@ export default function Home() {
         </div>
 
         {/* WHY Full Section */}
-        <section className="mt-32 max-w-6xl text-center">
-          <WhyContent />
-        </section>
+        <WhyContent />
 
         {/* HOW Full Section */}
-        <section className="mt-32 max-w-6xl text-center">
-          <HowContent />
-        </section>
+        <HowContent />
 
         {/* VISION Full Section */}
-        <section className="mt-32 max-w-6xl text-center">
-          <VisionContent />
-        </section>
+        <VisionContent />
 
         <Footer />
       </main>
