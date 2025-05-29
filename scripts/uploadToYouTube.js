@@ -1,0 +1,1 @@
+exports.uploadToYouTube = async (videoPath, text) => 'https://youtube.com/fakeurl';

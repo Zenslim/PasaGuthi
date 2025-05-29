@@ -1,0 +1,1 @@
+exports.notifyN8n = async (data) => console.log('Webhook sent:', data);

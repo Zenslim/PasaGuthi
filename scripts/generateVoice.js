@@ -1,0 +1,1 @@
+exports.generateVoice = async (text) => 'voice.mp3';

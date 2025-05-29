@@ -1,0 +1,1 @@
+exports.generateVideo = async (voicePath, text) => 'video.mp4';
