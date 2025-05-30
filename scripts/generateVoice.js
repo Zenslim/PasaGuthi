@@ -1,7 +1,16 @@
-const fs = require('fs');
-const path = require('path');
-const tempDir = path.join(__dirname, '..', 'temp');
-if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir);
-const voicePath = path.join(tempDir, 'voice.mp3');
-fs.writeFileSync(voicePath, 'Fake voice data');
-module.exports.generateVoice = async () => voicePath;
+const fs = require("fs");
+const path = require("path");
+
+module.exports.generateVoice = async ({ description }) => {
+  const voicePath = path.join(__dirname, "../temp/voice.mp3");
+  fs.mkdirSync(path.dirname(voicePath), { recursive: true });
+
+  const fallback = path.join(__dirname, "../assets/fallback.mp3");
+  if (!fs.existsSync(fallback)) {
+    throw new Error("❌ Missing fallback.mp3 for voice generation at: " + fallback);
+  }
+
+  fs.copyFileSync(fallback, voicePath);
+  console.log("🔉 Voice file ready:", voicePath);
+  return voicePath;
+};

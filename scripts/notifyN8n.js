@@ -1,17 +1,11 @@
 const axios = require("axios");
-const notifyN8n = async ({ url, title, description }) => {
+module.exports.notifyN8n = async ({ url, title, description }) => {
+  const webhookUrl = process.env.N8N_WEBHOOK_URL;
+  const payload = { url, title, description, triggeredAt: new Date().toISOString() };
   try {
-    const payload = {
-      youtubeUrl: url,
-      title,
-      description,
-      triggeredAt: new Date().toISOString()
-    };
-    const webhookUrl = process.env.N8N_WEBHOOK_URL || "https://example.com/webhook/notify";
-    const response = await axios.post(webhookUrl, payload);
-    console.log("✅ Notified n8n:", response.status, response.statusText);
-  } catch (error) {
-    console.error("❌ Failed to notify n8n:", error.message);
+    const res = await axios.post(webhookUrl, payload);
+    console.log("📡 Notified n8n:", res.status);
+  } catch (err) {
+    console.error("❌ Webhook failed:", err.message);
   }
 };
-module.exports = { notifyN8n };

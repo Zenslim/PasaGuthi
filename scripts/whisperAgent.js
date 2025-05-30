@@ -1,13 +1,17 @@
-const { generateWhisper } = require('./generateWhisper');
-const { generateVoice } = require('./generateVoice');
-const { generateVideo } = require('./generateVideo');
-const { uploadToYouTube } = require('./uploadToYouTube');
-const { notifyN8n } = require('./notifyN8n');
+const { generateWhisper } = require("./generateWhisper");
+const { generateVoice } = require("./generateVoice");
+const { generateVideo } = require("./generateVideo");
+const { uploadToYouTube } = require("./uploadToYouTube");
+const { notifyN8n } = require("./notifyN8n");
 
 (async () => {
-  const whisper = await generateWhisper();
-  const voicePath = await generateVoice(whisper);
-  const videoPath = await generateVideo(voicePath, whisper);
-  const youtubeUrl = await uploadToYouTube(videoPath, whisper);
-  await notifyN8n({ url: youtubeUrl, ...whisper });
+  try {
+    const whisper = await generateWhisper();
+    const voice = await generateVoice(whisper);
+    const video = await generateVideo(voice, whisper);
+    const url = await uploadToYouTube(video, whisper);
+    await notifyN8n({ url, ...whisper });
+  } catch (err) {
+    console.error("🔥 Pipeline failed:", err.message);
+  }
 })();

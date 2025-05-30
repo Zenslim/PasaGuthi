@@ -1,3 +1,4 @@
-module.exports.uploadToYouTube = async (videoPath, whisper) => {
-  return 'https://youtube.com/fake-video-url';
+module.exports.uploadToYouTube = async (videoPath, { title, description }) => {
+  console.log("🎥 Pretend uploading to YouTube:", videoPath);
+  return "https://youtu.be/dQw4w9WgXcQ";
 };
