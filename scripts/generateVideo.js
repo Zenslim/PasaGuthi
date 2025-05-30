@@ -24,20 +24,23 @@ module.exports.generateVideo = async () => {
   return new Promise((resolve, reject) => {
     ffmpeg()
       .input(inputImage)
-      .inputOptions(['-loop 1']) // loop static image
+      .inputOptions(['-loop 1', '-framerate 1']) // Loop static image at 1 FPS
       .input(inputAudio)
       .outputOptions([
         '-c:v libx264',        // use H.264 codec
         '-t 5',                // total duration
         '-pix_fmt yuv420p',    // ensure compatibility
-        '-shortest'            // stop at shorter stream
+        '-shortest'            // stop at shortest input
       ])
       .output(outputPath)
       .on('start', (cmd) => console.log("🎞️ FFmpeg started:", cmd))
-      .on('progress', (p) => console.log(`⏱️ Progress: ${p.percent?.toFixed(2) || '?'}%`))
+      .on('progress', (p) => {
+        const percent = p.percent?.toFixed(2) ?? '?';
+        console.log(`⏱️ Progress: ${percent}%`);
+      })
       .on('end', () => {
         console.log(`✅ Video created: ${outputPath}`);
-        resolve(outputPath);
+        resolve(outputPath); // Return the path to the generated video
       })
       .on('error', (err) => {
         console.error("❌ FFmpeg error:", err.message);
