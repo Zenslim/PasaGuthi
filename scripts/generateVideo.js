@@ -15,20 +15,29 @@ module.exports.generateVideo = async () => {
   if (!fs.existsSync(inputAudio)) throw new Error("❌ Missing input audio: temp/voice.mp3");
   if (!fs.existsSync(inputImage)) throw new Error("❌ Missing image: assets/fallback.jpg");
 
+  // Log file size for debugging
+  const stats = fs.statSync(inputAudio);
+  console.log("🎧 MP3 size:", stats.size, "bytes");
+
   fs.mkdirSync('temp', { recursive: true });
 
   return new Promise((resolve, reject) => {
     ffmpeg()
       .input(inputImage)
-      .loop(5) // Duration in seconds
+      .inputOptions(['-loop 1']) // loop static image
       .input(inputAudio)
-      .outputOptions('-shortest')
+      .outputOptions([
+        '-c:v libx264',        // use H.264 codec
+        '-t 5',                // total duration
+        '-pix_fmt yuv420p',    // ensure compatibility
+        '-shortest'            // stop at shorter stream
+      ])
       .output(outputPath)
       .on('start', (cmd) => console.log("🎞️ FFmpeg started:", cmd))
       .on('progress', (p) => console.log(`⏱️ Progress: ${p.percent?.toFixed(2) || '?'}%`))
       .on('end', () => {
         console.log(`✅ Video created: ${outputPath}`);
-        resolve(outputPath); // IMPORTANT: return the path!
+        resolve(outputPath);
       })
       .on('error', (err) => {
         console.error("❌ FFmpeg error:", err.message);
