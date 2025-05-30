@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-module.exports.generateVoice = async (whisper) => {
-  const output = path.join(__dirname, '../temp/voice.mp3');
-  fs.writeFileSync(output, 'FAKE_MP3_DATA'); // Replace with actual ElevenLabs API
-  return output;
-};
+const tempDir = path.join(__dirname, '..', 'temp');
+if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir);
+const voicePath = path.join(tempDir, 'voice.mp3');
+fs.writeFileSync(voicePath, 'Fake voice data');
+module.exports.generateVoice = async () => voicePath;
