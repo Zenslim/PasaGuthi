@@ -14,18 +14,29 @@ Use rhythm, space, and emotionally powerful phrasing. End with a goosebump-worth
 Write ~400–500 words. No labels or titles. Just the raw whisper.
   `.trim();
 
-  const chatCompletion = await openai.chat.completions.create({
-    model: "gpt-4",
-    messages: [{ role: "user", content: prompt }],
-    temperature: 0.85,
-    max_tokens: 700
-  });
-
-  const fullScript = chatCompletion.choices[0].message.content.trim();
-  console.log("📜 Whisper script generated:", fullScript.slice(0, 100), "...");
-
-  return {
-    title: "Zen Whisper",
-    body: fullScript,
+  const tryModel = async (model) => {
+    const response = await openai.chat.completions.create({
+      model,
+      messages: [{ role: "user", content: prompt }],
+      temperature: 0.85,
+      max_tokens: 700
+    });
+    return response.choices[0].message.content.trim();
   };
+
+  try {
+    console.log("🌀 Trying GPT-4...");
+    const gpt4 = await tryModel("gpt-4");
+    console.log("✅ GPT-4 succeeded.");
+    return { title: "Zen Whisper", body: gpt4 };
+  } catch (err) {
+    if (err.code === "model_not_found" || err.status === 404) {
+      console.warn("⚠️ GPT-4 unavailable. Falling back to GPT-3.5.");
+      const gpt35 = await tryModel("gpt-3.5-turbo");
+      console.log("✅ GPT-3.5-turbo succeeded.");
+      return { title: "Zen Whisper", body: gpt35 };
+    } else {
+      throw err;
+    }
+  }
 };
