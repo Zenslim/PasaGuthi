@@ -10,26 +10,25 @@ that explores transformation, impermanence, or purpose in a way that can go vira
 Use rhythm, space, and emotionally powerful phrasing. End with a goosebump-worthy thought.
 
 Write ~400–500 words. No labels or titles. Just the raw whisper.
-  `.trim();
-
-  const headers = {
-    "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
-    "Content-Type": "application/json",
-    "HTTP-Referer": "https://pasaguthi.org/",
-    "X-Title": "Zen Whisper Generator"
-  };
+`.trim();
 
   try {
-    const response = await axios.post(
-      "https://openrouter.ai/api/v1/chat/completions",
-      {
-        model: "deepseek-chat", // or "mistralai/mixtral-8x7b"
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.85,
-        max_tokens: 700
+    const response = await axios({
+      method: "POST",
+      url: "https://openrouter.ai/api/v1/chat/completions",
+      headers: {
+        Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json"
       },
-      { headers }
-    );
+      data: {
+        model: "openai/gpt-3.5-turbo", // ✅ switch to a known good model
+        messages: [
+          { role: "user", content: prompt }
+        ],
+        temperature: 0.85,
+        max_tokens: 1000
+      }
+    });
 
     const fullScript = response.data.choices[0].message.content.trim();
     console.log("📜 Whisper script generated:", fullScript.slice(0, 100), "...");
@@ -38,7 +37,7 @@ Write ~400–500 words. No labels or titles. Just the raw whisper.
       body: fullScript
     };
   } catch (err) {
-    console.error("🔥 OpenRouter Whisper generation failed:", err.message);
+    console.error("🔥 OpenRouter Whisper generation failed:", err.response?.data || err.message);
     throw err;
   }
 };
