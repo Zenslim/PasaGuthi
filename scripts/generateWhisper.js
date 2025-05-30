@@ -1,9 +1,8 @@
-const { Configuration, OpenAIApi } = require("openai");
+const OpenAI = require("openai");
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
 });
-const openai = new OpenAIApi(configuration);
 
 module.exports.generateWhisper = async () => {
   const prompt = `
@@ -15,14 +14,14 @@ Use rhythm, space, and emotionally powerful phrasing. End with a goosebump-worth
 Write ~400–500 words. No labels or titles. Just the raw whisper.
   `.trim();
 
-  const res = await openai.createChatCompletion({
+  const chatCompletion = await openai.chat.completions.create({
     model: "gpt-4",
     messages: [{ role: "user", content: prompt }],
     temperature: 0.85,
-    max_tokens: 700,
+    max_tokens: 700
   });
 
-  const fullScript = res.data.choices[0].message.content.trim();
+  const fullScript = chatCompletion.choices[0].message.content.trim();
   console.log("📜 Whisper script generated:", fullScript.slice(0, 100), "...");
 
   return {
