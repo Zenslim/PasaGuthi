@@ -1,12 +1,32 @@
-exports.generateWhisper = async () => {
-  const prompts = [
-    "🌿 Walk slowly. The earth is sacred.",
-    "🌀 Your breath is a portal to clarity.",
-    "🪷 Even the lotus blooms from mud.",
-    "🔥 Burn illusions, not bridges.",
-    "🕊 You are not late. You are timeless."
-  ];
-  const pick = prompts[Math.floor(Math.random() * prompts.length)];
-  console.log("🧘 Whisper:", pick);
-  return { title: "Zen Whisper", description: pick };
+const { Configuration, OpenAIApi } = require("openai");
+
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
+module.exports.generateWhisper = async () => {
+  const prompt = `
+You are a visionary narrator crafting a 2–3 minute cinematic script.
+Your mission is to awaken hearts and minds with a poetic, emotionally resonant narrative
+that explores transformation, impermanence, or purpose in a way that can go viral.
+Use rhythm, space, and emotionally powerful phrasing. End with a goosebump-worthy thought.
+
+Write ~400–500 words. No labels or titles. Just the raw whisper.
+  `.trim();
+
+  const res = await openai.createChatCompletion({
+    model: "gpt-4",
+    messages: [{ role: "user", content: prompt }],
+    temperature: 0.85,
+    max_tokens: 700,
+  });
+
+  const fullScript = res.data.choices[0].message.content.trim();
+  console.log("📜 Whisper script generated:", fullScript.slice(0, 100), "...");
+
+  return {
+    title: "Zen Whisper",
+    body: fullScript,
+  };
 };
