@@ -9,7 +9,7 @@ jobs:
   whisper:
     runs-on: ubuntu-latest
     env:
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
       ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
       RUNWAYML_API_KEY: ${{ secrets.RUNWAYML_API_KEY }}
       YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
@@ -20,16 +20,16 @@ jobs:
       N8N_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
 
     steps:
-      - name: Checkout
+      - name: 📦 Zen Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: 🛠️ Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Install dependencies
+      - name: 📥 Install Dependencies
         run: npm install
 
-      - name: Run Whisper Agent
+      - name: 🌀 Run Whisper Agent
         run: node scripts/whisperAgent.js
