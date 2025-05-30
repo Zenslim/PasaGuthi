@@ -1,8 +1,6 @@
-const OpenAI = require("openai");
+const axios = require("axios");
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
 module.exports.generateWhisper = async () => {
   const prompt = `
@@ -14,29 +12,33 @@ Use rhythm, space, and emotionally powerful phrasing. End with a goosebump-worth
 Write ~400–500 words. No labels or titles. Just the raw whisper.
   `.trim();
 
-  const tryModel = async (model) => {
-    const response = await openai.chat.completions.create({
-      model,
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.85,
-      max_tokens: 700
-    });
-    return response.choices[0].message.content.trim();
+  const headers = {
+    "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+    "Content-Type": "application/json",
+    "HTTP-Referer": "https://pasaguthi.org/",
+    "X-Title": "Zen Whisper Generator"
   };
 
   try {
-    console.log("🌀 Trying GPT-4...");
-    const gpt4 = await tryModel("gpt-4");
-    console.log("✅ GPT-4 succeeded.");
-    return { title: "Zen Whisper", body: gpt4 };
+    const response = await axios.post(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        model: "deepseek-chat", // or "mistralai/mixtral-8x7b"
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.85,
+        max_tokens: 700
+      },
+      { headers }
+    );
+
+    const fullScript = response.data.choices[0].message.content.trim();
+    console.log("📜 Whisper script generated:", fullScript.slice(0, 100), "...");
+    return {
+      title: "Zen Whisper",
+      body: fullScript
+    };
   } catch (err) {
-    if (err.code === "model_not_found" || err.status === 404) {
-      console.warn("⚠️ GPT-4 unavailable. Falling back to GPT-3.5.");
-      const gpt35 = await tryModel("gpt-3.5-turbo");
-      console.log("✅ GPT-3.5-turbo succeeded.");
-      return { title: "Zen Whisper", body: gpt35 };
-    } else {
-      throw err;
-    }
+    console.error("🔥 OpenRouter Whisper generation failed:", err.message);
+    throw err;
   }
 };
