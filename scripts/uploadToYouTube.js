@@ -1,1 +1,3 @@
-exports.uploadToYouTube = async (videoPath, text) => 'https://youtube.com/fakeurl';
+module.exports.uploadToYouTube = async (videoPath, whisper) => {
+  return "https://youtube.com/fake-video-url";
+};
