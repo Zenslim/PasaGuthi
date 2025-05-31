@@ -1,51 +1,43 @@
-const axios = require("axios");
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
+const axios = require('axios');
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
-const VOICE_NAME = "Anjali"; // Make sure this exists in your ElevenLabs dashboard
-
-async function getVoiceIdByName(name) {
-  const res = await axios.get("https://api.elevenlabs.io/v1/voices", {
-    headers: {
-      "xi-api-key": ELEVENLABS_API_KEY
-    }
-  });
-  const voice = res.data.voices.find(v => v.name.toLowerCase() === name.toLowerCase());
-  if (!voice) throw new Error(`Voice "${name}" not found in ElevenLabs.`);
-  return voice.voice_id;
-}
+const VOICE_ID = '21m00Tcm4TlvDq8ikWAM'; // Rachel (default ElevenLabs voice)
 
 module.exports.generateVoice = async (whisper) => {
-  const voiceId = await getVoiceIdByName(VOICE_NAME);
-  const outputPath = path.join("temp", "voice.mp3");
+  const voiceText = whisper.body;
+  const outputPath = path.join('temp', 'voice.mp3');
+  fs.mkdirSync('temp', { recursive: true });
 
-  const response = await axios.post(
-    `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
-    {
-      text: whisper.body,
-      model_id: "eleven_monolingual_v1", // safe default
-      voice_settings: {
-        stability: 0.4,
-        similarity_boost: 0.75
-      }
+  const url = `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}/stream`;
+
+  const payload = {
+    text: voiceText,
+    voice_settings: {
+      stability: 0.25,
+      similarity_boost: 0.9,
+      style: 1.4,
+      use_speaker_boost: true
     },
-    {
-      responseType: "stream",
-      headers: {
-        "xi-api-key": ELEVENLABS_API_KEY,
-        "Content-Type": "application/json"
-      }
-    }
-  );
+    model_id: "eleven_monolingual_v1"
+  };
 
+  const headers = {
+    'xi-api-key': ELEVENLABS_API_KEY,
+    'Content-Type': 'application/json'
+  };
+
+  console.log("🎙️ Generating voice with Rachel...");
+  const response = await axios.post(url, payload, { headers, responseType: 'stream' });
+
+  const writer = fs.createWriteStream(outputPath);
   await new Promise((resolve, reject) => {
-    const stream = fs.createWriteStream(outputPath);
-    response.data.pipe(stream);
-    stream.on("finish", () => resolve());
-    stream.on("error", reject);
+    response.data.pipe(writer);
+    writer.on('finish', resolve);
+    writer.on('error', reject);
   });
 
-  console.log("🔉 Voice file ready:", outputPath);
+  console.log(`✅ Voice file ready: ${outputPath}`);
   return outputPath;
 };
