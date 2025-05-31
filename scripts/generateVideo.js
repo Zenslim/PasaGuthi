@@ -6,7 +6,7 @@ const { execSync } = require("child_process");
 module.exports.generateVideo = async (voicePath, whisper) => {
   const tempDir = path.join(__dirname, "../temp");
   const outputPath = path.join(tempDir, "video.mp4");
-  const imagePath = path.join(__dirname, "../assets/placeholder.jpg"); // Replace with actual image
+  const imagePath = path.join(__dirname, "../assets/fallback.jpg"); // Replace with actual image
   const duration = 60; // fallback duration in seconds
 
   // Ensure voice file exists
