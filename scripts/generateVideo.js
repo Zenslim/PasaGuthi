@@ -1,30 +1,41 @@
-const fs = require('fs');
-const path = require('path');
-const ffmpegPath = require('ffmpeg-static');
-const ffmpeg = require('fluent-ffmpeg');
+// scripts/generateVideo.js
+const path = require("path");
+const fs = require("fs");
+const { execSync } = require("child_process");
 
-// Point fluent-ffmpeg to ffmpeg-static binary
-ffmpeg.setFfmpegPath(ffmpegPath);
+module.exports.generateVideo = async (voicePath, whisper) => {
+  const tempDir = path.join(__dirname, "../temp");
+  const outputPath = path.join(tempDir, "video.mp4");
+  const imagePath = path.join(__dirname, "../assets/placeholder.jpg"); // Replace with actual image
+  const duration = 60; // fallback duration in seconds
 
-module.exports.generateVideo = async () => {
-  const outputPath = path.join('temp', 'video.mp4');
-  const inputImage = path.join('assets', 'fallback.jpg');
-  const inputAudio = path.join('temp', 'voice.mp3');
+  // Ensure voice file exists
+  if (!fs.existsSync(voicePath)) {
+    throw new Error(`Voice file not found: ${voicePath}`);
+  }
 
-  fs.mkdirSync('temp', { recursive: true });
+  // Ensure fallback image exists
+  if (!fs.existsSync(imagePath)) {
+    throw new Error(`Missing background image: ${imagePath}`);
+  }
 
-  return new Promise((resolve, reject) => {
-    ffmpeg()
-      .addInput(inputImage)
-      .loop(5) // Duration in seconds
-      .addInput(inputAudio)
-      .outputOptions('-shortest')
-      .output(outputPath)
-      .on('end', () => {
-        console.log(`✅ Video created: ${outputPath}`);
-        resolve();
-      })
-      .on('error', reject)
-      .run();
-  });
+  // Generate video using ffmpeg
+  try {
+    console.log("🎬 Generating video with ffmpeg...");
+
+    const cmd = `
+      ffmpeg -y -loop 1 -i "${imagePath}" -i "${voicePath}" \
+      -c:v libx264 -tune stillimage -c:a aac -b:a 192k \
+      -pix_fmt yuv420p -shortest -movflags +faststart \
+      -t ${duration} "${outputPath}"
+    `;
+
+    execSync(cmd, { stdio: "inherit" });
+    console.log(`✅ Video created: ${outputPath}`);
+    return outputPath;
+
+  } catch (err) {
+    console.error("🔥 ffmpeg video generation failed:", err.message);
+    throw err;
+  }
 };
