@@ -1,43 +1,42 @@
-const fs = require('fs');
-const path = require('path');
-const axios = require('axios');
+const fs = require("fs");
+const axios = require("axios");
+const path = require("path");
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
-const VOICE_ID = '21m00Tcm4TlvDq8ikWAM'; // Rachel (default ElevenLabs voice)
+const VOICE_ID = "21m00Tcm4TlvDq8ikWAM"; // default: Rachel
 
 module.exports.generateVoice = async (whisper) => {
-  const voiceText = whisper.body;
-  const outputPath = path.join('temp', 'voice.mp3');
-  fs.mkdirSync('temp', { recursive: true });
+  const text = whisper.body;
+  const voiceName = "Rachel"; // optional, change as needed
 
-  const url = `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}/stream`;
+  console.log(`🎙️ Generating voice with ${voiceName}...`);
 
-  const payload = {
-    text: voiceText,
-    voice_settings: {
-      stability: 0.25,
-      similarity_boost: 0.9,
-      style: 1.4,
-      use_speaker_boost: true
-    },
-    model_id: "eleven_monolingual_v1"
-  };
+  try {
+    const response = await axios.post(
+      `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`,
+      {
+        text,
+        model_id: "eleven_monolingual_v1",
+        voice_settings: {
+          stability: 0.4,
+          similarity_boost: 0.7
+        }
+      },
+      {
+        headers: {
+          "xi-api-key": ELEVENLABS_API_KEY,
+          "Content-Type": "application/json"
+        },
+        responseType: "arraybuffer"
+      }
+    );
 
-  const headers = {
-    'xi-api-key': ELEVENLABS_API_KEY,
-    'Content-Type': 'application/json'
-  };
-
-  console.log("🎙️ Generating voice with Rachel...");
-  const response = await axios.post(url, payload, { headers, responseType: 'stream' });
-
-  const writer = fs.createWriteStream(outputPath);
-  await new Promise((resolve, reject) => {
-    response.data.pipe(writer);
-    writer.on('finish', resolve);
-    writer.on('error', reject);
-  });
-
-  console.log(`✅ Voice file ready: ${outputPath}`);
-  return outputPath;
+    const outPath = path.join(__dirname, "../temp/voice.mp3");
+    fs.writeFileSync(outPath, response.data);
+    console.log(`🔉 Voice file ready: ${outPath}`);
+    return outPath;
+  } catch (err) {
+    console.error("🔥 Voice generation failed:", err.response?.data || err.message);
+    throw err;
+  }
 };
