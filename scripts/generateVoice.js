@@ -1,3 +1,4 @@
+// scripts/generateVoice.js
 const fs = require("fs");
 const axios = require("axios");
 const path = require("path");
@@ -7,11 +8,19 @@ const VOICE_ID = "21m00Tcm4TlvDq8ikWAM"; // default: Rachel
 
 module.exports.generateVoice = async (whisper) => {
   const text = whisper.body;
-  const voiceName = "Rachel"; // optional, change as needed
+  const voiceName = "Rachel";
 
   console.log(`🎙️ Generating voice with ${voiceName}...`);
 
+  const tempDir = path.join(__dirname, "../temp");
+  const outPath = path.join(tempDir, "voice.mp3");
+
   try {
+    // Ensure temp directory exists
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir, { recursive: true });
+    }
+
     const response = await axios.post(
       `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`,
       {
@@ -31,7 +40,6 @@ module.exports.generateVoice = async (whisper) => {
       }
     );
 
-    const outPath = path.join(__dirname, "../temp/voice.mp3");
     fs.writeFileSync(outPath, response.data);
     console.log(`🔉 Voice file ready: ${outPath}`);
     return outPath;
