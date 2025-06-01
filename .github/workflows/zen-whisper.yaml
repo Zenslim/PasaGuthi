@@ -34,5 +34,5 @@ jobs:
       - name: 📥 Install Dependencies
         run: npm install
 
-        - name: 🌀 Run Whisper Agent
+      - name: 🌀 Run Whisper Agent
         run: node scripts/whisperAgent.js
