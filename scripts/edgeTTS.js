@@ -1,23 +1,16 @@
 // scripts/edgeTTS.js
-const fs = require("fs");
+const { exec } = require("child_process");
 
-module.exports.generateEdgeVoice = async (text, outputPath) => {
-  try {
-    const edgeTTS = await import("edge-tts");
+module.exports.generateEdgeVoice = (text, outputPath) => {
+  return new Promise((resolve, reject) => {
+    const safeText = text.replace(/"/g, "'"); // escape quotes
+    const cmd = `edge-tts --text "${safeText}" --voice en-US-AriaNeural --write-media "${outputPath}"`;
 
-    const stream = await edgeTTS
-      .synthesize({
-        text,
-        voice: "en-US-AriaNeural",
-      })
-      .then((r) => r.stream());
-
-    const writeStream = fs.createWriteStream(outputPath);
-    for await (const chunk of stream) {
-      writeStream.write(chunk);
-    }
-    writeStream.end();
-  } catch (err) {
-    throw new Error(`Edge TTS API failed: ${err.message}`);
-  }
+    exec(cmd, (error, stdout, stderr) => {
+      if (error) {
+        return reject(new Error(`Edge TTS CLI failed: ${stderr || error.message}`));
+      }
+      resolve();
+    });
+  });
 };
