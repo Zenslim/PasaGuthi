@@ -7,7 +7,6 @@ module.exports.generateVideo = async (voicePath, whisper) => {
   const tempDir = path.join(__dirname, "../temp");
   const outputPath = path.join(tempDir, "video.mp4");
   const imagePath = path.join(__dirname, "../assets/fallback.jpg"); // Replace with your actual image
-  const duration = 60; // fallback duration if needed
 
   // Ensure voice file exists
   if (!fs.existsSync(voicePath)) {
@@ -24,10 +23,10 @@ module.exports.generateVideo = async (voicePath, whisper) => {
     console.log("🎬 Generating video with ffmpeg...");
 
     const cmd = `
-      ffmpeg -y -loop 1 -i "${imagePath}" -i "${voicePath}" \
-      -c:v libx264 -tune stillimage -c:a aac -b:a 192k \
-      -pix_fmt yuv420p -shortest -r 25 \
+      ffmpeg -y -framerate 1 -loop 1 -i "${imagePath}" -i "${voicePath}" \
       -vf "scale=800:600,format=yuv420p" \
+      -c:v libx264 -tune stillimage -preset veryslow -crf 18 \
+      -c:a aac -b:a 192k -shortest -pix_fmt yuv420p \
       "${outputPath}"
     `;
 
