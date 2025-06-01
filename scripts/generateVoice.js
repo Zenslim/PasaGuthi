@@ -1,50 +1,22 @@
 // scripts/generateVoice.js
-const fs = require("fs");
-const axios = require("axios");
 const path = require("path");
-
-const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
-const VOICE_ID = "21m00Tcm4TlvDq8ikWAM"; // default: Rachel
+const fs = require("fs");
+const { generateEdgeVoice } = require("./edgeTTS");
 
 module.exports.generateVoice = async (whisper) => {
-  const text = whisper.body;
-  const voiceName = "Rachel";
+  const voicePath = path.join(__dirname, "../temp/voice.mp3");
 
-  console.log(`🎙️ Generating voice with ${voiceName}...`);
+  const tempDir = path.dirname(voicePath);
+  if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir, { recursive: true });
 
-  const tempDir = path.join(__dirname, "../temp");
-  const outPath = path.join(tempDir, "voice.mp3");
+  console.log("🎙️ Generating voice with Edge TTS...");
 
   try {
-    // Ensure temp directory exists
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir, { recursive: true });
-    }
-
-    const response = await axios.post(
-      `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`,
-      {
-        text,
-        model_id: "eleven_monolingual_v1",
-        voice_settings: {
-          stability: 0.4,
-          similarity_boost: 0.7
-        }
-      },
-      {
-        headers: {
-          "xi-api-key": ELEVENLABS_API_KEY,
-          "Content-Type": "application/json"
-        },
-        responseType: "arraybuffer"
-      }
-    );
-
-    fs.writeFileSync(outPath, response.data);
-    console.log(`🔉 Voice file ready: ${outPath}`);
-    return outPath;
+    await generateEdgeVoice(whisper.body, voicePath);
+    console.log(`🔉 Voice file ready: ${voicePath}`);
+    return voicePath;
   } catch (err) {
-    console.error("🔥 Voice generation failed:", err.response?.data || err.message);
+    console.error("🔥 Voice generation failed:", err.message);
     throw err;
   }
 };
