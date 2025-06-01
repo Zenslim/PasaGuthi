@@ -34,8 +34,5 @@ jobs:
       - name: 📥 Install Dependencies
         run: npm install
 
-      - name: 📦 Install Edge TTS CLI
-        run: npx edge-tts --version
-
-      - name: 🌀 Run Whisper Agent
+        - name: 🌀 Run Whisper Agent
         run: node scripts/whisperAgent.js
