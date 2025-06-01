@@ -37,5 +37,12 @@ jobs:
       - name: 📥 Install Dependencies
         run: npm install
 
-      - name: 🌀 Run Whisper Agent
+           - name: 🎨 Prepare fallback visuals (voice + scenes)
+        run: node scripts/prepareTempAssets.js
+
+      - name: 🎬 Merge scenes and voice
+        run: node scripts/mergeVideoAssets.js
+
+      - name: 🌀 Run Whisper Agent (final step)
         run: node scripts/whisperAgent.js
+
