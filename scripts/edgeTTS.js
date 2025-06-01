@@ -1,13 +1,14 @@
 // scripts/edgeTTS.js
 const fs = require("fs");
-const edgeTTS = require("edge-tts");
 
 module.exports.generateEdgeVoice = async (text, outputPath) => {
   try {
+    const edgeTTS = await import("edge-tts");
+
     const stream = await edgeTTS
       .synthesize({
         text,
-        voice: "en-US-AriaNeural", // ✅ You can change this voice
+        voice: "en-US-AriaNeural",
       })
       .then((r) => r.stream());
 
