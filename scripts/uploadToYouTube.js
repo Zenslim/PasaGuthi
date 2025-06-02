@@ -1,10 +1,22 @@
+// scripts/uploadToYouTube.js
 const { google } = require("googleapis");
 const fs = require("fs");
+const path = require("path");
 
-module.exports.uploadToYouTube = async (videoPath, { title, description }) => {
-  if (!videoPath || !fs.existsSync(videoPath)) {
+const videoPath = path.join(__dirname, "../temp/final-video.mp4");
+const whisperPath = path.join(__dirname, "../temp/whisper.json");
+
+module.exports.uploadToYouTube = async () => {
+  if (!fs.existsSync(videoPath)) {
     throw new Error("Video file not found: " + videoPath);
   }
+
+  const whisper = fs.existsSync(whisperPath)
+    ? JSON.parse(fs.readFileSync(whisperPath, "utf-8"))
+    : { text: "Zen Whisper" };
+
+  const title = whisper.text?.slice(0, 80) || "Zen Whisper";
+  const description = `A Zen Whisper:\n${whisper.text}\n\n#Zen #Pasaguthi #AI`;
 
   const oauth2Client = new google.auth.OAuth2(
     process.env.YOUTUBE_CLIENT_ID,
