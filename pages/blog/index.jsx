@@ -1,3 +1,5 @@
+"use client";
+...
 import { supabase } from '@/lib/supabaseClient'
 import BlogCard from '@/components/BlogCard'
 
