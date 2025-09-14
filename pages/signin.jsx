@@ -1,139 +1,86 @@
-
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { supabase } from '../lib/supabaseClient';
-import bcrypt from 'bcryptjs';
+// pages/signin.jsx
+"use client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function SignIn() {
   const router = useRouter();
-  const [identifier, setIdentifier] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [canUseBiometric, setCanUseBiometric] = useState(false);
+  const [email, setEmail] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
 
   useEffect(() => {
-    if (window.PublicKeyCredential) {
-      setCanUseBiometric(true);
-    }
-  }, []);
+    // If already signed in, bounce to editor or dashboard
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) router.replace("/blog/new");
+    });
+  }, [router]);
 
-  const handleSubmit = async (e) => {
+  async function signInGoogle() {
+    setBusy(true);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: window.location.origin + "/blog/new" },
+    });
+    if (error) { setMsg(error.message); setBusy(false); }
+  }
+
+  async function sendMagicLink(e) {
     e.preventDefault();
-    setError('');
-
-    const isPhone = identifier.startsWith('+');
-    const key = isPhone ? 'phone' : 'guthiKey';
-
-    const { data, error: fetchError } = await supabase
-      .from('users')
-      .select('*')
-      .eq(key, identifier.trim())
-      .limit(1);
-
-    if (fetchError || !Array.isArray(data) || data.length === 0) {
-      setError('❌ User not found. Please check your Guthi Key or phone.');
-      return;
-    }
-
-    const user = data[0];
-
-    if (!user.password) {
-      setError('❌ This Guthi identity was created without a password.');
-      return;
-    }
-
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-      setError('❌ Incorrect password.');
-      return;
-    }
-
-    localStorage.setItem('guthiKey', user.guthiKey);
-    router.push('/dashboard');
-  };
-
-  const handleBiometricLogin = async () => {
-    setError('');
-
-    try {
-      const assertion = await navigator.credentials.get({
-        publicKey: {
-          challenge: new Uint8Array([/* random data */]),
-          allowCredentials: [],
-          timeout: 60000,
-          userVerification: 'preferred',
-        },
-      });
-
-      const guthiKey = localStorage.getItem('guthiKey');
-      if (guthiKey) {
-        router.push('/dashboard');
-      } else {
-        setError('🔐 Biometric success but no Guthi Key found. Please sign in manually once.');
-      }
-    } catch (err) {
-      console.error('Biometric error:', err);
-      setError('⚠️ Biometric login failed or was cancelled.');
-    }
-  };
+    setBusy(true); setMsg("");
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: window.location.origin + "/blog/new" },
+    });
+    setBusy(false);
+    setMsg(error ? error.message : "Magic link sent. Check your email.");
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white text-black p-6">
-      <form onSubmit={handleSubmit} className="w-full max-w-md space-y-5">
-        <h1 className="text-2xl font-bold text-center">🔐 Enter Your Guthi</h1>
-        <p className="text-sm text-center text-gray-600">
-          Use your <strong>Guthi Key</strong> or <strong>Phone</strong> and <strong>Password</strong> to enter the circle.
+    <main className="min-h-screen grid place-items-center bg-black text-white px-4">
+      <div className="w-full max-w-md space-y-6 bg-zinc-950/60 border border-zinc-800 p-6 rounded-2xl">
+        <h1 className="text-2xl font-bold">Enter Pasaguthi</h1>
+        <p className="text-sm text-zinc-400">
+          Sign in to publish to the Ritual Feed.
         </p>
 
-        <div>
-          <label className="block font-semibold">🧾 Guthi Key or Phone</label>
-          <input
-            type="text"
-            required
-            placeholder="e.g., maya-shrestha-bhaktapur-abc12 or +97798XXXXXXX"
-            value={identifier}
-            onChange={(e) => setIdentifier(e.target.value)}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-
-        <div>
-          <label className="block font-semibold">🔐 Password</label>
-          <input
-            type="password"
-            required
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-
-        {error && <p className="text-sm text-red-700 text-center">{error}</p>}
-
         <button
-          type="submit"
-          className="w-full bg-black text-white font-bold py-2 px-4 rounded hover:bg-gray-800"
+          onClick={signInGoogle}
+          disabled={busy}
+          className="w-full px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50"
         >
-          🌀 Enter My Guthi Dashboard
+          Continue with Google
         </button>
 
-        {canUseBiometric && (
+        <div className="flex items-center gap-3 text-zinc-500">
+          <div className="h-px flex-1 bg-zinc-800" /><span className="text-xs">or</span><div className="h-px flex-1 bg-zinc-800" />
+        </div>
+
+        <form onSubmit={sendMagicLink} className="space-y-3">
+          <input
+            type="email"
+            required
+            placeholder="you@domain.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full bg-zinc-900/70 border border-zinc-800 p-3 rounded-xl"
+          />
           <button
-            type="button"
-            onClick={handleBiometricLogin}
-            className="w-full mt-2 bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700"
+            type="submit"
+            disabled={busy}
+            className="w-full px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 disabled:opacity-50"
           >
-            🔓 Use Biometric Login
+            Send magic link
           </button>
-        )}
-        <p className="text-center text-sm mt-2 text-gray-600">
-  First time?{' '}
-  <a href="/register-biometric" className="text-blue-600 underline hover:text-blue-800">
-    🔒 Register your biometric
-  </a>
-</p>
-      </form>
-    </div>
+        </form>
+
+        {msg ? <p className="text-sm text-emerald-300">{msg}</p> : null}
+
+        <p className="text-xs text-zinc-500">
+          Need to go back? <a href="/" className="underline hover:no-underline">Home</a>
+        </p>
+      </div>
+    </main>
   );
 }
