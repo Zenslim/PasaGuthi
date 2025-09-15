@@ -1,10 +1,11 @@
+// pages/api/auth/webauthn/register-verify.js
 import { verifyRegistrationResponse } from "@simplewebauthn/server";
 import { isoBase64URL } from "@simplewebauthn/server/helpers";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY, // server-only
+  process.env.SUPABASE_SERVICE_ROLE_KEY, // server-only, set in Vercel
   { auth: { persistSession: false } }
 );
 
@@ -18,18 +19,19 @@ function getCookie(req, name) {
 }
 
 export default async function handler(req, res) {
-  // Handle CORS preflight if needed
+  // Allow CORS preflight (if you’re testing from a different origin/host)
   if (req.method === "OPTIONS") {
-    res.setHeader("Access-Control-Allow-Origin", process.env.NEXT_PUBLIC_SITE_URL);
+    const origin = process.env.NEXT_PUBLIC_SITE_URL;
+    if (origin) res.setHeader("Access-Control-Allow-Origin", origin);
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-    res.status(200).end();
-    return;
+    return res.status(200).end();
   }
 
   if (req.method !== "POST") {
-    res.status(405).json({ ok: false, message: "Method not allowed" });
-    return;
+    // Log so you can see the unexpected method in Vercel logs
+    console.warn("register-verify received non-POST method:", req.method);
+    return res.status(405).json({ ok: false, message: "Method not allowed" });
   }
 
   try {
@@ -60,7 +62,7 @@ export default async function handler(req, res) {
         clientExtensionResults: body.clientExtensionResults || {},
       },
       expectedChallenge,
-      expectedOrigin: process.env.NEXT_PUBLIC_SITE_URL,
+      expectedOrigin: process.env.NEXT_PUBLIC_SITE_URL, // e.g. https://www.pasaguthi.org
       expectedRPID: rpID,
       requireUserVerification: false,
     });
@@ -86,8 +88,8 @@ export default async function handler(req, res) {
       "pg_reg_gk=; Path=/; HttpOnly; Max-Age=0; SameSite=Lax",
     ]);
 
-    res.status(200).json({ ok: true, guthiKey });
+    return res.status(200).json({ ok: true, guthiKey });
   } catch (e) {
-    res.status(400).json({ ok: false, message: e?.message || "Invalid registration" });
+    return res.status(400).json({ ok: false, message: e?.message || "Invalid registration" });
   }
 }
