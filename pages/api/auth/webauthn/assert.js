@@ -1,6 +1,14 @@
+// pages/api/auth/webauthn/assert.ts
 import { verifyAuthenticationResponse } from "@simplewebauthn/server";
 import { isoBase64URL } from "@simplewebauthn/server/helpers";
 import { createClient } from "@supabase/supabase-js";
+
+/* ---------- ADDED: simple CORS helper ---------- */
+function setCORS(res: any) {
+  res.setHeader("Access-Control-Allow-Origin", process.env.NEXT_PUBLIC_SITE_URL || "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+}
 
 /**
  * SERVER-ONLY Supabase client with Service Role
@@ -9,13 +17,13 @@ import { createClient } from "@supabase/supabase-js";
  *   SUPABASE_SERVICE_ROLE_KEY
  */
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY,
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
   { auth: { persistSession: false } }
 );
 
-function getCookie(req, name) {
-  const list = (req.headers.cookie || "").split(";").map((c) => c.trim());
+function getCookie(req: any, name: string) {
+  const list = (req.headers.cookie || "").split(";").map((c: string) => c.trim());
   for (const c of list) {
     const [k, ...rest] = c.split("=");
     if (k === name) return decodeURIComponent(rest.join("="));
@@ -32,10 +40,15 @@ function getCookie(req, name) {
  * - Clears challenge cookie
  * - (Hook) Start your app session here if desired
  */
-export default async function handler(req, res) {
+export default async function handler(req: any, res: any) {
+  /* ---------- ADDED: CORS + OPTIONS preflight ---------- */
+  setCORS(res);
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
   if (req.method !== "POST") {
-    res.status(405).json({ ok: false, message: "Method not allowed" });
-    return;
+    res.setHeader("Allow", "POST, OPTIONS");
+    return res.status(405).json({ ok: false, message: "Method not allowed" });
   }
 
   try {
@@ -69,8 +82,8 @@ export default async function handler(req, res) {
         type: body.type,
         response: {
           authenticatorData: isoBase64URL.toBuffer(body.response.authenticatorData),
-          clientDataJSON:    isoBase64URL.toBuffer(body.response.clientDataJSON),
-          signature:         isoBase64URL.toBuffer(body.response.signature),
+          clientDataJSON: isoBase64URL.toBuffer(body.response.clientDataJSON),
+          signature: isoBase64URL.toBuffer(body.response.signature),
           userHandle: body.response.userHandle
             ? isoBase64URL.toBuffer(body.response.userHandle)
             : undefined,
@@ -82,7 +95,7 @@ export default async function handler(req, res) {
       expectedRPID: rpID,
       authenticator: {
         credentialPublicKey: isoBase64URL.toBuffer(cred.public_key),
-        credentialID:        isoBase64URL.toBuffer(cred.credential_id),
+        credentialID: isoBase64URL.toBuffer(cred.credential_id),
         counter: Number(cred.counter || 0),
       },
     });
@@ -93,10 +106,7 @@ export default async function handler(req, res) {
 
     // Update counter
     const newCounter = verification.authenticationInfo.newCounter ?? cred.counter;
-    await supabase
-      .from("webauthn_credentials")
-      .update({ counter: newCounter })
-      .eq("id", cred.id);
+    await supabase.from("webauthn_credentials").update({ counter: newCounter }).eq("id", cred.id);
 
     // Clear challenge cookie
     res.setHeader(
@@ -104,10 +114,9 @@ export default async function handler(req, res) {
       "pg_webauthn_chal=; Path=/; HttpOnly; Max-Age=0; SameSite=Lax"
     );
 
-    // TODO: Start your app session here (cookie or Supabase session)
-    // For now: return ok + guthiKey for optional client UX
+    // TODO: Start your app session here
     return res.status(200).json({ ok: true, guthiKey: cred.guthi_key });
-  } catch (e) {
+  } catch (e: any) {
     return res.status(400).json({ ok: false, message: e?.message || "Invalid assertion" });
   }
 }
