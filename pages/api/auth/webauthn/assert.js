@@ -2,9 +2,15 @@ import { verifyAuthenticationResponse } from "@simplewebauthn/server";
 import { isoBase64URL } from "@simplewebauthn/server/helpers";
 import { createClient } from "@supabase/supabase-js";
 
+/**
+ * SERVER-ONLY Supabase client with Service Role
+ * Make sure to set these in Vercel:
+ *   NEXT_PUBLIC_SUPABASE_URL
+ *   SUPABASE_SERVICE_ROLE_KEY
+ */
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY,     // server-only
+  process.env.SUPABASE_SERVICE_ROLE_KEY,
   { auth: { persistSession: false } }
 );
 
@@ -17,6 +23,15 @@ function getCookie(req, name) {
   return null;
 }
 
+/**
+ * Verifies a WebAuthn assertion for discoverable credentials:
+ * - Reads expected challenge from cookie
+ * - Finds credential by credential_id (response.id)
+ * - Verifies signature and rp/origin
+ * - Updates signature counter
+ * - Clears challenge cookie
+ * - (Hook) Start your app session here if desired
+ */
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.status(405).json({ ok: false, message: "Method not allowed" });
@@ -24,21 +39,21 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = req.body;
+    const body = req.body; // JSON with base64url strings
     const expectedChallenge = getCookie(req, "pg_webauthn_chal");
     if (!expectedChallenge) {
       return res.status(400).json({ ok: false, message: "Challenge missing/expired" });
     }
 
-    // 🔎 Identify authenticator by credential ID
-    const { data: creds, error } = await supabase
+    // Lookup authenticator by credential ID (discoverable creds)
+    const { data: rows, error } = await supabase
       .from("webauthn_credentials")
       .select("id, guthi_key, credential_id, public_key, counter")
       .eq("credential_id", body.id)
       .limit(1);
 
     if (error) throw new Error(error.message);
-    const cred = creds?.[0];
+    const cred = rows?.[0];
     if (!cred) throw new Error("Credential not registered");
 
     const rpID =
@@ -63,7 +78,7 @@ export default async function handler(req, res) {
         clientExtensionResults: body.clientExtensionResults || {},
       },
       expectedChallenge,
-      expectedOrigin: process.env.NEXT_PUBLIC_SITE_URL,
+      expectedOrigin: process.env.NEXT_PUBLIC_SITE_URL, // e.g. https://www.pasaguthi.org
       expectedRPID: rpID,
       authenticator: {
         credentialPublicKey: isoBase64URL.toBuffer(cred.public_key),
@@ -76,20 +91,21 @@ export default async function handler(req, res) {
       return res.status(400).json({ ok: false, message: "Verification failed" });
     }
 
-    // Update signature counter
+    // Update counter
     const newCounter = verification.authenticationInfo.newCounter ?? cred.counter;
     await supabase
       .from("webauthn_credentials")
       .update({ counter: newCounter })
       .eq("id", cred.id);
 
-    // Clear the challenge cookie
+    // Clear challenge cookie
     res.setHeader(
       "Set-Cookie",
       "pg_webauthn_chal=; Path=/; HttpOnly; Max-Age=0; SameSite=Lax"
     );
 
-    // TODO: start your app session here (cookie or Supabase session)
+    // TODO: Start your app session here (cookie or Supabase session)
+    // For now: return ok + guthiKey for optional client UX
     return res.status(200).json({ ok: true, guthiKey: cred.guthi_key });
   } catch (e) {
     return res.status(400).json({ ok: false, message: e?.message || "Invalid assertion" });
