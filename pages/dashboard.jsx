@@ -1,7 +1,7 @@
 // pages/dashboard.jsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -40,25 +40,33 @@ async function getJSON(url, init) {
 
 export default function Dashboard() {
   const router = useRouter();
+
+  // Identity state
   const [ready, setReady] = useState(false);
-  const [guthiKey, setGuthiKey] = useState("");
+  const [guthiKey, setGuthiKey] = useState(""); // human identity anchor
+  const [userId, setUserId] = useState(null);   // supabase auth uid (for OTP path)
+
+  // Passkey capability & existence
+  const [browserSupportsPasskey, setBrowserSupportsPasskey] = useState(false);
+  const [hasPasskey, setHasPasskey] = useState(false);
+
+  // UI
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
   const [err, setErr] = useState("");
-  const [canPasskey, setCanPasskey] = useState(false);
 
-  // Gate: user must be "in" (Guthi Key or Supabase session from phone OTP)
+  /* 1) Gate access: must be signed in (Guthi Key from localStorage OR Supabase session) */
   useEffect(() => {
     (async () => {
-      const lk = localStorage.getItem("guthiKey") || "";
-      if (lk) {
-        setGuthiKey(lk);
+      const localGuthiKey = (typeof window !== "undefined" && localStorage.getItem("guthiKey")) || "";
+      if (localGuthiKey) {
+        setGuthiKey(localGuthiKey);
         setReady(true);
         return;
       }
-      // If no Guthi Key, allow Supabase session (e.g., phone OTP path)
       const { data } = await supabase.auth.getSession();
-      if (data?.session) {
+      if (data?.session?.user?.id) {
+        setUserId(data.session.user.id);
         setReady(true);
       } else {
         router.replace("/signin");
@@ -66,36 +74,81 @@ export default function Dashboard() {
     })();
   }, [router]);
 
+  /* 2) Detect WebAuthn/Passkey capability */
   useEffect(() => {
-    if (typeof window !== "undefined" && window.PublicKeyCredential) setCanPasskey(true);
+    if (typeof window !== "undefined" && window.PublicKeyCredential) {
+      setBrowserSupportsPasskey(true);
+    }
   }, []);
 
+  /* 3) Check if a passkey already exists for this identity
+        Preferred: by guthi_key (what your server uses).
+        Fallback: if you manage by user_id, switch the query accordingly and ensure RLS allows it. */
+  const refreshHasPasskey = useCallback(async () => {
+    try {
+      setErr("");
+      // If you store by guthi_key (as in provided server routes):
+      if (guthiKey) {
+        const { data, error } = await supabase
+          .from("webauthn_credentials")
+          .select("id")
+          .eq("guthi_key", guthiKey)
+          .limit(1);
+        if (error) throw error;
+        setHasPasskey(!!(data && data.length));
+        return;
+      }
+      // If no guthiKey (e.g., OTP-only session), and you store by user_id instead:
+      if (userId) {
+        const { data, error } = await supabase
+          .from("webauthn_credentials")
+          .select("id")
+          .eq("user_id", userId)        // only if you added user_id column & RLS to allow self-read
+          .limit(1);
+        if (error) throw error;
+        setHasPasskey(!!(data && data.length));
+      }
+    } catch (e) {
+      // If your RLS blocks client reads, you can instead create a tiny server route /api/auth/webauthn/has
+      // that returns { has: true/false } using the service role key.
+      // For now, we’ll just show the button (safe) and let register handle existence gracefully.
+      console.warn("Passkey existence check failed:", e.message);
+      setHasPasskey(false);
+    }
+  }, [guthiKey, userId]);
+
+  useEffect(() => {
+    if (ready) refreshHasPasskey();
+  }, [ready, refreshHasPasskey]);
+
+  /* 4) Register a discoverable passkey (resident key) */
   async function registerPasskey() {
     setBusy(true); setMsg(""); setErr("");
     try {
-      // Need a guthiKey to bind the passkey; prompt if not found
-      let key = guthiKey?.trim();
+      let key = (guthiKey || "").trim();
+
+      // If user arrived via phone OTP and no guthiKey stored, ask once:
       if (!key) {
         const prompted = prompt("Enter your Guthi Key to register a passkey:");
         if (!prompted) throw new Error("Guthi Key is required");
         key = prompted.trim();
       }
 
-      // 1) Get registration options
+      // 4.1 Get registration options
       const options = await getJSON(`/api/auth/webauthn/register-challenge?guthiKey=${encodeURIComponent(key)}`);
 
-      // Some browsers require user.id as Uint8Array
+      // Some browsers need user.id as Uint8Array
       const publicKey = {
         ...options,
         challenge: b64uToUint8(options.challenge),
         user: { ...options.user, id: b64uToUint8(options.user.id) },
       };
 
-      // 2) Native prompt to create credential
+      // 4.2 Create credential on authenticator
       const att = await navigator.credentials.create({ publicKey });
       if (!att) throw new Error("User cancelled or no authenticator available");
 
-      // 3) Serialize for JSON
+      // 4.3 Serialize for JSON
       const cred = {
         id: att.id,
         type: att.type,
@@ -108,7 +161,7 @@ export default function Dashboard() {
         clientExtensionResults: att.getClientExtensionResults?.() || {},
       };
 
-      // 4) Verify & store on server
+      // 4.4 Verify & store on server (POST; not a form submit)
       const result = await getJSON("/api/auth/webauthn/register-verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -116,9 +169,13 @@ export default function Dashboard() {
       });
       if (!result?.ok) throw new Error(result?.message || "Registration failed");
 
-      localStorage.setItem("guthiKey", result.guthiKey || key);
-      setGuthiKey(result.guthiKey || key);
+      // 4.5 Persist guthiKey locally for future UX
+      const finalKey = result.guthiKey || key;
+      localStorage.setItem("guthiKey", finalKey);
+      setGuthiKey(finalKey);
+
       setMsg("✅ Passkey registered. Next time you can sign in with one tap.");
+      setHasPasskey(true);
     } catch (e) {
       setErr(`❌ ${e.message}`);
     } finally {
@@ -140,39 +197,49 @@ export default function Dashboard() {
         <header className="space-y-1">
           <h1 className="text-2xl font-bold">Welcome to your Guthi Dashboard</h1>
           {guthiKey ? (
-            <p className="text-sm text-zinc-400">Signed in as <span className="font-mono">{guthiKey}</span></p>
+            <p className="text-sm text-zinc-400">
+              Signed in as <span className="font-mono">{guthiKey}</span>
+            </p>
           ) : (
             <p className="text-sm text-zinc-400">Signed in via phone session</p>
           )}
         </header>
 
-        {/* Register Passkey */}
-        <section className="space-y-2 bg-zinc-950/60 border border-zinc-800 p-4 rounded-2xl">
+        {/* Passkey section */}
+        <section className="space-y-3 bg-zinc-950/60 border border-zinc-800 p-4 rounded-2xl">
           <h2 className="text-lg font-semibold">Biometric sign-in</h2>
-          <p className="text-sm text-zinc-400">
-            Add a passkey to unlock one-tap logins on this device.
-          </p>
-
-          {canPasskey ? (
-            <button
-              onClick={registerPasskey}
-              disabled={busy}
-              className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white disabled:opacity-50"
-            >
-              {busy ? "Registering…" : "Register Passkey"}
-            </button>
-          ) : (
+          {!browserSupportsPasskey && (
             <p className="text-sm text-amber-400">
               This browser/device doesn’t support passkeys (WebAuthn).
             </p>
           )}
+
+          {browserSupportsPasskey && hasPasskey ? (
+            <p className="text-sm text-emerald-300">
+              ✅ A passkey is already registered for this account on the server.
+            </p>
+          ) : browserSupportsPasskey ? (
+            <div className="space-y-2">
+              <p className="text-sm text-zinc-400">
+                Add a passkey to unlock one-tap logins on this device.
+              </p>
+              <button
+                type="button"
+                onClick={registerPasskey}
+                disabled={busy}
+                className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white disabled:opacity-50"
+              >
+                {busy ? "Registering…" : "Register Passkey"}
+              </button>
+            </div>
+          ) : null}
 
           {(msg || err) && (
             <p className={`text-sm ${err ? "text-red-400" : "text-emerald-300"}`}>{err || msg}</p>
           )}
         </section>
 
-        {/* …your dashboard content here… */}
+        {/* …your other dashboard content… */}
       </div>
     </main>
   );
