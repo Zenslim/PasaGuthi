@@ -145,7 +145,12 @@ export default function SignIn() {
     setBusy(true); setErr(""); setMsg("");
     try {
       // 1) Ask server for a JSON-safe PublicKeyCredentialRequestOptions
-      const options = await getJSON("/api/auth/webauthn/challenge");
+ if (!identifier.trim()) {
+  setErr("Please enter your Guthi Key (or phone) before using Passkey.");
+  return;
+}
+const guthiKey = identifier.trim(); // or resolve phone → guthiKey if needed
+const options = await getJSON(`/api/auth/webauthn/challenge?guthiKey=${encodeURIComponent(guthiKey)}`);
       // Convert base64url fields → Uint8Array for WebAuthn
       const publicKey = {
         ...options,
