@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "@/lib/supabaseClient";
-// TEMP: keep bcrypt client-side only until you move password verification server-side
+// TEMP: keep bcrypt client-side until you move password verification server-side
 import bcrypt from "bcryptjs";
 
 /* ---------------- Base64URL helpers for WebAuthn ---------------- */
@@ -55,7 +55,7 @@ export default function SignIn() {
   // C) Passkeys
   const [canPasskey, setCanPasskey] = useState(false);
 
-  // UI state
+  // UI
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
   const [err, setErr] = useState("");
@@ -69,7 +69,7 @@ export default function SignIn() {
     e.preventDefault();
     setBusy(true); setErr(""); setMsg("");
     try {
-      // 1) Preferred: server-side verification and session creation
+      // Preferred: server route (implement when ready)
       const r = await fetch("/api/auth/password-login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -80,14 +80,11 @@ export default function SignIn() {
         return;
       }
 
-      // 2) TEMP fallback: your current client-side bcrypt check (until Edge Function is wired)
+      // TEMP fallback: your existing client-side bcrypt flow
       const isPhone = identifier.trim().startsWith("+");
       const key = isPhone ? "phone" : "guthiKey";
       const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq(key, identifier.trim())
-        .limit(1);
+        .from("users").select("*").eq(key, identifier.trim()).limit(1);
       if (error || !data?.length) throw new Error("User not found");
 
       const user = data[0];
@@ -104,7 +101,7 @@ export default function SignIn() {
     }
   }
 
-  /* ---------------- B) Phone OTP (no email, no Google) ---------------- */
+  /* ---------------- B) Phone OTP ---------------- */
   async function startOtp() {
     setBusy(true); setErr(""); setMsg("");
     try {
@@ -121,7 +118,6 @@ export default function SignIn() {
       setBusy(false);
     }
   }
-
   async function verifyOtp() {
     setBusy(true); setErr(""); setMsg("");
     try {
@@ -140,18 +136,13 @@ export default function SignIn() {
     }
   }
 
-  /* ---------------- C) Biometric / Passkey (WebAuthn) ---------------- */
+  /* ---------------- C) Biometric / Passkey (discoverable) ---------------- */
   async function usePasskey() {
     setBusy(true); setErr(""); setMsg("");
     try {
-      // 1) Ask server for a JSON-safe PublicKeyCredentialRequestOptions
- if (!identifier.trim()) {
-  setErr("Please enter your Guthi Key (or phone) before using Passkey.");
-  return;
-}
-const guthiKey = identifier.trim(); // or resolve phone → guthiKey if needed
-const options = await getJSON(`/api/auth/webauthn/challenge?guthiKey=${encodeURIComponent(guthiKey)}`);
-      // Convert base64url fields → Uint8Array for WebAuthn
+      // No identifier needed: discoverable credentials
+      const options = await getJSON("/api/auth/webauthn/challenge");
+
       const publicKey = {
         ...options,
         challenge: b64uToUint8(options.challenge),
@@ -161,18 +152,16 @@ const options = await getJSON(`/api/auth/webauthn/challenge?guthiKey=${encodeURI
         })),
       };
 
-      // 2) Get assertion from authenticator
       const assertion = await navigator.credentials.get({ publicKey });
 
-      // 3) Serialize ArrayBuffers → base64url so JSON can carry them
       const cred = {
         id: assertion.id,
         type: assertion.type,
         rawId: uint8ToB64u(new Uint8Array(assertion.rawId)),
         response: {
           authenticatorData: uint8ToB64u(new Uint8Array(assertion.response.authenticatorData)),
-          clientDataJSON:  uint8ToB64u(new Uint8Array(assertion.response.clientDataJSON)),
-          signature:       uint8ToB64u(new Uint8Array(assertion.response.signature)),
+          clientDataJSON:    uint8ToB64u(new Uint8Array(assertion.response.clientDataJSON)),
+          signature:         uint8ToB64u(new Uint8Array(assertion.response.signature)),
           userHandle: assertion.response.userHandle
             ? uint8ToB64u(new Uint8Array(assertion.response.userHandle))
             : null,
@@ -180,7 +169,6 @@ const options = await getJSON(`/api/auth/webauthn/challenge?guthiKey=${encodeURI
         clientExtensionResults: assertion.getClientExtensionResults?.() || {},
       };
 
-      // 4) Send to server for verification & session
       const result = await getJSON("/api/auth/webauthn/assert", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -188,6 +176,8 @@ const options = await getJSON(`/api/auth/webauthn/challenge?guthiKey=${encodeURI
       });
 
       if (!result?.ok) throw new Error(result?.message || "Assertion rejected");
+      if (result.guthiKey) localStorage.setItem("guthiKey", result.guthiKey);
+
       router.push("/dashboard");
     } catch (e) {
       setErr(`⚠️ Passkey login failed: ${e.message}`);
@@ -208,7 +198,6 @@ const options = await getJSON(`/api/auth/webauthn/challenge?guthiKey=${encodeURI
         <form onSubmit={signInPassword} className="space-y-3">
           <input
             type="text"
-            required
             placeholder="maya-shrestha-bhaktapur-abc12 or +97798XXXXXXX"
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
@@ -217,7 +206,6 @@ const options = await getJSON(`/api/auth/webauthn/challenge?guthiKey=${encodeURI
           />
           <input
             type="password"
-            required
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
