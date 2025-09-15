@@ -6,7 +6,7 @@ import { isoBase64URL } from "@simplewebauthn/server/helpers";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-/* ---- CORS helper ---- */
+/* ---------- CORS helper ---------- */
 function cors(res) {
   res.headers.set("Access-Control-Allow-Origin", process.env.NEXT_PUBLIC_SITE_URL || "*");
   res.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -14,14 +14,14 @@ function cors(res) {
   return res;
 }
 
-/* ---- IMPORTANT: lazy-init Supabase at runtime, not at module scope ---- */
+/* ---------- Lazy-init Supabase (runtime only) ---------- */
 function getAdminClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) {
-    // Don’t throw during module import; only here when function is actually called
-    throw new Error("Server misconfig: SUPABASE env missing");
-  }
+  const missing = [];
+  if (!url) missing.push("SUPABASE_URL or NEXT_PUBLIC_SUPABASE_URL");
+  if (!key) missing.push("SUPABASE_SERVICE_ROLE_KEY");
+  if (missing.length) throw new Error(`Server misconfig: missing ${missing.join(", ")}`);
   const { createClient } = require("@supabase/supabase-js");
   return createClient(url, key, { auth: { persistSession: false } });
 }
@@ -32,7 +32,7 @@ export async function OPTIONS() {
 
 export async function POST(request) {
   try {
-    const expectedOrigin = process.env.NEXT_PUBLIC_SITE_URL;
+    const expectedOrigin = process.env.NEXT_PUBLIC_SITE_URL; // e.g., https://www.pasaguthi.org
     const rpID =
       process.env.NEXT_PUBLIC_RP_ID ||
       (expectedOrigin ? new URL(expectedOrigin).hostname : undefined);
@@ -40,7 +40,7 @@ export async function POST(request) {
     const body = await request.json().catch(() => null);
     if (!body) return cors(NextResponse.json({ ok: false, message: "Bad JSON" }, { status: 400 }));
 
-    // Read cookies set by /register-challenge
+    // Cookies set by /register-challenge
     const chal = request.cookies.get("pg_webauthn_reg_chal")?.value;
     const guthiKeyCookie = request.cookies.get("pg_webauthn_gk")?.value;
     const guthiKey = guthiKeyCookie ? decodeURIComponent(guthiKeyCookie) : null;
@@ -48,9 +48,9 @@ export async function POST(request) {
     if (!chal)     return cors(NextResponse.json({ ok: false, message: "Missing registration challenge" }, { status: 400 }));
     if (!guthiKey) return cors(NextResponse.json({ ok: false, message: "Missing guthiKey cookie" }, { status: 400 }));
 
-    // Verify WebAuthn attestation
+    // Verify attestation
     const verification = await verifyRegistrationResponse({
-      response: body,                 // client sends the raw credential object
+      response: body,                // raw credential object from client
       expectedChallenge: chal,
       expectedOrigin,
       expectedRPID: rpID,
@@ -62,15 +62,15 @@ export async function POST(request) {
     }
 
     const reg = verification.registrationInfo;
-    const credentialIDb64u   = isoBase64URL.fromBuffer(reg.credentialID);
-    const publicKeyB64u      = isoBase64URL.fromBuffer(reg.credentialPublicKey);
-    const counter            = reg.counter ?? 0;
-    const transportsFromBody =
-      body?.transports || body?.response?.transports || [];
+    const credentialIDb64u = isoBase64URL.fromBuffer(reg.credentialID);
+    const publicKeyB64u    = isoBase64URL.fromBuffer(reg.credentialPublicKey);
+    const counter          = reg.counter ?? 0;
 
-    // 👉 Lazy-create the Supabase admin client here (runtime only)
+    // ✅ transports as a plain JS array (JSONB column in DB)
+    const transports = body?.transports || body?.response?.transports || [];
+
+    // Save to Supabase
     const supabase = getAdminClient();
-
     const { error: upsertErr } = await supabase
       .from("webauthn_credentials")
       .upsert(
@@ -79,7 +79,7 @@ export async function POST(request) {
           credential_id: credentialIDb64u,
           public_key: publicKeyB64u,
           counter,
-          transports: JSON.stringify(transportsFromBody),
+          transports, // <-- no JSON.stringify(); DB column must be jsonb
         },
         { onConflict: "credential_id" }
       );
@@ -92,8 +92,7 @@ export async function POST(request) {
     res.cookies.set("pg_webauthn_gk", "",       { httpOnly: true, sameSite: "lax", path: "/", maxAge: 0 });
     return cors(res);
   } catch (e) {
-    // If envs are missing at runtime, show a clean 500 (not a build-time crash)
-    const status = String(e?.message || "").includes("misconfig") ? 500 : 400;
+    const status = String(e?.message || "").includes("Server misconfig") ? 500 : 400;
     return cors(NextResponse.json({ ok: false, message: e?.message || "Invalid registration" }, { status }));
   }
 }
