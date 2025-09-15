@@ -24,8 +24,17 @@ const uint8ToB64u = (u8) => {
     .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
   return b64;
 };
-async function getJSON(url, init) {
-  const res = await fetch(url, init);
+
+/* ===== FIX: always send cookies & ask for JSON ===== */
+async function getJSON(url, init = {}) {
+  const res = await fetch(
+    url,
+    {
+      credentials: "include",                                   // 🔑 bring/set cookies (challenge ticket)
+      headers: { Accept: "application/json", ...(init.headers || {}) },
+      ...init,
+    }
+  );
   const ct = res.headers.get("content-type") || "";
   if (!res.ok) {
     const text = await res.text().catch(() => "");
@@ -81,13 +90,10 @@ export default function Dashboard() {
     }
   }, []);
 
-  /* 3) Check if a passkey already exists for this identity
-        Preferred: by guthi_key (what your server uses).
-        Fallback: if you manage by user_id, switch the query accordingly and ensure RLS allows it. */
+  /* 3) Check if a passkey already exists for this identity */
   const refreshHasPasskey = useCallback(async () => {
     try {
       setErr("");
-      // If you store by guthi_key (as in provided server routes):
       if (guthiKey) {
         const { data, error } = await supabase
           .from("webauthn_credentials")
@@ -98,20 +104,16 @@ export default function Dashboard() {
         setHasPasskey(!!(data && data.length));
         return;
       }
-      // If no guthiKey (e.g., OTP-only session), and you store by user_id instead:
       if (userId) {
         const { data, error } = await supabase
           .from("webauthn_credentials")
           .select("id")
-          .eq("user_id", userId)        // only if you added user_id column & RLS to allow self-read
+          .eq("user_id", userId)
           .limit(1);
         if (error) throw error;
         setHasPasskey(!!(data && data.length));
       }
     } catch (e) {
-      // If your RLS blocks client reads, you can instead create a tiny server route /api/auth/webauthn/has
-      // that returns { has: true/false } using the service role key.
-      // For now, we’ll just show the button (safe) and let register handle existence gracefully.
       console.warn("Passkey existence check failed:", e.message);
       setHasPasskey(false);
     }
@@ -134,7 +136,7 @@ export default function Dashboard() {
         key = prompted.trim();
       }
 
-      // 4.1 Get registration options
+      // 4.1 Get registration options (sets cookie on server)
       const options = await getJSON(`/api/auth/webauthn/register-challenge?guthiKey=${encodeURIComponent(key)}`);
 
       // Some browsers need user.id as Uint8Array
@@ -161,7 +163,7 @@ export default function Dashboard() {
         clientExtensionResults: att.getClientExtensionResults?.() || {},
       };
 
-      // 4.4 Verify & store on server (POST; not a form submit)
+      // 4.4 Verify & store on server (POST; cookie included by getJSON)
       const result = await getJSON("/api/auth/webauthn/register-verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
