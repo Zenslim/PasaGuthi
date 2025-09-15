@@ -4,7 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY, // server-only key in Vercel
+  process.env.SUPABASE_SERVICE_ROLE_KEY, // server-only
   { auth: { persistSession: false } }
 );
 
@@ -17,19 +17,24 @@ function getCookie(req, name) {
   return null;
 }
 
-/**
- * Completes registration:
- * - Verifies attestation with the stored challenge
- * - Inserts credential_id, public_key, transports, counter into webauthn_credentials
- */
 export default async function handler(req, res) {
+  // Handle CORS preflight if needed
+  if (req.method === "OPTIONS") {
+    res.setHeader("Access-Control-Allow-Origin", process.env.NEXT_PUBLIC_SITE_URL);
+    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    res.status(200).end();
+    return;
+  }
+
   if (req.method !== "POST") {
     res.status(405).json({ ok: false, message: "Method not allowed" });
     return;
   }
 
   try {
-    const body = req.body;
+    const body = req.body; // JSON
+
     const expectedChallenge = getCookie(req, "pg_reg_chal");
     const guthiKey = getCookie(req, "pg_reg_gk");
     if (!expectedChallenge || !guthiKey) {
@@ -55,7 +60,7 @@ export default async function handler(req, res) {
         clientExtensionResults: body.clientExtensionResults || {},
       },
       expectedChallenge,
-      expectedOrigin: process.env.NEXT_PUBLIC_SITE_URL, // e.g. https://www.pasaguthi.org
+      expectedOrigin: process.env.NEXT_PUBLIC_SITE_URL,
       expectedRPID: rpID,
       requireUserVerification: false,
     });
@@ -66,7 +71,6 @@ export default async function handler(req, res) {
 
     const { credentialPublicKey, credentialID, counter } = verification.registrationInfo;
 
-    // Persist credential (base64url strings)
     const { error } = await supabase.from("webauthn_credentials").insert({
       guthi_key: guthiKey,
       credential_id: isoBase64URL.fromBuffer(credentialID),
