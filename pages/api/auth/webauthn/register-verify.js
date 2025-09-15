@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY, // server-only, set in Vercel
+  process.env.SUPABASE_SERVICE_ROLE_KEY,
   { auth: { persistSession: false } }
 );
 
@@ -19,24 +19,22 @@ function getCookie(req, name) {
 }
 
 export default async function handler(req, res) {
-  // Allow CORS preflight (if you’re testing from a different origin/host)
+  // 🔹 Preflight support (so OPTIONS won’t throw 405)
   if (req.method === "OPTIONS") {
-    const origin = process.env.NEXT_PUBLIC_SITE_URL;
-    if (origin) res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Origin", process.env.NEXT_PUBLIC_SITE_URL || "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
     return res.status(200).end();
   }
 
+  // 🔹 Only allow POST
   if (req.method !== "POST") {
-    // Log so you can see the unexpected method in Vercel logs
-    console.warn("register-verify received non-POST method:", req.method);
+    console.warn("405 at register-verify:", req.method);
     return res.status(405).json({ ok: false, message: "Method not allowed" });
   }
 
   try {
-    const body = req.body; // JSON
-
+    const body = req.body;
     const expectedChallenge = getCookie(req, "pg_reg_chal");
     const guthiKey = getCookie(req, "pg_reg_gk");
     if (!expectedChallenge || !guthiKey) {
@@ -55,14 +53,14 @@ export default async function handler(req, res) {
         rawId: isoBase64URL.toBuffer(body.rawId),
         response: {
           attestationObject: isoBase64URL.toBuffer(body.response.attestationObject),
-          clientDataJSON:    isoBase64URL.toBuffer(body.response.clientDataJSON),
+          clientDataJSON: isoBase64URL.toBuffer(body.response.clientDataJSON),
           transports: body.response.transports || [],
         },
         type: body.type,
         clientExtensionResults: body.clientExtensionResults || {},
       },
       expectedChallenge,
-      expectedOrigin: process.env.NEXT_PUBLIC_SITE_URL, // e.g. https://www.pasaguthi.org
+      expectedOrigin: process.env.NEXT_PUBLIC_SITE_URL,
       expectedRPID: rpID,
       requireUserVerification: false,
     });
@@ -82,7 +80,6 @@ export default async function handler(req, res) {
     });
     if (error) throw new Error(error.message);
 
-    // Clear cookies
     res.setHeader("Set-Cookie", [
       "pg_reg_chal=; Path=/; HttpOnly; Max-Age=0; SameSite=Lax",
       "pg_reg_gk=; Path=/; HttpOnly; Max-Age=0; SameSite=Lax",
