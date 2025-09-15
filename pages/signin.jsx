@@ -1,46 +1,93 @@
 // pages/signin.jsx
 "use client";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { supabase } from "@/lib/supabaseClient"; // still needed for OTP until edge wired
-// TEMPORARY: keep bcrypt client-side only until /auth/password-login is live
+import { supabase } from "@/lib/supabaseClient";
+// TEMP: keep bcrypt client-side only until you move password verification server-side
 import bcrypt from "bcryptjs";
+
+/* ---------------- Base64URL helpers for WebAuthn ---------------- */
+const b64uToUint8 = (b64u) => {
+  const pad = (s) => s + "===".slice((s.length + 3) % 4);
+  const b64 = pad(b64u.replace(/-/g, "+").replace(/_/g, "/"));
+  const str = typeof atob !== "undefined" ? atob(b64) : Buffer.from(b64, "base64").toString("binary");
+  const bytes = new Uint8Array(str.length);
+  for (let i = 0; i < str.length; i++) bytes[i] = str.charCodeAt(i);
+  return bytes;
+};
+const uint8ToB64u = (u8) => {
+  let str = "";
+  const chunk = 0x8000;
+  for (let i = 0; i < u8.length; i += chunk) {
+    str += String.fromCharCode.apply(null, u8.subarray(i, i + chunk));
+  }
+  const b64 = (typeof btoa !== "undefined" ? btoa(str) : Buffer.from(str, "binary").toString("base64"))
+    .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+  return b64;
+};
+async function getJSON(url, init) {
+  const res = await fetch(url, init);
+  const ct = res.headers.get("content-type") || "";
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`HTTP ${res.status} on ${url}: ${text.slice(0, 180)}`);
+  }
+  if (!ct.includes("application/json")) {
+    const head = await res.text().catch(() => "");
+    throw new Error(`Unexpected content-type: ${ct}. Body: ${head.slice(0, 180)}`);
+  }
+  return res.json();
+}
 
 export default function SignIn() {
   const router = useRouter();
-  const [identifier, setIdentifier] = useState("");  // guthiKey or +977...
-  const [password, setPassword]   = useState("");
-  const [phone, setPhone]         = useState("");    // for OTP
-  const [busy, setBusy]           = useState(false);
-  const [msg, setMsg]             = useState("");
-  const [err, setErr]             = useState("");
+
+  // A) Guthi Key / Phone + Password
+  const [identifier, setIdentifier] = useState(""); // guthiKey or +977...
+  const [password, setPassword] = useState("");
+
+  // B) Phone OTP
+  const [phone, setPhone] = useState("");
+  const [otpCode, setOtpCode] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+
+  // C) Passkeys
   const [canPasskey, setCanPasskey] = useState(false);
+
+  // UI state
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [err, setErr] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.PublicKeyCredential) setCanPasskey(true);
   }, []);
 
-  // --- A) Guthi Key / Phone + Password (server-first; client fallback) ---
+  /* ---------------- A) Password entry (server-first; client fallback) ---------------- */
   async function signInPassword(e) {
     e.preventDefault();
     setBusy(true); setErr(""); setMsg("");
-
     try {
-      // 1) Preferred: server verifies and starts session
+      // 1) Preferred: server-side verification and session creation
       const r = await fetch("/api/auth/password-login", {
         method: "POST",
-        headers: { "Content-Type":"application/json" },
-        body: JSON.stringify({ identifier, password })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier, password }),
       });
       if (r.ok) {
-        router.push("/dashboard"); return;
+        router.push("/dashboard");
+        return;
       }
 
-      // 2) Temporary fallback to your existing client flow (until Edge is live)
+      // 2) TEMP fallback: your current client-side bcrypt check (until Edge Function is wired)
       const isPhone = identifier.trim().startsWith("+");
       const key = isPhone ? "phone" : "guthiKey";
       const { data, error } = await supabase
-        .from("users").select("*").eq(key, identifier.trim()).limit(1);
+        .from("users")
+        .select("*")
+        .eq(key, identifier.trim())
+        .limit(1);
       if (error || !data?.length) throw new Error("User not found");
 
       const user = data[0];
@@ -57,16 +104,17 @@ export default function SignIn() {
     }
   }
 
-  // --- B) Phone OTP (no email, no Google) ---
+  /* ---------------- B) Phone OTP (no email, no Google) ---------------- */
   async function startOtp() {
     setBusy(true); setErr(""); setMsg("");
     try {
       const { error } = await supabase.auth.signInWithOtp({
         phone: phone.trim(),
-        options: { channel: "sms" }
+        options: { channel: "sms" },
       });
       if (error) throw error;
-      setMsg("📲 OTP sent via SMS. Enter the code in the system prompt if asked.");
+      setOtpSent(true);
+      setMsg("📲 OTP sent via SMS.");
     } catch (e) {
       setErr(`❌ ${e.message || "Failed to send OTP"}`);
     } finally {
@@ -74,22 +122,70 @@ export default function SignIn() {
     }
   }
 
-  // --- C) Biometric / Passkey (WebAuthn) ---
+  async function verifyOtp() {
+    setBusy(true); setErr(""); setMsg("");
+    try {
+      const { data, error } = await supabase.auth.verifyOtp({
+        phone: phone.trim(),
+        token: otpCode.trim(),
+        type: "sms",
+      });
+      if (error) throw error;
+      if (!data?.session) throw new Error("OTP verified but session not issued");
+      router.push("/dashboard");
+    } catch (e) {
+      setErr(`❌ ${e.message || "OTP verification failed"}`);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  /* ---------------- C) Biometric / Passkey (WebAuthn) ---------------- */
   async function usePasskey() {
     setBusy(true); setErr(""); setMsg("");
     try {
-      const pre = await fetch("/api/auth/webauthn/challenge");
-      const opts = await pre.json();
-      // navigator.credentials.get with server-provided "publicKey" options
-      const assertion = await navigator.credentials.get({ publicKey: opts });
-      const res = await fetch("/api/auth/webauthn/assert", {
+      // 1) Ask server for a JSON-safe PublicKeyCredentialRequestOptions
+      const options = await getJSON("/api/auth/webauthn/challenge");
+      // Convert base64url fields → Uint8Array for WebAuthn
+      const publicKey = {
+        ...options,
+        challenge: b64uToUint8(options.challenge),
+        allowCredentials: (options.allowCredentials || []).map((c) => ({
+          ...c,
+          id: b64uToUint8(c.id),
+        })),
+      };
+
+      // 2) Get assertion from authenticator
+      const assertion = await navigator.credentials.get({ publicKey });
+
+      // 3) Serialize ArrayBuffers → base64url so JSON can carry them
+      const cred = {
+        id: assertion.id,
+        type: assertion.type,
+        rawId: uint8ToB64u(new Uint8Array(assertion.rawId)),
+        response: {
+          authenticatorData: uint8ToB64u(new Uint8Array(assertion.response.authenticatorData)),
+          clientDataJSON:  uint8ToB64u(new Uint8Array(assertion.response.clientDataJSON)),
+          signature:       uint8ToB64u(new Uint8Array(assertion.response.signature)),
+          userHandle: assertion.response.userHandle
+            ? uint8ToB64u(new Uint8Array(assertion.response.userHandle))
+            : null,
+        },
+        clientExtensionResults: assertion.getClientExtensionResults?.() || {},
+      };
+
+      // 4) Send to server for verification & session
+      const result = await getJSON("/api/auth/webauthn/assert", {
         method: "POST",
-        body: JSON.stringify(assertion),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(cred),
       });
-      if (!res.ok) throw new Error("Passkey assertion failed");
+
+      if (!result?.ok) throw new Error(result?.message || "Assertion rejected");
       router.push("/dashboard");
     } catch (e) {
-      setErr(`⚠️ ${e.message || "Biometric login failed or was cancelled"}`);
+      setErr(`⚠️ Passkey login failed: ${e.message}`);
     } finally {
       setBusy(false);
     }
@@ -153,6 +249,26 @@ export default function SignIn() {
               Send OTP
             </button>
           </div>
+
+          {otpSent && (
+            <div className="flex gap-2">
+              <input
+                type="text"
+                inputMode="numeric"
+                placeholder="Enter OTP"
+                value={otpCode}
+                onChange={(e) => setOtpCode(e.target.value)}
+                className="w-full bg-zinc-900/70 border border-zinc-800 p-3 rounded-xl"
+              />
+              <button
+                onClick={verifyOtp}
+                disabled={busy || !otpCode.trim()}
+                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50"
+              >
+                Verify
+              </button>
+            </div>
+          )}
         </div>
 
         {/* C) Passkeys */}
@@ -171,7 +287,10 @@ export default function SignIn() {
         )}
 
         <p className="text-xs text-zinc-500 text-center">
-          New here? <a href="/welcome" className="underline hover:no-underline">Create your Guthi identity</a>
+          New here?{" "}
+          <a href="/welcome" className="underline hover:no-underline">
+            Create your Guthi identity
+          </a>
         </p>
       </div>
     </main>
