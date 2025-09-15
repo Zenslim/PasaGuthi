@@ -3,12 +3,21 @@ import { verifyRegistrationResponse } from "@simplewebauthn/server";
 import { isoBase64URL } from "@simplewebauthn/server/helpers";
 import { createClient } from "@supabase/supabase-js";
 
+/* ---------- CORS ---------- */
+function setCORS(res) {
+  res.setHeader("Access-Control-Allow-Origin", process.env.NEXT_PUBLIC_SITE_URL || "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+}
+
+/* ---------- Supabase (server-only) ---------- */
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY,
   { auth: { persistSession: false } }
 );
 
+/* ---------- Cookie helper ---------- */
 function getCookie(req, name) {
   const list = (req.headers.cookie || "").split(";").map((c) => c.trim());
   for (const c of list) {
@@ -19,48 +28,38 @@ function getCookie(req, name) {
 }
 
 export default async function handler(req, res) {
-  // 🔹 Preflight support (so OPTIONS won’t throw 405)
-  if (req.method === "OPTIONS") {
-    res.setHeader("Access-Control-Allow-Origin", process.env.NEXT_PUBLIC_SITE_URL || "*");
-    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-    return res.status(200).end();
-  }
+  setCORS(res);
 
-  // 🔹 Only allow POST
+  // ✅ Always answer preflight to avoid 405
+  if (req.method === "OPTIONS") return res.status(200).end();
+
   if (req.method !== "POST") {
-    console.warn("405 at register-verify:", req.method);
     return res.status(405).json({ ok: false, message: "Method not allowed" });
   }
 
   try {
-    const body = req.body;
-    const expectedChallenge = getCookie(req, "pg_reg_chal");
-    const guthiKey = getCookie(req, "pg_reg_gk");
-    if (!expectedChallenge || !guthiKey) {
-      return res.status(400).json({ ok: false, message: "Challenge missing/expired" });
+    const body = req.body || {};
+    // You set this in your /register-options endpoint
+    const challenge = getCookie(req, "pg_webauthn_reg_chal");
+    if (!challenge) {
+      return res.status(400).json({ ok: false, message: "Missing registration challenge" });
     }
 
+    // You should include your app's user key in the request body (e.g., guthiKey)
+    const guthiKey = body?.guthiKey;
+    if (!guthiKey) {
+      return res.status(400).json({ ok: false, message: "Missing guthiKey" });
+    }
+
+    const expectedOrigin = process.env.NEXT_PUBLIC_SITE_URL; // e.g., https://www.pasaguthi.org
     const rpID =
       process.env.NEXT_PUBLIC_RP_ID ||
-      (process.env.NEXT_PUBLIC_SITE_URL
-        ? new URL(process.env.NEXT_PUBLIC_SITE_URL).hostname
-        : undefined);
+      (expectedOrigin ? new URL(expectedOrigin).hostname : undefined);
 
     const verification = await verifyRegistrationResponse({
-      response: {
-        id: body.id,
-        rawId: isoBase64URL.toBuffer(body.rawId),
-        response: {
-          attestationObject: isoBase64URL.toBuffer(body.response.attestationObject),
-          clientDataJSON: isoBase64URL.toBuffer(body.response.clientDataJSON),
-          transports: body.response.transports || [],
-        },
-        type: body.type,
-        clientExtensionResults: body.clientExtensionResults || {},
-      },
-      expectedChallenge,
-      expectedOrigin: process.env.NEXT_PUBLIC_SITE_URL,
+      response: body.credential, // client sends { credential, guthiKey }
+      expectedChallenge: challenge,
+      expectedOrigin,
       expectedRPID: rpID,
       requireUserVerification: false,
     });
@@ -69,24 +68,40 @@ export default async function handler(req, res) {
       return res.status(400).json({ ok: false, message: "Registration verification failed" });
     }
 
-    const { credentialPublicKey, credentialID, counter } = verification.registrationInfo;
+    const regInfo = verification.registrationInfo;
+    if (!regInfo) {
+      return res.status(400).json({ ok: false, message: "No registration info" });
+    }
 
-    const { error } = await supabase.from("webauthn_credentials").insert({
-      guthi_key: guthiKey,
-      credential_id: isoBase64URL.fromBuffer(credentialID),
-      public_key: isoBase64URL.fromBuffer(credentialPublicKey),
-      counter: Number(counter || 0),
-      transports: body.response.transports || [],
-    });
-    if (error) throw new Error(error.message);
+    const credentialIDb64u = isoBase64URL.fromBuffer(regInfo.credentialID);
+    const publicKeyB64u = isoBase64URL.fromBuffer(regInfo.credentialPublicKey);
+    const counter = regInfo.counter ?? 0;
 
-    res.setHeader("Set-Cookie", [
-      "pg_reg_chal=; Path=/; HttpOnly; Max-Age=0; SameSite=Lax",
-      "pg_reg_gk=; Path=/; HttpOnly; Max-Age=0; SameSite=Lax",
-    ]);
+    // Persist the credential
+    const { error: upsertErr } = await supabase
+      .from("webauthn_credentials")
+      .upsert(
+        {
+          guthi_key: guthiKey,
+          credential_id: credentialIDb64u,
+          public_key: publicKeyB64u,
+          counter,
+          transports: JSON.stringify(body.credential?.transports || []),
+        },
+        { onConflict: "credential_id" }
+      );
 
-    return res.status(200).json({ ok: true, guthiKey });
+    if (upsertErr) throw new Error(upsertErr.message);
+
+    // Clear the challenge cookie
+    res.setHeader(
+      "Set-Cookie",
+      "pg_webauthn_reg_chal=; Path=/; HttpOnly; Max-Age=0; SameSite=Lax"
+    );
+
+    return res.status(200).json({ ok: true, credentialID: credentialIDb64u });
   } catch (e) {
+    console.error("REGISTER-VERIFY ERROR:", e?.message || e);
     return res.status(400).json({ ok: false, message: e?.message || "Invalid registration" });
   }
 }
