@@ -1,5 +1,5 @@
-// app/api/auth/webauthn/assert/route.ts
-export const runtime = "nodejs"; // ensure Node runtime (needed for simplewebauthn)
+// app/api/auth/webauthn/assert/route.js
+export const runtime = "nodejs"; // required for @simplewebauthn/server
 
 import { NextResponse } from "next/server";
 import { verifyAuthenticationResponse } from "@simplewebauthn/server";
@@ -12,34 +12,34 @@ const CORS = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
-
-function withCORS(init?: number | ResponseInit) {
+function withCORS(init) {
   const base = typeof init === "number" ? { status: init } : init || {};
   return {
     ...base,
     headers: {
-      ...(base as any).headers,
+      ...(base && base.headers ? base.headers : {}),
       ...CORS,
       "Content-Type": "application/json",
     },
-  } as ResponseInit;
+  };
 }
 
 /* ---------- Supabase (service role) ---------- */
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY,
   { auth: { persistSession: false } }
 );
 
-function getCookie(headers: Headers, name: string) {
+/* ---------- Cookie reader ---------- */
+function getCookie(headers, name) {
   const raw = headers.get("cookie") || "";
-  for (const c of raw.split(";")) {
-    const s = c.trim();
-    const idx = s.indexOf("=");
-    if (idx > -1) {
-      const k = s.slice(0, idx);
-      const v = s.slice(idx + 1);
+  for (const part of raw.split(";")) {
+    const s = part.trim();
+    const i = s.indexOf("=");
+    if (i > -1) {
+      const k = s.slice(0, i);
+      const v = s.slice(i + 1);
       if (k === name) return decodeURIComponent(v);
     }
   }
@@ -52,10 +52,8 @@ export function OPTIONS() {
 }
 
 /* ---------- POST (assertion verify) ---------- */
-export async function POST(req: Request) {
+export async function POST(req) {
   try {
-    // minimal logging to verify we reached this route
-    // (view in Vercel "Functions" logs)
     console.log("ASSERT HIT:", req.method, new URL(req.url).pathname);
 
     const headers = req.headers;
@@ -77,7 +75,7 @@ export async function POST(req: Request) {
       .limit(1);
 
     if (error) throw new Error(error.message);
-    const cred = rows?.[0];
+    const cred = rows && rows[0];
     if (!cred) {
       return NextResponse.json(
         { ok: false, message: "Credential not registered" },
@@ -136,11 +134,11 @@ export async function POST(req: Request) {
       "pg_webauthn_chal=; Path=/; HttpOnly; Max-Age=0; SameSite=Lax"
     );
     return res;
-  } catch (e: any) {
-    console.error("ASSERT ERROR:", e?.message || e);
+  } catch (e) {
+    console.error("ASSERT ERROR:", e && e.message ? e.message : e);
     return NextResponse.json(
-      { ok: false, message: e?.message || "Invalid assertion" },
+      { ok: false, message: (e && e.message) || "Invalid assertion" },
       withCORS({ status: 400 })
     );
-  }
+    }
 }
