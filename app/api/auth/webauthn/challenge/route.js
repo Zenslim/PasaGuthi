@@ -16,32 +16,22 @@ export async function OPTIONS() {
   return cors(NextResponse.json({ ok: true }));
 }
 
-export async function GET(request) {
+export async function GET() {
   try {
-    const url = new URL(request.url);
-    const qpKey = url.searchParams.get("guthiKey");
-    const cookieKey = request.cookies.get("pg_webauthn_gk")?.value
-      ? decodeURIComponent(request.cookies.get("pg_webauthn_gk").value)
-      : null;
-
-    const guthiKey = (qpKey || cookieKey || "").trim();
-    if (!guthiKey) {
-      return cors(NextResponse.json({ ok: false, message: "Missing guthiKey" }, { status: 400 }));
-    }
-
+    // No guthiKey required for discoverable credentials
     const expectedOrigin = process.env.NEXT_PUBLIC_SITE_URL;
     const rpID = process.env.NEXT_PUBLIC_RP_ID || new URL(expectedOrigin).hostname;
 
     const options = await generateAuthenticationOptions({
       rpID,
       userVerification: "preferred",
+      // For discoverable credentials, allowCredentials can be empty.
+      // If you later want to restrict to a known list, populate it here.
     });
 
     const res = NextResponse.json(options);
+    // Store the challenge for the assert step
     res.cookies.set("pg_webauthn_assert_chal", options.challenge, {
-      httpOnly: true, sameSite: "lax", path: "/",
-    });
-    res.cookies.set("pg_webauthn_gk", encodeURIComponent(guthiKey), {
       httpOnly: true, sameSite: "lax", path: "/",
     });
     return cors(res);
