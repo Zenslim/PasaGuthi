@@ -1,10 +1,10 @@
-// pages/api/auth/webauthn/assert.ts
+// pages/api/auth/webauthn/assert.js
 import { verifyAuthenticationResponse } from "@simplewebauthn/server";
 import { isoBase64URL } from "@simplewebauthn/server/helpers";
 import { createClient } from "@supabase/supabase-js";
 
-/* ---------- ADDED: simple CORS helper ---------- */
-function setCORS(res: any) {
+/* ---------- simple CORS helper (JS, no types) ---------- */
+function setCORS(res) {
   res.setHeader("Access-Control-Allow-Origin", process.env.NEXT_PUBLIC_SITE_URL || "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -12,18 +12,18 @@ function setCORS(res: any) {
 
 /**
  * SERVER-ONLY Supabase client with Service Role
- * Make sure to set these in Vercel:
+ * Vercel env:
  *   NEXT_PUBLIC_SUPABASE_URL
  *   SUPABASE_SERVICE_ROLE_KEY
  */
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY,
   { auth: { persistSession: false } }
 );
 
-function getCookie(req: any, name: string) {
-  const list = (req.headers.cookie || "").split(";").map((c: string) => c.trim());
+function getCookie(req, name) {
+  const list = (req.headers.cookie || "").split(";").map((c) => c.trim());
   for (const c of list) {
     const [k, ...rest] = c.split("=");
     if (k === name) return decodeURIComponent(rest.join("="));
@@ -32,20 +32,12 @@ function getCookie(req: any, name: string) {
 }
 
 /**
- * Verifies a WebAuthn assertion for discoverable credentials:
- * - Reads expected challenge from cookie
- * - Finds credential by credential_id (response.id)
- * - Verifies signature and rp/origin
- * - Updates signature counter
- * - Clears challenge cookie
- * - (Hook) Start your app session here if desired
+ * Verifies a WebAuthn assertion for discoverable credentials
  */
-export default async function handler(req: any, res: any) {
-  /* ---------- ADDED: CORS + OPTIONS preflight ---------- */
+export default async function handler(req, res) {
+  // CORS + preflight
   setCORS(res);
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
+  if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST, OPTIONS");
     return res.status(405).json({ ok: false, message: "Method not allowed" });
@@ -109,14 +101,11 @@ export default async function handler(req: any, res: any) {
     await supabase.from("webauthn_credentials").update({ counter: newCounter }).eq("id", cred.id);
 
     // Clear challenge cookie
-    res.setHeader(
-      "Set-Cookie",
-      "pg_webauthn_chal=; Path=/; HttpOnly; Max-Age=0; SameSite=Lax"
-    );
+    res.setHeader("Set-Cookie", "pg_webauthn_chal=; Path=/; HttpOnly; Max-Age=0; SameSite=Lax");
 
-    // TODO: Start your app session here
+    // Start your app session here if needed
     return res.status(200).json({ ok: true, guthiKey: cred.guthi_key });
-  } catch (e: any) {
+  } catch (e) {
     return res.status(400).json({ ok: false, message: e?.message || "Invalid assertion" });
   }
 }
