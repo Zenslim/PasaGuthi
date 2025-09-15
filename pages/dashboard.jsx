@@ -7,6 +7,10 @@ import { supabase } from "@/lib/supabaseClient";
 
 /* ---------------- Base64URL helpers ---------------- */
 const b64uToUint8 = (b64u) => {
+  if (b64u instanceof Uint8Array) return b64u;
+  if (Array.isArray(b64u)) return new Uint8Array(b64u);
+  if (b64u && typeof b64u === "object" && Array.isArray(b64u.data)) return new Uint8Array(b64u.data); // Node Buffer JSON
+  if (typeof b64u !== "string") throw new Error("Expected base64url string");
   const pad = (s) => s + "===".slice((s.length + 3) % 4);
   const b64 = pad(b64u.replace(/-/g, "+").replace(/_/g, "/"));
   const str = typeof atob !== "undefined" ? atob(b64) : Buffer.from(b64, "base64").toString("binary");
@@ -14,21 +18,21 @@ const b64uToUint8 = (b64u) => {
   for (let i = 0; i < str.length; i++) bytes[i] = str.charCodeAt(i);
   return bytes;
 };
+
 const uint8ToB64u = (u8) => {
   let str = "";
   const chunk = 0x8000;
   for (let i = 0; i < u8.length; i += chunk) {
     str += String.fromCharCode.apply(null, u8.subarray(i, i + chunk));
   }
-  const b64 = (typeof btoa !== "undefined" ? btoa(str) : Buffer.from(str, "binary").toString("base64"))
-    .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
-  return b64;
+  const b64 = (typeof btoa !== "undefined" ? btoa(str) : Buffer.from(str, "binary").toString("base64"));
+  return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 };
 
-/* ===== FIX: always send cookies & ask for JSON ===== */
+/* ---- Always bring/set cookies + expect JSON ---- */
 async function getJSON(url, init = {}) {
   const res = await fetch(url, {
-    credentials: "include", // <-- carry/set cookies (challenge ticket)
+    credentials: "include",
     headers: { Accept: "application/json", ...(init.headers || {}) },
     ...init,
   });
@@ -80,7 +84,7 @@ export default function Dashboard() {
     })();
   }, [router]);
 
-  /* 2) Detect WebAuthn */
+  /* 2) Detect WebAuthn/Passkey capability */
   useEffect(() => {
     if (typeof window !== "undefined" && window.PublicKeyCredential) {
       setBrowserSupportsPasskey(true);
@@ -120,7 +124,7 @@ export default function Dashboard() {
     if (ready) refreshHasPasskey();
   }, [ready, refreshHasPasskey]);
 
-  /* 4) Register passkey */
+  /* 4) Register a passkey (resident/discoverable) */
   async function registerPasskey() {
     setBusy(true); setMsg(""); setErr("");
     try {
@@ -131,20 +135,28 @@ export default function Dashboard() {
         key = prompted.trim();
       }
 
-      // 4.1 Get registration options (server sets pg_webauthn_reg_chal cookie)
+      // 4.1 Get options (server sets cookies; we keep GET support)
       const options = await getJSON(`/api/auth/webauthn/register-challenge?guthiKey=${encodeURIComponent(key)}`);
 
+      // 4.2 Build a clean PublicKeyCredentialCreationOptions:
+      //     - challenge comes as base64url string -> decode to bytes
+      //     - ALWAYS rebuild user.id from guthiKey (bytes), avoiding bad types from JSON
       const publicKey = {
         ...options,
         challenge: b64uToUint8(options.challenge),
-        user: { ...options.user, id: b64uToUint8(options.user.id) },
+        user: {
+          ...options.user,
+          id: new TextEncoder().encode(key), // ✅ critical fix: never b64-decode JSON user.id
+          name: key,
+          displayName: options?.user?.displayName || key,
+        },
       };
 
-      // 4.2 Create credential on authenticator
+      // 4.3 Ask authenticator
       const att = await navigator.credentials.create({ publicKey });
       if (!att) throw new Error("User cancelled or no authenticator available");
 
-      // 4.3 Serialize for JSON
+      // 4.4 Serialize for JSON
       const cred = {
         id: att.id,
         type: att.type,
@@ -157,7 +169,7 @@ export default function Dashboard() {
         clientExtensionResults: att.getClientExtensionResults?.() || {},
       };
 
-      // 4.4 Verify (includes cookie now via getJSON)
+      // 4.5 Verify & store on server (cookies ride along)
       const result = await getJSON("/api/auth/webauthn/register-verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -165,7 +177,6 @@ export default function Dashboard() {
       });
       if (!result?.ok) throw new Error(result?.message || "Registration failed");
 
-      // 4.5 Persist guthiKey locally
       const finalKey = result.guthiKey || key;
       localStorage.setItem("guthiKey", finalKey);
       setGuthiKey(finalKey);
@@ -173,7 +184,7 @@ export default function Dashboard() {
       setMsg("✅ Passkey registered. Next time you can sign in with one tap.");
       setHasPasskey(true);
     } catch (e) {
-      setErr(`❌ ${e.message}`);
+      setErr(`❌ ${e.message || e}`);
     } finally {
       setBusy(false);
     }
