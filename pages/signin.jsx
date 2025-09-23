@@ -1,144 +1,155 @@
 // pages/signin.jsx
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 
-/* ---------------- Base64URL helpers for WebAuthn ---------------- */
+/* ---------- Helpers for base64url <-> Uint8 ---------- */
+const b64uToUint8 = (b64u) => {
+  const pad = (s) => s + "===".slice((s.length + 3) % 4);
+  const b64 = pad(b64u.replace(/-/g, "+").replace(/_/g, "/"));
+  const str =
+    typeof atob !== "undefined"
+      ? atob(b64)
+      : Buffer.from(b64, "base64").toString("binary");
+  const bytes = new Uint8Array(str.length);
+  for (let i = 0; i < str.length; i++) bytes[i] = str.charCodeAt(i);
+  return bytes;
+};
 const uint8ToB64u = (u8) => {
   let str = "";
-  const chunk = 0x8000;
-  for (let i = 0; i < u8.length; i += chunk) {
-    str += String.fromCharCode.apply(null, u8.subarray(i, i + chunk));
-  }
-  const b64 = (typeof btoa !== "undefined" ? btoa(str) : Buffer.from(str, "binary").toString("base64"))
-    .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
-  return b64;
+  for (let i = 0; i < u8.length; i++) str += String.fromCharCode(u8[i]);
+  return btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 };
-async function getJSON(url, init) {
-  const res = await fetch(url, init);
-  if (!res.ok) {
-    const t = await res.text().catch(() => "");
-    throw new Error(`HTTP ${res.status} ${url}: ${t.slice(0,180)}`);
-  }
-  const ct = res.headers.get("content-type") || "";
-  if (!ct.includes("application/json")) {
-    const head = await res.text().catch(() => "");
-    throw new Error(`Unexpected content-type: ${ct}. Body: ${head.slice(0,180)}`);
-  }
-  return res.json();
+
+/* Normalize server options: decode challenge + allowCredentials IDs */
+function normalizeAssertOptions(opts) {
+  return {
+    ...opts,
+    challenge: b64uToUint8(opts.challenge),
+    allowCredentials: (opts.allowCredentials || []).map((cred) => ({
+      ...cred,
+      id: b64uToUint8(cred.id),
+    })),
+  };
 }
 
 export default function SignIn() {
   const router = useRouter();
-  const [busy, setBusy] = useState(false);
+  const [mobile, setMobile] = useState("");
+  const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
-  const [hint, setHint] = useState("Scanning for your Guthi Key…");
-  const triedRef = useRef(false);
 
-  // Single path: Platform passkey (fingerprint/face). OTP/password live in /recovery.
-  useEffect(() => {
-    if (triedRef.current) return;
-    triedRef.current = true;
-    attemptLogin().catch(() => {});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  async function handlePasswordLogin(e) {
+    e.preventDefault();
+    setErr("");
+    // Replace with your server API call
+    const res = await fetch("/api/auth/password-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ mobile, password }),
+    });
+    if (res.ok) router.push("/dashboard");
+    else setErr("Invalid credentials.");
+  }
 
-  async function attemptLogin() {
-    setBusy(true); setErr(""); setHint("Touch your fingerprint sensor or look at the camera…");
-
+  async function handleBiometric() {
+    setErr("");
     try {
-      if (!("PublicKeyCredential" in window)) {
-        throw new Error("This device doesn't support WebAuthn / passkeys.");
-      }
+      // 1) Ask server for assertion options
+      const raw = await fetch("/api/auth/webauthn/challenge", {
+        credentials: "include",
+      }).then((r) => r.json());
 
-      // 1) Ask server for assertion options (challenge, rpId, etc.)
-      const opts = await getJSON("/api/auth/webauthn/challenge", { credentials: "include" });
+      const opts = normalizeAssertOptions(raw);
 
-      // 2) Prefer Conditional UI (inline hint for returning users)
-      let mediation = "required";
-      try {
-        const cond = await PublicKeyCredential.isConditionalMediationAvailable?.();
-        if (cond) mediation = "conditional";
-      } catch {}
-
-      // 3) Trigger platform biometric
-      const assertion = await navigator.credentials.get({ publicKey: opts, mediation });
+      // 2) Call WebAuthn API
+      const assertion = await navigator.credentials.get({ publicKey: opts });
       if (!assertion) throw new Error("No credential returned.");
 
-      // 4) Send result to server to verify and create session
+      // 3) Send to server
       const cred = {
         id: assertion.id,
         type: assertion.type,
         rawId: uint8ToB64u(new Uint8Array(assertion.rawId)),
         response: {
-          authenticatorData: uint8ToB64u(new Uint8Array(assertion.response.authenticatorData)),
-          clientDataJSON:    uint8ToB64u(new Uint8Array(assertion.response.clientDataJSON)),
-          signature:         uint8ToB64u(new Uint8Array(assertion.response.signature)),
+          authenticatorData: uint8ToB64u(
+            new Uint8Array(assertion.response.authenticatorData)
+          ),
+          clientDataJSON: uint8ToB64u(
+            new Uint8Array(assertion.response.clientDataJSON)
+          ),
+          signature: uint8ToB64u(new Uint8Array(assertion.response.signature)),
           userHandle: assertion.response.userHandle
             ? uint8ToB64u(new Uint8Array(assertion.response.userHandle))
             : null,
         },
-        clientExtensionResults: assertion.getClientExtensionResults?.() || {},
       };
 
-      const result = await getJSON("/api/auth/webauthn/assert", {
+      const res = await fetch("/api/auth/webauthn/assert", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify(cred),
       });
-
-      if (!result?.ok) throw new Error(result?.message || "Assertion rejected");
-      if (result.guthiKey) localStorage.setItem("guthiKey", result.guthiKey); // display-only handle
-
+      if (!res.ok) throw new Error("Biometric login failed.");
       router.push("/dashboard");
     } catch (e) {
       console.error(e);
-      setErr(e.message || "Passkey login failed.");
-      setHint("Tap Try Again or use recovery.");
-      setBusy(false);
+      setErr(e.message);
     }
   }
 
   return (
-    <main className="min-h-screen bg-black text-zinc-100 grid place-items-center p-6">
-      <div className="w-full max-w-md space-y-6">
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-semibold">Enter the Digital Guthi</h1>
-          <p className="text-zinc-400">Fingerprint or Face ID will open the gate.</p>
+    <main className="min-h-screen bg-gray-100 grid place-items-center p-6">
+      <div className="w-full max-w-sm rounded-2xl shadow bg-white p-6 space-y-4">
+        <h2 className="text-center text-lg font-semibold">Good Evening</h2>
+
+        <form onSubmit={handlePasswordLogin} className="space-y-3">
+          <input
+            type="tel"
+            placeholder="Mobile Number"
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)}
+            className="w-full border rounded-lg px-3 py-2"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full border rounded-lg px-3 py-2"
+          />
+
+          <label className="flex items-center gap-2 text-sm text-gray-500">
+            <input type="checkbox" /> Remember Me
+          </label>
+
+          <button
+            type="submit"
+            className="w-full bg-red-600 text-white py-2 rounded-lg font-semibold"
+          >
+            Login
+          </button>
+        </form>
+
+        <button
+          onClick={handleBiometric}
+          className="w-full flex justify-center items-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-50"
+        >
+          <span role="img" aria-label="fingerprint">
+            🔒
+          </span>{" "}
+          Use Biometric
+        </button>
+
+        {err && <p className="text-red-500 text-sm text-center">{err}</p>}
+
+        <div className="text-center text-sm text-gray-500">
+          New here? <a href="/welcome" className="text-blue-600">Register</a> |{" "}
+          <a href="/recovery" className="text-blue-600">Forgot Password?</a>
         </div>
-
-        <div className="rounded-2xl border border-zinc-800 p-6 bg-zinc-900/40 space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-zinc-800 grid place-items-center">🔒</div>
-            <div className="flex-1">
-              <p className="text-sm text-zinc-300">{hint}</p>
-              {busy && <p className="text-xs text-zinc-500">Waiting for device…</p>}
-              {err && <p className="text-sm text-red-400 mt-1">{err}</p>}
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <button
-              onClick={attemptLogin}
-              disabled={busy}
-              className="flex-1 px-4 py-3 rounded-xl bg-white/90 text-black hover:bg-white disabled:opacity-50"
-            >
-              {busy ? "Authenticating…" : "Try Again"}
-            </button>
-            <a
-              href="/recovery"
-              className="px-4 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-100 whitespace-nowrap"
-            >
-              Recovery
-            </a>
-          </div>
-        </div>
-
-        <p className="text-xs text-zinc-500 text-center">
-          New here? <a className="underline hover:no-underline" href="/welcome">Create your Guthi identity</a>
-        </p>
       </div>
     </main>
   );
