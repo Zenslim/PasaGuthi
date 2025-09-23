@@ -4,83 +4,86 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 
-/* ---------- Helpers for base64url <-> Uint8 ---------- */
-const b64uToUint8 = (b64u) => {
+/* ---------- b64url <-> Uint8 helpers ---------- */
+const b64uToUint8 = (b64u = "") => {
   const pad = (s) => s + "===".slice((s.length + 3) % 4);
-  const b64 = pad(b64u.replace(/-/g, "+").replace(/_/g, "/"));
-  const str =
-    typeof atob !== "undefined"
-      ? atob(b64)
-      : Buffer.from(b64, "base64").toString("binary");
-  const bytes = new Uint8Array(str.length);
-  for (let i = 0; i < str.length; i++) bytes[i] = str.charCodeAt(i);
-  return bytes;
+  const b64 = pad(String(b64u).replace(/-/g, "+").replace(/_/g, "/"));
+  const bin =
+    typeof atob !== "undefined" ? atob(b64) : Buffer.from(b64, "base64").toString("binary");
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
 };
 const uint8ToB64u = (u8) => {
-  let str = "";
-  for (let i = 0; i < u8.length; i++) str += String.fromCharCode(u8[i]);
-  return btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+  let s = "";
+  for (let i = 0; i < u8.length; i++) s += String.fromCharCode(u8[i]);
+  return (typeof btoa !== "undefined" ? btoa(s) : Buffer.from(s, "binary").toString("base64"))
+    .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 };
 
-/* Normalize server options: decode challenge + allowCredentials IDs */
-function normalizeAssertOptions(opts) {
-  return {
-    ...opts,
-    challenge: b64uToUint8(opts.challenge),
-    allowCredentials: (opts.allowCredentials || []).map((cred) => ({
-      ...cred,
-      id: b64uToUint8(cred.id),
-    })),
-  };
+/* Normalize server options for WebAuthn.get */
+function normalizeAssertOptions(server) {
+  const out = { ...server };
+  out.challenge = b64uToUint8(server.challenge);
+  if (Array.isArray(server.allowCredentials)) {
+    out.allowCredentials = server.allowCredentials.map((c) => ({ ...c, id: b64uToUint8(c.id) }));
+  }
+  return out;
 }
 
 export default function SignIn() {
   const router = useRouter();
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
 
+  /* -------- Password lane (kept simple; handled by your API) -------- */
   async function handlePasswordLogin(e) {
     e.preventDefault();
-    setErr("");
-    // Replace with your server API call
-    const res = await fetch("/api/auth/password-login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ mobile, password }),
-    });
-    if (res.ok) router.push("/dashboard");
-    else setErr("Invalid credentials.");
+    setErr(""); setBusy(true);
+    try {
+      const r = await fetch("/api/auth/password-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ mobile, password }),
+      });
+      if (!r.ok) throw new Error("Invalid credentials.");
+      router.push("/dashboard");
+    } catch (e) {
+      setErr(e.message || "Login failed.");
+    } finally {
+      setBusy(false);
+    }
   }
 
+  /* -------- Biometric lane (WebAuthn) -------- */
   async function handleBiometric() {
-    setErr("");
+    setErr(""); setBusy(true);
     try {
-      // 1) Ask server for assertion options
-      const raw = await fetch("/api/auth/webauthn/challenge", {
-        credentials: "include",
-      }).then((r) => r.json());
+      if (!("PublicKeyCredential" in window)) {
+        throw new Error("This device/browser doesn’t support biometrics (WebAuthn).");
+      }
 
-      const opts = normalizeAssertOptions(raw);
+      // 1) Get assertion options from server
+      const raw = await fetch("/api/auth/webauthn/challenge", { credentials: "include" })
+        .then((r) => r.json());
+      const publicKey = normalizeAssertOptions(raw);
 
-      // 2) Call WebAuthn API
-      const assertion = await navigator.credentials.get({ publicKey: opts });
-      if (!assertion) throw new Error("No credential returned.");
+      // 2) Trigger OS biometric sheet
+      const assertion = await navigator.credentials.get({ publicKey });
+      if (!assertion) throw new Error("No credential returned. (Is a passkey registered on this device?)");
 
-      // 3) Send to server
-      const cred = {
+      // 3) Post back to server
+      const payload = {
         id: assertion.id,
         type: assertion.type,
         rawId: uint8ToB64u(new Uint8Array(assertion.rawId)),
         response: {
-          authenticatorData: uint8ToB64u(
-            new Uint8Array(assertion.response.authenticatorData)
-          ),
-          clientDataJSON: uint8ToB64u(
-            new Uint8Array(assertion.response.clientDataJSON)
-          ),
-          signature: uint8ToB64u(new Uint8Array(assertion.response.signature)),
+          clientDataJSON:    uint8ToB64u(new Uint8Array(assertion.response.clientDataJSON)),
+          authenticatorData: uint8ToB64u(new Uint8Array(assertion.response.authenticatorData)),
+          signature:         uint8ToB64u(new Uint8Array(assertion.response.signature)),
           userHandle: assertion.response.userHandle
             ? uint8ToB64u(new Uint8Array(assertion.response.userHandle))
             : null,
@@ -91,13 +94,15 @@ export default function SignIn() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify(cred),
+        body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error("Biometric login failed.");
+      if (!res.ok) throw new Error("Biometric verification failed.");
       router.push("/dashboard");
     } catch (e) {
-      console.error(e);
-      setErr(e.message);
+      // Common causes: no passkey enrolled on this device; wrong rpId/origin on server
+      setErr(e.message || "Biometric login failed.");
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -112,41 +117,43 @@ export default function SignIn() {
             placeholder="Mobile Number"
             value={mobile}
             onChange={(e) => setMobile(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 placeholder-gray-500 bg-white"
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 placeholder-gray-500 bg-white"
           />
 
-          <label className="flex items-center gap-2 text-sm text-gray-500">
-            <input type="checkbox" /> Remember Me
+          <label className="flex items-center gap-2 text-sm text-gray-600">
+            <input type="checkbox" className="accent-red-600" /> Remember Me
           </label>
 
           <button
             type="submit"
-            className="w-full bg-red-600 text-white py-2 rounded-lg font-semibold"
+            disabled={busy}
+            className="w-full bg-red-600 text-white py-2 rounded-lg font-semibold disabled:opacity-50"
           >
-            Login
+            {busy ? "Signing in…" : "Login"}
           </button>
         </form>
 
         <button
           onClick={handleBiometric}
-          className="w-full flex justify-center items-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-50"
+          disabled={busy}
+          className="w-full flex justify-center items-center gap-2 border border-gray-300 py-2 rounded-lg
+                     bg-white text-gray-900 hover:bg-gray-50 disabled:opacity-50"
+          title="Use fingerprint/face (platform passkey)"
         >
-          <span role="img" aria-label="fingerprint">
-            🔒
-          </span>{" "}
+          <span aria-hidden>🔒</span>
           Use Biometric
         </button>
 
-        {err && <p className="text-red-500 text-sm text-center">{err}</p>}
+        {err && <p className="text-red-600 text-sm text-center">{err}</p>}
 
-        <div className="text-center text-sm text-gray-500">
+        <div className="text-center text-sm text-gray-600">
           New here? <a href="/welcome" className="text-blue-600">Register</a> |{" "}
           <a href="/recovery" className="text-blue-600">Forgot Password?</a>
         </div>
