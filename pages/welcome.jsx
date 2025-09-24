@@ -133,63 +133,59 @@ export default function Welcome() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!authUser) return;
+  e.preventDefault();
+  if (!authUser) return;
 
-    const v = validate();
-    if (v) {
-      setErr(v);
+  // validate as before...
+  const v = validate();
+  if (v) { setErr(v); return; }
+
+  try {
+    setBusy(true);
+    setErr("");
+
+    // compact key
+    const keyBase = `${form.name}-${form.thar}-${form.region}`.toLowerCase().replace(/\s+/g, "-");
+    const key = `${keyBase}-${Math.random().toString(36).slice(2, 7)}`;
+    const skillsArr = form.skills.split(",").map(s => s.trim()).filter(Boolean);
+
+    // IMPORTANT: only include columns that actually exist in profiles
+    const payload = {
+      id: authUser.id,                  // must equal auth.uid() under RLS
+      name: form.name.trim(),
+      thar: form.thar.trim(),
+      region: form.region.trim(),
+      skills: skillsArr,                // text[]
+      phone: phone || null,
+      guthi_key: key,
+      is_public: true,
+      updated_at: new Date().toISOString(),
+      // remove user_id or gender here if those columns don't exist in your table
+    };
+
+    const { data, error, status } = await supabase
+      .from("profiles")
+      .upsert(payload, { onConflict: "id", ignoreDuplicates: false })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("profiles.upsert error", { status, error, payload });
+      setErr(error.message || `Insert/update blocked (HTTP ${status}).`);
       return;
     }
 
-    try {
-      setBusy(true);
-      setErr("");
-
-      // generate a compact guthiKey (omit skills for brevity)
-      const key =
-        `${form.name}-${form.thar}-${form.region}`.toLowerCase().replace(/\s+/g, "-") +
-        `-${nanoid(5)}`;
-
-      const skillsArr = skillsToArray(form.skills);
-
-      // upsert to PROFILES (single source of truth)
-      // id/user_id must equal auth user id
-      const payload = {
-        id: authUser.id,
-        user_id: authUser.id, // mirror column if you created it
-        name: form.name.trim(),
-        thar: form.thar.trim(),
-        gender: form.gender.trim(),
-        region: form.region.trim(),
-        skills: skillsArr,
-        phone: phone || null,
-        guthi_key: key,
-        is_public: true, // default visible; change if you want an opt-in toggle
-        updated_at: new Date().toISOString(),
-      };
-
-      const { error: upsertErr } = await supabase
-        .from("profiles")
-        .upsert(payload, { onConflict: "id" });
-
-      if (upsertErr) {
-        setErr(upsertErr.message || "Could not save your Guthi seed.");
-        setBusy(false);
-        return;
-      }
-
-      // Success → store key locally and open demographic step
-      localStorage.setItem("guthiKey", key);
-      setGuthiKey(key);
-      setSubmitted(true);
-      setShowDemographic(true);
-    } catch (e) {
-      setErr(e?.message || "Unexpected error.");
-    } finally {
-      setBusy(false);
-    }
-  };
+    localStorage.setItem("guthiKey", key);
+    setGuthiKey(key);
+    setSubmitted(true);
+    setShowDemographic(true);
+  } catch (e) {
+    console.error("submit crash", e);
+    setErr(e?.message || "Unexpected error.");
+  } finally {
+    setBusy(false);
+  }
+};
 
   if (!authUser) {
     return (
