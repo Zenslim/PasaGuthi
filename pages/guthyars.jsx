@@ -1,6 +1,5 @@
-// /pages/guthyars.jsx (patched)
-// SSR directory with robust env fallbacks.
-
+// /pages/guthyars.jsx (privacy-safe: is_public + noindex)
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
@@ -26,12 +25,12 @@ export async function getServerSideProps({ query }) {
 
   let req = supa
     .from('profiles')
-    .select('id,name,title,region,skills,karma_points,photo_url', { count: 'exact' });
+    .select('id,name,title,region,skills,karma_points,photo_url', { count: 'exact' })
+    .eq('is_public', true); // only list opt-in profiles
 
   if (q) req = req.ilike('name', `%${q}%`);
   if (region) req = req.eq('region', region);
-  // NOTE: if 'skills' is text[] this works, if it's plain text, comment this and migrate type.
-  if (skill)  req = req.contains('skills', [skill]);
+  if (skill)  req = req.contains('skills', [skill]); // skills should be text[]
 
   req = req.order('karma_points', { ascending: false })
            .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
@@ -64,6 +63,12 @@ export default function Guthyars({ profiles, total, page, q, region, skill, err 
 
   return (
     <div className="min-h-screen bg-black text-white">
+      <Head>
+        {/* Hide the directory from search engines to protect member privacy */}
+        <meta name="robots" content="noindex,nofollow" />
+        <title>Guthyars (Members)</title>
+      </Head>
+
       <div className="max-w-6xl mx-auto px-4 py-8">
         <h1 className="text-3xl font-semibold mb-4">Guthyars (Members)</h1>
 
