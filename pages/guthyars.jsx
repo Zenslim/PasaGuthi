@@ -1,5 +1,5 @@
-// /pages/guthyars.jsx
-// SSR directory: filters (search, region, skill), sort by karma, pagination.
+// /pages/guthyars.jsx (patched)
+// SSR directory with robust env fallbacks.
 
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -7,18 +7,22 @@ import { createClient } from '@supabase/supabase-js';
 
 const PAGE_SIZE = 20;
 
+const SUPABASE_URL =
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  process.env.SUPABASE_URL;
+
+const SUPABASE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE ||
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY; // read-only fallback if policy allows
+
 export async function getServerSideProps({ query }) {
   const q = (query.q || '').toString().trim();
   const region = (query.region || '').toString().trim();
   const skill = (query.skill || '').toString().trim();
   const page = Math.max(parseInt(query.page || '1', 10), 1);
 
-  // Server-side Supabase admin client (safe on server)
-  const supa = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE,
-    { auth: { persistSession: false } }
-  );
+  const supa = createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: false } });
 
   let req = supa
     .from('profiles')
@@ -26,25 +30,18 @@ export async function getServerSideProps({ query }) {
 
   if (q) req = req.ilike('name', `%${q}%`);
   if (region) req = req.eq('region', region);
-  if (skill)  req = req.contains('skills', [skill]); // skills is text[] in DB
+  // NOTE: if 'skills' is text[] this works, if it's plain text, comment this and migrate type.
+  if (skill)  req = req.contains('skills', [skill]);
 
   req = req.order('karma_points', { ascending: false })
            .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
 
   const { data, error, count } = await req;
   if (error) {
-    // Don't crash the page; show empty with error message
     return { props: { profiles: [], total: 0, page, q, region, skill, err: error.message } };
   }
 
-  return {
-    props: {
-      profiles: data || [],
-      total: count || 0,
-      page,
-      q, region, skill,
-    },
-  };
+  return { props: { profiles: data || [], total: count || 0, page, q, region, skill } };
 }
 
 export default function Guthyars({ profiles, total, page, q, region, skill, err }) {
