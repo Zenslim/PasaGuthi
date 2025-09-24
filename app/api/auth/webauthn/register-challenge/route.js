@@ -5,7 +5,6 @@ import { generateRegistrationOptions } from "@simplewebauthn/server";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-/* ---------- CORS helper ---------- */
 function cors(res) {
   res.headers.set("Access-Control-Allow-Origin", process.env.NEXT_PUBLIC_SITE_URL || "*");
   res.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -13,23 +12,30 @@ function cors(res) {
   return res;
 }
 
-/* ---------- shared core ---------- */
 async function buildOptions(guthiKey) {
   if (!guthiKey) throw new Error("Missing guthiKey");
+
   const expectedOrigin = process.env.NEXT_PUBLIC_SITE_URL;
-  const rpID = process.env.NEXT_PUBLIC_RP_ID ||
+  const rpID =
+    process.env.NEXT_PUBLIC_RP_ID ||
     (expectedOrigin ? new URL(expectedOrigin).hostname : undefined);
 
   const options = await generateRegistrationOptions({
     rpName: "Pasaguthi",
     rpID,
     userName: guthiKey,
-    userID: new TextEncoder().encode(guthiKey),
+    userID: new TextEncoder().encode(guthiKey), // stable, per-user
     attestationType: "none",
-    authenticatorSelection: { residentKey: "preferred", userVerification: "preferred" },
+    // Force on-device biometrics + discoverable creds for smooth sign-in later
+    authenticatorSelection: {
+      authenticatorAttachment: "platform",
+      residentKey: "required",
+      userVerification: "required",
+    },
   });
 
   const res = NextResponse.json(options);
+  // Tie challenge to this client
   res.cookies.set("pg_webauthn_reg_chal", options.challenge, {
     httpOnly: true, sameSite: "lax", path: "/",
   });
@@ -39,15 +45,13 @@ async function buildOptions(guthiKey) {
   return cors(res);
 }
 
-/* ---------- handlers ---------- */
 export async function OPTIONS() {
   return cors(NextResponse.json({ ok: true }));
 }
 
 export async function GET(request) {
   try {
-    const url = new URL(request.url);
-    const guthiKey = url.searchParams.get("guthiKey");
+    const guthiKey = new URL(request.url).searchParams.get("guthiKey");
     return await buildOptions(guthiKey);
   } catch (e) {
     return cors(NextResponse.json({ ok: false, message: e?.message || "options error" }, { status: 400 }));
