@@ -8,9 +8,7 @@ import { useRouter } from "next/router";
 const u8ToB64u = (u8) => {
   let bin = "";
   const chunk = 0x8000;
-  for (let i = 0; i < u8.length; i += chunk) {
-    bin += String.fromCharCode.apply(null, u8.subarray(i, i + chunk));
-  }
+  for (let i = 0; i < u8.length; i += chunk) bin += String.fromCharCode.apply(null, u8.subarray(i, i + chunk));
   const b64 = (typeof btoa !== "undefined" ? btoa(bin) : Buffer.from(bin, "binary").toString("base64"));
   return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 };
@@ -48,32 +46,54 @@ function normalizeAssertionOptions(opts) {
       id: typeof c.id === "string" ? b64uToU8(c.id) : c.id,
       transports: c.transports || ["internal"],
     }));
-  } else {
-    delete out.allowCredentials; // discoverable creds → let OS pick on-device key
-  }
+  } else delete out.allowCredentials; // discoverable creds → on-device key
   out.userVerification = "required";
   return out;
 }
 
+/* ------------------------------- Country options ------------------------------- */
+const COUNTRIES = [
+  { code: "NP", name: "Nepal", dial: "+977" },
+  { code: "IN", name: "India", dial: "+91" },
+  { code: "US", name: "United States", dial: "+1" },
+  { code: "GB", name: "United Kingdom", dial: "+44" },
+  { code: "AE", name: "UAE", dial: "+971" },
+  { code: "MY", name: "Malaysia", dial: "+60" },
+  { code: "EU", name: "Europe (generic)", dial: "+43" }, // fallback; adjust per need
+];
+
 export default function SignIn() {
   const router = useRouter();
 
-  const [identifier, setIdentifier] = useState(""); // Phone (+977…) OR GuthiKey
-  const [password, setPassword]   = useState("");
-  const [busy, setBusy]           = useState(false);
-  const [bioBusy, setBioBusy]     = useState(false);
-  const [msg, setMsg]             = useState("");
-  const [bioMsg, setBioMsg]       = useState("");
+  // Phone path
+  const [cc, setCc] = useState(COUNTRIES[0].dial); // default +977
+  const [phoneLocal, setPhoneLocal] = useState(""); // 98xxxxxxx (no +)
+  const [password, setPassword] = useState("");
+
+  // GuthiKey path
+  const [guthiKey, setGuthiKey] = useState("");
+
+  // States
+  const [busy, setBusy] = useState(false);
+  const [bioBusy, setBioBusy] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [bioMsg, setBioMsg] = useState("");
+
+  const phoneE164 = () => {
+    const digits = phoneLocal.replace(/\D/g, "");
+    return `${cc}${digits}`;
+  };
 
   /* --------------------------- Password login (server) -------------------------- */
   async function doPasswordLogin() {
-    setBusy(true); setMsg(""); 
+    setBusy(true); setMsg("");
     try {
+      const identifier = guthiKey?.trim() ? guthiKey.trim() : phoneE164();
       const res = await getJSON("/api/auth/password-login", {
         method: "POST",
         headers: { "content-type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ identifier, password }), // server accepts phone or guthiKey
+        body: JSON.stringify({ identifier, password }),
       });
       if (!res?.ok) throw new Error(res?.message || "Login failed.");
       if (res.guthiKey) localStorage.setItem("guthiKey", res.guthiKey); // display-only
@@ -90,15 +110,11 @@ export default function SignIn() {
     setBioBusy(true); setBioMsg(""); setMsg("");
     try {
       if (!("PublicKeyCredential" in window)) throw new Error("Device does not support biometrics.");
-      // 1) Get assertion options
       const raw = await getJSON("/api/auth/webauthn/challenge", { credentials: "include" });
       const options = normalizeAssertionOptions(raw);
-
-      // 2) Trigger OS sheet (no conditional UI text; simple)
       const assertion = await navigator.credentials.get({ publicKey: options, mediation: "required" });
       if (!assertion) throw new Error("No credential returned.");
 
-      // 3) Send back
       const payload = {
         id: assertion.id,
         type: assertion.type,
@@ -130,51 +146,73 @@ export default function SignIn() {
     }
   }
 
-  const loginDisabled = !identifier || !password || busy;
+  const loginDisabled = (!password) || ( !guthiKey.trim() && phoneLocal.replace(/\D/g, "").length < 8 ) || busy;
 
   return (
     <main className="min-h-screen bg-[#0b0b0b] text-white grid place-items-center p-6">
       <div className="w-full max-w-md space-y-6">
-        {/* Header */}
         <div className="text-left">
           <h1 className="text-3xl font-semibold">Welcome to Pasaguthi</h1>
-          <p className="text-zinc-400">Sign in with Phone/GuthiKey & Password or use Biometric</p>
+          <p className="text-zinc-400">Login with Phone or GuthiKey — or use Biometric</p>
         </div>
 
-        {/* Form Card */}
         <div className="rounded-2xl border border-zinc-800 p-6 bg-zinc-900/40 space-y-4">
-          <div className="space-y-3">
-            <input
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
-              placeholder="Mobile (+977…) or GuthiKey"
-              className="w-full rounded-xl bg-zinc-800 px-4 py-3 outline-none"
-              autoCapitalize="none"
-              inputMode="text"
-            />
-            <div className="relative">
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-                className="w-full rounded-xl bg-zinc-800 px-4 py-3 outline-none pr-24"
-              />
-              <a href="/recovery" className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-zinc-300 hover:text-white">
-                Forgot?
-              </a>
-            </div>
-
-            {msg && <p className="text-sm text-red-400">{msg}</p>}
-
-            <button
-              onClick={doPasswordLogin}
-              disabled={loginDisabled}
-              className="w-full px-4 py-3 rounded-xl bg-white text-black hover:bg-white/90 disabled:opacity-50"
+          {/* Phone (with country selector) */}
+          <label className="text-sm text-zinc-300">Mobile Number</label>
+          <div className="flex gap-2">
+            <select
+              value={cc}
+              onChange={(e) => setCc(e.target.value)}
+              className="w-32 rounded-xl bg-zinc-800 px-3 py-3 outline-none"
             >
-              {busy ? "Signing in…" : "Login"}
-            </button>
+              {COUNTRIES.map((c) => (
+                <option key={c.code} value={c.dial}>{c.name} {c.dial}</option>
+              ))}
+            </select>
+            <input
+              value={phoneLocal}
+              onChange={(e) => setPhoneLocal(e.target.value)}
+              placeholder="98XXXXXXXX"
+              className="flex-1 rounded-xl bg-zinc-800 px-4 py-3 outline-none"
+              inputMode="tel"
+            />
           </div>
+
+          {/* OR GuthiKey */}
+          <div className="text-center text-xs text-zinc-500">— OR —</div>
+          <label className="text-sm text-zinc-300">GuthiKey</label>
+          <input
+            value={guthiKey}
+            onChange={(e) => setGuthiKey(e.target.value)}
+            placeholder="e.g., navin-xyz"
+            className="w-full rounded-xl bg-zinc-800 px-4 py-3 outline-none"
+            autoCapitalize="none"
+          />
+
+          {/* Password */}
+          <label className="text-sm text-zinc-300 mt-2">Password</label>
+          <div className="relative">
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              className="w-full rounded-xl bg-zinc-800 px-4 py-3 outline-none pr-24"
+            />
+            <a href="/recovery" className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-zinc-300 hover:text-white">
+              Forgot?
+            </a>
+          </div>
+
+          {msg && <p className="text-sm text-red-400">{msg}</p>}
+
+          <button
+            onClick={doPasswordLogin}
+            disabled={loginDisabled}
+            className="w-full px-4 py-3 rounded-xl bg-white text-black hover:bg-white/90 disabled:opacity-50"
+          >
+            {busy ? "Signing in…" : "Login"}
+          </button>
 
           <div className="relative my-1 h-px bg-zinc-800" />
 
@@ -188,12 +226,9 @@ export default function SignIn() {
           {bioMsg && <p className="text-sm text-red-400">{bioMsg}</p>}
         </div>
 
-        {/* Footer */}
         <div className="text-center text-sm text-zinc-500">
           Don’t have a login?{" "}
-          <a className="underline hover:no-underline" href="/welcome">
-            Create your Guthi identity
-          </a>
+          <a className="underline hover:no-underline" href="/welcome">Create your Guthi identity</a>
         </div>
       </div>
     </main>
