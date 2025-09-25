@@ -1,13 +1,13 @@
 // pages/welcome.jsx
-// ELI15: Must be signed in. Then we either UPDATE an existing profiles row
-// (matched by user_id) or INSERT a new one. No ON CONFLICT needed.
+// ELI15: Must be signed in. We save to public.profiles.
+// Fix: send skills as an ARRAY (text[]) not a string, so Postgres won't error.
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
 import { nanoid } from 'nanoid';
 
-// Optional lists; if you don't have them, you can delete suggestions logic.
+// Optional lists; delete if you don't use them
 import tharList from '../data/tharList.json';
 import skillsList from '../data/skillsList.json';
 import regionList from '../data/regionList.json';
@@ -38,7 +38,7 @@ export default function Welcome() {
     thar: '',
     gender: '',
     region: '',
-    skills: ''
+    skills: '' // user types: "doctor, sculptor, healer"
   });
   const [phone, setPhone] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -97,16 +97,22 @@ export default function Welcome() {
       const seedKey = `${(form.name || 'friend').toLowerCase()}-${(form.thar || 'guthi').toLowerCase()}-${nanoid(5)}`;
       setGuthiKey(seedKey);
 
+      // CRITICAL FIX: convert "doctor, sculptor" -> ["doctor","sculptor"]
+      const skillsArray = form.skills
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean);
+
       const payload = {
-        user_id: user.id,              // required link
+        user_id: user.id,                 // link to auth user
         name: form.name || null,
         thar: form.thar || null,
         gender: form.gender || null,
         region: form.region || null,
-        skills: form.skills || null,
+        skills: skillsArray,              // <- text[] column expects an array
         phone: phone || null,
-        guthi_key: seedKey
-        // created_at: DB default preferred
+        guthi_key: seedKey                // keep snake_case if your column is snake_case
+        // created_at: let DB default handle it
       };
 
       // 1) Does a profile already exist for this user?
@@ -119,14 +125,14 @@ export default function Welcome() {
       if (findErr) throw findErr;
 
       if (existing?.id) {
-        // 2a) UPDATE existing profile
+        // 2a) UPDATE
         const { error: updErr } = await supabase
           .from('profiles')
           .update(payload)
           .eq('user_id', user.id);
         if (updErr) throw updErr;
       } else {
-        // 2b) INSERT new profile
+        // 2b) INSERT
         const { error: insErr } = await supabase
           .from('profiles')
           .insert([payload]);
@@ -268,7 +274,7 @@ export default function Welcome() {
             required
             value={form.skills}
             onChange={handleChange}
-            placeholder="e.g., sculpting, storytelling, healing"
+            placeholder="e.g., doctor, sculptor, healer"
             className="border bg-white text-black p-2 w-full rounded"
           />
           {suggestedSkills.length > 0 && (
@@ -284,6 +290,7 @@ export default function Welcome() {
               ))}
             </ul>
           )}
+          <p className="text-xs text-gray-500 mt-1">Tip: type a skill, add a comma, keep going.</p>
         </div>
 
         {/* Phone (optional) */}
@@ -297,7 +304,7 @@ export default function Welcome() {
             className="border bg-white text-black p-2 w-full rounded"
           />
           <p className="text-xs text-gray-500 mt-1">
-            Used only to help you recover your Guthi Key (OTP), never for marketing.
+            Used only for OTP recovery of your Guthi Key. Never for marketing.
           </p>
         </div>
 
