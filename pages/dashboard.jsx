@@ -5,12 +5,12 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "../lib/supabaseClient";
 
-/** ---------- helpers ---------- */
+/* ------------ tiny utils ------------ */
 const safe = (v, d = "") => (v === null || v === undefined ? d : v);
 const getLocal = (k) => (typeof window !== "undefined" ? localStorage.getItem(k) : null);
 const setLocal = (k, v) => (typeof window !== "undefined" ? localStorage.setItem(k, v) : void 0);
 
-/** Try a select on a table with a builder; swallow errors so we can try other paths. */
+/* generic “first row” fetch with a builder; swallow errors so we can try other paths */
 async function selectFirst(table, build) {
   try {
     let q = supabase
@@ -22,32 +22,21 @@ async function selectFirst(table, build) {
     q = build(q);
     const { data, error } = await q;
     if (error) throw error;
-    return data && data[0] ? data[0] : null;
+    return data?.[0] || null;
   } catch {
     return null;
   }
 }
 
-/** Upsert into a table with flexible key names and onConflict hint (best effort). */
-async function upsertProfile(table, row, onConflictCols = "id") {
-  try {
-    const { data, error } = await supabase
-      .from(table)
-      .upsert(row, { onConflict: onConflictCols, ignoreDuplicates: false })
-      .select()
-      .limit(1);
-    if (error) throw error;
-    return data && data[0] ? data[0] : null;
-  } catch (e) {
-    // Second-chance without onConflict (some PostgREST versions choke if column missing)
-    try {
-      const { data, error } = await supabase.from(table).upsert(row).select().limit(1);
-      if (error) throw error;
-      return data && data[0] ? data[0] : null;
-    } catch {
-      return null;
-    }
-  }
+/* upsert into profiles (RLS owner policies now allow id = auth.uid()) */
+async function upsertMyProfile(row) {
+  const { data, error } = await supabase
+    .from("profiles")
+    .upsert(row, { onConflict: "id", ignoreDuplicates: false })
+    .select()
+    .limit(1);
+  if (error) throw error;
+  return data?.[0] || null;
 }
 
 export default function Dashboard() {
@@ -62,7 +51,7 @@ export default function Dashboard() {
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
 
-  /** 1) grab session + local guthiKey */
+  // 1) load session + local key
   useEffect(() => {
     (async () => {
       try {
@@ -93,7 +82,19 @@ export default function Dashboard() {
     ).trim();
   }, [meta]);
 
-  /** 2) load profile. If not found, AUTO-HEAL by creating it. */
+  // 2) try fetch profile by id first (RLS-friendly), then by guthiKey
+  const tryLoadProfile = useCallback(async () => {
+    if (!userId) return null;
+    const key = safe(guthiKey, "").trim();
+
+    const row =
+      (await selectFirst("profiles", (q) => q.eq("id", userId))) ||
+      (key &&
+        (await selectFirst("profiles", (q) => q.or(`guthiKey.eq.${key},guthi_key.eq.${key}`))));
+    return row;
+  }, [userId, guthiKey]);
+
+  // 3) if missing, AUTO-CREATE in profiles (now allowed by your RLS policies)
   const loadOrCreate = useCallback(async () => {
     if (!userId) return;
 
@@ -101,74 +102,56 @@ export default function Dashboard() {
     setErr("");
     setMsg("");
 
-    // Try locate in users/profiles by id first (RLS-friendly), then by guthiKey
-    const key = safe(guthiKey, "").trim();
-
-    // lookups (ordered for fastest RLS path first)
-    let row =
-      (await selectFirst("profiles", (q) => q.eq("id", userId))) ||
-      (await selectFirst("users", (q) => q.eq("id", userId))) ||
-      (key &&
-        ((await selectFirst("profiles", (q) => q.or(`guthiKey.eq.${key},guthi_key.eq.${key}`))) ||
-          (await selectFirst("users", (q) => q.or(`guthiKey.eq.${key},guthi_key.eq.${key}`)))));
+    let row = await tryLoadProfile();
 
     if (!row) {
-      // AUTO-HEAL: attempt to create a minimal profile row the current user can see via RLS
-      // Assumptions for RLS: INSERT where id = auth.uid() is allowed (standard Supabase pattern).
+      const key = safe(guthiKey, "").trim();
       const seed = {
         id: userId,
         email: userEmail || null,
         name: guessedName || null,
-        guthi_key: key || null, // both keys for safety
+        guthi_key: key || null,
         guthiKey: key || null,
-        // optional starter fields (null-safe)
-        thar: safe(getLocal("thar"), null),
-        region: safe(getLocal("region"), null),
-        phone: safe(getLocal("phone"), null),
-        skills: safe(getLocal("skills"), null),
+        // leave phone/skills/thar/region null until user fills them
         updated_at: new Date().toISOString(),
       };
-
-      // Prefer 'profiles' as canonical storage; fall back to 'users' if profiles table isn’t there
-      row =
-        (await upsertProfile("profiles", seed, "id")) ||
-        (await upsertProfile("users", seed, "id"));
+      try {
+        row = await upsertMyProfile(seed);
+        if (row) setMsg("✅ Profile created.");
+      } catch (e) {
+        setErr(`Could not create your profile (RLS/schema). ${e.message || e}`);
+      }
     }
 
     if (row) {
-      // normalize keys + persist guthiKey if we learned it from DB
-      const dbKey = row.guthiKey || row.guthi_key || key;
-      if (dbKey && dbKey !== key) {
+      const dbKey = row.guthiKey || row.guthi_key || guthiKey;
+      if (dbKey && dbKey !== guthiKey) {
         setLocal("guthiKey", dbKey);
         setGuthiKey(dbKey);
       }
       setProfile(row);
-      setMsg(row?.created_at ? "✅ Profile loaded." : "✅ Profile created.");
-    } else {
-      setErr(
-        "Could not load or create your profile. This is usually a database policy issue (RLS) or mismatched table/columns."
-      );
+      if (!msg) setMsg("✅ Profile loaded.");
     }
 
     setBusy(false);
-  }, [userId, userEmail, guthiKey, guessedName]);
+  }, [userId, userEmail, guessedName, guthiKey, tryLoadProfile, msg]);
 
   useEffect(() => {
     if (ready && userId) loadOrCreate();
   }, [ready, userId, loadOrCreate]);
 
-  /** 3) fix-buttons if something still blocks auto-heal */
+  // 4) sign out helper
   const signOut = async () => {
     await supabase.auth.signOut();
     if (typeof window !== "undefined") {
-      localStorage.removeItem("guthiKey");
-      ["name", "thar", "region", "phone", "skills"].forEach((k) => localStorage.removeItem(k));
+      ["guthiKey", "name", "thar", "region", "phone", "skills"].forEach((k) =>
+        localStorage.removeItem(k)
+      );
     }
     router.replace("/signin");
   };
 
-  /** ---------- UI ---------- */
-
+  /* ---------------- UI ---------------- */
   if (!ready || busy) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
@@ -194,13 +177,13 @@ export default function Dashboard() {
   }
 
   if (!profile) {
-    // Only shown if RLS/columns blocked auto-heal
+    // Only shown if RLS/schema blocked creation (should be rare now)
     return (
       <div className="min-h-screen bg-gradient-to-b from-black via-slate-900 to-slate-800 text-white p-6">
         <div className="max-w-md mx-auto text-center space-y-3">
           <h1 className="text-2xl font-bold">We couldn’t access your profile yet.</h1>
           <p className="text-sm text-gray-300">
-            I tried to auto-create it but was blocked (likely RLS or schema). Use a quick fallback:
+            We tried to auto-create it but were blocked. Please finish welcome or edit profile.
           </p>
           {err && <p className="text-sm text-amber-400">{err}</p>}
           <div className="flex flex-col gap-3 pt-2">
@@ -222,12 +205,6 @@ export default function Dashboard() {
             >
               🚪 Sign Out & Start Fresh
             </button>
-            <button
-              onClick={loadOrCreate}
-              className="w-full py-3 px-4 rounded-xl bg-yellow-600 hover:bg-yellow-500 text-white font-semibold"
-            >
-              🔁 Try Auto-Create Again
-            </button>
           </div>
         </div>
       </div>
@@ -241,7 +218,7 @@ export default function Dashboard() {
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-extrabold text-yellow-300 mb-1">
-            🌸 Welcome, {safe(profile?.name, "Friend")} {safe(profile?.thar)}
+            🌸 Welcome, {safe(profile?.name, guessedName || "Friend")} {safe(profile?.thar)}
           </h1>
           <p className="text-sm italic text-gray-400">Your circle remembers you.</p>
         </div>
@@ -253,13 +230,16 @@ export default function Dashboard() {
         )}
 
         <div className="grid gap-2 text-center text-base mb-10">
-          <p>📧 <span className="text-blue-300">{safe(profile?.email, "—")}</span></p>
+          <p>📧 <span className="text-blue-300">{safe(profile?.email, userEmail || "—")}</span></p>
           <p>📍 <span className="text-blue-300">{safe(profile?.region, "—")}</span></p>
           <p>📱 <span className="text-orange-300">{safe(profile?.phone, "—")}</span></p>
           <p>🛠 <span className="text-purple-300">{safe(profile?.skills, "—")}</span></p>
           <p>✨ <span className="text-pink-300 font-mono">Karma: {karma}</span></p>
           <p className="text-xs text-gray-500">
-            Key: <span className="font-mono">{safe(profile?.guthiKey || profile?.guthi_key, "—")}</span>
+            Key:{" "}
+            <span className="font-mono">
+              {safe(profile?.guthiKey || profile?.guthi_key || guthiKey, "—")}
+            </span>
           </p>
         </div>
 
