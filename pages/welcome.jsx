@@ -1,14 +1,16 @@
 // pages/welcome.jsx
-// ELI15: You must be signed in. We save your seed into public.profiles.
-// After success, we SHOW your Guthi Key and WAIT — no auto-redirect.
-// User goes to Dashboard only by clicking the button.
+// ELI15:
+// - Must be signed in.
+// - Phone is REQUIRED and must be UNIQUE across profiles.
+// - If a profile already exists for this user OR the phone is taken, we DO NOT insert a new row.
+// - No auto-redirect anywhere. User stays until they click "Go to Dashboard".
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
 import { nanoid } from 'nanoid';
 
-// Optional lists; remove if not used elsewhere
+// Optional lists; remove if unused
 import tharList from '../data/tharList.json';
 import skillsList from '../data/skillsList.json';
 import regionList from '../data/regionList.json';
@@ -41,11 +43,12 @@ export default function Welcome() {
     region: '',
     skills: '' // user types: "doctor, sculptor, healer"
   });
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState(''); // REQUIRED & UNIQUE
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [guthiKey, setGuthiKey] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const [noticeMsg, setNoticeMsg] = useState(''); // shown when already registered
 
   // ---------- 3) OPTIONAL SUGGESTIONS ----------
   const tharFuse = new Fuse(tharList || [], { keys: ['Thar'], threshold: 0.3 });
@@ -85,16 +88,17 @@ export default function Welcome() {
     setSuggestedSkills([]);
   };
 
-  // ---------- 4) SUBMIT (manual "upsert") ----------
+  // ---------- 4) SUBMIT (with uniqueness checks) ----------
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!authReady || !user) return;
 
     setErrorMsg('');
+    setNoticeMsg('');
     setSubmitting(true);
 
     try {
-      // Human-friendly, unique-ish key
+      // A human-friendly, unique-ish key
       const seedKey = `${(form.name || 'friend').toLowerCase()}-${(form.thar || 'guthi').toLowerCase()}-${nanoid(5)}`;
       setGuthiKey(seedKey);
 
@@ -104,43 +108,72 @@ export default function Welcome() {
         .map((s) => s.trim())
         .filter(Boolean);
 
+      // ---- A) Check if a profile already exists for THIS AUTH USER ----
+      const { data: existingForUser, error: findUserErr } = await supabase
+        .from('profiles')
+        .select('id, guthi_key, phone')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (findUserErr) throw findUserErr;
+
+      if (existingForUser?.id) {
+        // Already registered → DO NOT insert/update. Just show their key & a gentle notice.
+        setGuthiKey(existingForUser.guthi_key || '');
+        setSubmitted(true);
+        setNoticeMsg('You have already planted your seed. Use the button below to enter your dashboard.');
+        setSubmitting(false);
+        return;
+      }
+
+      // ---- B) Enforce PHONE REQUIRED & UNIQUE across profiles ----
+      const phoneTrim = (phone || '').trim();
+      if (!phoneTrim) {
+        setErrorMsg('Phone number is required to create your Guthi identity.');
+        setSubmitting(false);
+        return;
+      }
+
+      // Optional: very simple sanity check (you can replace with your own)
+      const looksLikePhone = /^\+?\d[\d\s\-()]{7,}$/.test(phoneTrim);
+      if (!looksLikePhone) {
+        setErrorMsg('Please enter a valid phone number (include country code, e.g., +97798XXXXXXX).');
+        setSubmitting(false);
+        return;
+      }
+
+      // Check if any OTHER profile already uses this phone
+      const { data: phoneOwner, error: phoneErr } = await supabase
+        .from('profiles')
+        .select('id, user_id')
+        .eq('phone', phoneTrim)
+        .maybeSingle();
+      if (phoneErr) throw phoneErr;
+      if (phoneOwner?.id) {
+        setErrorMsg('This phone number is already registered. Please use a different number or sign in with the original account.');
+        setSubmitting(false);
+        return;
+      }
+
+      // ---- C) Insert brand-new profile for this user ----
       const payload = {
-        user_id: user.id,                 // link to auth user
+        user_id: user.id,
         name: form.name || null,
         thar: form.thar || null,
         gender: form.gender || null,
         region: form.region || null,
-        skills: skillsArray,              // text[] expects array
-        phone: phone || null,
-        guthi_key: seedKey                // use your actual column name
+        skills: skillsArray,         // text[] expects array
+        phone: phoneTrim,            // REQUIRED + UNIQUE (enforced here)
+        guthi_key: seedKey
+        // created_at: let DB default handle it
       };
 
-      // 1) Does a profile already exist for this user?
-      const { data: existing, error: findErr } = await supabase
+      const { error: insErr } = await supabase
         .from('profiles')
-        .select('id')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (findErr) throw findErr;
-
-      if (existing?.id) {
-        // UPDATE
-        const { error: updErr } = await supabase
-          .from('profiles')
-          .update(payload)
-          .eq('user_id', user.id);
-        if (updErr) throw updErr;
-      } else {
-        // INSERT
-        const { error: insErr } = await supabase
-          .from('profiles')
-          .insert([payload]);
-        if (insErr) throw insErr;
-      }
+        .insert([payload]);
+      if (insErr) throw insErr;
 
       localStorage.setItem('guthiKey', seedKey);
-      setSubmitted(true); // Show success screen (with key + button only; no auto-redirect)
+      setSubmitted(true); // Show success screen (no auto-redirect)
     } catch (err) {
       console.error('❌ profile save failed:', err);
       setErrorMsg(err?.message || 'Could not plant your Guthi seed. Please try again.');
@@ -170,11 +203,20 @@ export default function Welcome() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white text-black p-6 text-center">
         <div className="max-w-lg w-full">
-          <h1 className="text-2xl font-bold">🌿 Seed planted successfully</h1>
-          <p className="mt-3">Your Guthi Key:</p>
-          <code className="inline-block mt-2 bg-gray-100 px-3 py-2 rounded text-lg break-all">
-            {guthiKey}
-          </code>
+          <h1 className="text-2xl font-bold">🌿 Seed planted</h1>
+
+          {noticeMsg ? (
+            <p className="mt-3 text-amber-700">{noticeMsg}</p>
+          ) : (
+            <p className="mt-3">Your Guthi Key:</p>
+          )}
+
+          {guthiKey && (
+            <code className="inline-block mt-2 bg-gray-100 px-3 py-2 rounded text-lg break-all">
+              {guthiKey}
+            </code>
+          )}
+
           <p className="mt-4 text-gray-700">
             Keep this safe. It’s also saved in your browser for now.
           </p>
@@ -315,18 +357,19 @@ export default function Welcome() {
           <p className="text-xs text-gray-500 mt-1">Tip: type a skill, add a comma, keep going.</p>
         </div>
 
-        {/* Phone (optional) */}
+        {/* Phone (REQUIRED & UNIQUE) */}
         <div>
-          <label className="block font-semibold">📱 Recovery Phone (optional)</label>
+          <label className="block font-semibold">📱 Recovery Phone (required, unique)</label>
           <input
             type="tel"
+            required
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="+97798XXXXXXX"
             className="border bg-white text-black p-2 w-full rounded"
           />
           <p className="text-xs text-gray-500 mt-1">
-            Used only for OTP recovery of your Guthi Key. Never for marketing.
+            Used for OTP recovery of your Guthi Key. Never for marketing.
           </p>
         </div>
 
