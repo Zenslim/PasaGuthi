@@ -74,26 +74,28 @@ function Dashboard() {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
   const [err, setErr] = useState("");
+  const [debug, setDebug] = useState("");
 
-  /* 1) Gate access */
+  /* 1) Gate access + gather candidates */
   useEffect(() => {
     (async () => {
-      const localGuthiKey =
-        (typeof window !== "undefined" && localStorage.getItem("guthiKey")) || "";
-      if (localGuthiKey) {
-        setGuthiKey(localGuthiKey);
+      try {
+        const local =
+          (typeof window !== "undefined" && localStorage.getItem("guthiKey")) || "";
+        if (local) setGuthiKey(local.trim());
+
+        const { data, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        const sid = data?.session?.user?.id || null;
+        if (sid) setUserId(sid);
+
         setReady(true);
-        return;
-      }
-      const { data } = await supabase.auth.getSession();
-      if (data?.session?.user?.id) {
-        setUserId(data.session.user.id);
+      } catch (e) {
+        setErr(`Auth/session error: ${e.message || e}`);
         setReady(true);
-      } else {
-        router.replace("/signin");
       }
     })();
-  }, [router]);
+  }, []);
 
   /* 2) Detect WebAuthn/Passkey capability */
   useEffect(() => {
@@ -102,33 +104,105 @@ function Dashboard() {
     }
   }, []);
 
-  /* 3) Fetch profile when guthiKey is set */
-  useEffect(() => {
-    if (!guthiKey) return;
-    (async () => {
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("guthiKey", guthiKey)
-        .single();
-      if (!error && data) setUserData(data);
-    })();
-  }, [guthiKey]);
+  /* Helpers: safe first-row fetch */
+  const fetchFirst = async (table, builder) => {
+    try {
+      let q = supabase.from(table).select(
+        "id, name, thar, region, phone, skills, karma, karma_points, guthiKey, guthi_key"
+      ).limit(1);
+      q = builder(q);
+      const { data, error } = await q;
+      if (error) throw error;
+      const row = Array.isArray(data) ? data[0] : data;
+      return row || null;
+    } catch (e) {
+      // swallow table/rls errors so we can try other paths
+      return null;
+    }
+  };
 
-  /* 4) Check if a passkey already exists */
+  /* 3) Load user record robustly */
+  useEffect(() => {
+    if (!ready) return;
+    (async () => {
+      try {
+        const candidates = [];
+
+        // Prefer local guthiKey if present
+        const key = (guthiKey || "").trim();
+        if (key) {
+          // users by guthiKey OR guthi_key
+          candidates.push(
+            fetchFirst("users", (q) =>
+              q.or(`guthiKey.eq.${key},guthi_key.eq.${key}`)
+            )
+          );
+          // profiles by guthiKey OR guthi_key (fallback schema)
+          candidates.push(
+            fetchFirst("profiles", (q) =>
+              q.or(`guthiKey.eq.${key},guthi_key.eq.${key}`)
+            )
+          );
+        }
+
+        // Fallback: by session user id
+        if (userId) {
+          candidates.push(fetchFirst("users", (q) => q.eq("id", userId)));
+          candidates.push(fetchFirst("profiles", (q) => q.eq("id", userId)));
+        }
+
+        // Run in sequence (stop on first hit) for clearer debug
+        let found = null;
+        for (const p of candidates) {
+          // eslint-disable-next-line no-await-in-loop
+          const row = await p;
+          if (row) {
+            found = row;
+            break;
+          }
+        }
+
+        if (!found) {
+          setErr(
+            "We couldn’t find your profile yet. Finish the welcome step or edit your profile to create it."
+          );
+          // Build a tiny debug hint
+          setDebug(
+            `debug: key(${key ? "yes" : "no"}) userId(${userId ? "yes" : "no"}) tried(users/profiles by key & id)`
+          );
+          return;
+        }
+
+        // Normalize + store key if missing
+        const resolvedKey = found.guthiKey || found.guthi_key || key || "";
+        if (resolvedKey && typeof window !== "undefined") {
+          localStorage.setItem("guthiKey", resolvedKey);
+          setGuthiKey(resolvedKey);
+        }
+
+        setUserData(found);
+      } catch (e) {
+        setErr(`Load error: ${e.message || e}`);
+      }
+    })();
+  }, [ready, guthiKey, userId]);
+
+  /* 4) Check if a passkey already exists (only if we have a key) */
   const refreshHasPasskey = useCallback(async () => {
     try {
-      if (guthiKey) {
-        const { data, error } = await supabase
-          .from("webauthn_credentials")
-          .select("id")
-          .eq("guthi_key", guthiKey)
-          .limit(1);
-        if (error) throw error;
-        setHasPasskey(!!(data && data.length));
+      const key = (guthiKey || "").trim();
+      if (!key) {
+        setHasPasskey(false);
+        return;
       }
-    } catch (e) {
-      console.warn("Passkey existence check failed:", e.message);
+      const { data, error } = await supabase
+        .from("webauthn_credentials")
+        .select("id")
+        .eq("guthi_key", key)
+        .limit(1);
+      if (error) throw error;
+      setHasPasskey(!!(data && data.length));
+    } catch {
       setHasPasskey(false);
     }
   }, [guthiKey]);
@@ -256,14 +330,62 @@ function Dashboard() {
     }
   }
 
-  /* Render */
-  if (!userData) {
+  /* --------- RENDER --------- */
+
+  // Loading gate while we’re checking session/queries
+  if (!ready && !err) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <p>🌿 Loading your Dashboard...</p>
       </div>
     );
   }
+
+  // If we couldn’t resolve a profile, don’t spin forever—show actions
+  if (ready && !userData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-black via-slate-900 to-slate-800 text-white p-6">
+        <div className="max-w-md mx-auto text-center space-y-4">
+          <h1 className="text-2xl font-bold">We couldn’t find your profile yet.</h1>
+          <p className="text-sm text-gray-300">
+            Finish the welcome step (creates your row), or edit your profile. You won’t be stuck on
+            “🌿 Loading your Dashboard…” anymore.
+          </p>
+          {err && <p className="text-sm text-amber-400">{err}</p>}
+          {debug && <p className="text-xs text-gray-500">{debug}</p>}
+          <div className="flex flex-col gap-3 pt-2">
+            <button
+              onClick={() => router.push("/welcome")}
+              className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold"
+            >
+              🌱 Finish Welcome
+            </button>
+            <button
+              onClick={() => router.push("/edit-profile")}
+              className="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold"
+            >
+              ✏️ Edit Profile
+            </button>
+            <button
+              onClick={async () => {
+                await supabase.auth.signOut();
+                if (typeof window !== "undefined") {
+                  localStorage.removeItem("guthiKey");
+                }
+                router.replace("/signin");
+              }}
+              className="w-full py-3 px-4 rounded-xl bg-zinc-700 hover:bg-zinc-600 text-white font-semibold"
+            >
+              🚪 Sign Out & Start Fresh
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const karmaValue =
+    (userData?.karma ?? userData?.karma_points ?? 0);
 
   const NavButton = ({ label, href, locked, emoji }) => (
     <button
@@ -281,7 +403,7 @@ function Dashboard() {
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-extrabold text-yellow-300 mb-1">
-            🌸 Welcome, {userData.name} {userData.thar}!
+            🌸 Welcome, {userData?.name} {userData?.thar}!
           </h1>
           <p className="text-sm italic text-gray-400">
             Let your journey begin with presence and purpose.
@@ -289,10 +411,10 @@ function Dashboard() {
         </div>
 
         <div className="grid gap-2 text-center text-base mb-10">
-          <p>📍 <span className="text-blue-300">{userData.region}</span></p>
-          <p>📱 <span className="text-orange-300">{userData.phone}</span></p>
-          <p>🛠 <span className="text-purple-300">{userData.skills}</span></p>
-          <p>✨ <span className="text-pink-300 font-mono">Karma: {userData.karma}</span></p>
+          <p>📍 <span className="text-blue-300">{userData?.region || "—"}</span></p>
+          <p>📱 <span className="text-orange-300">{userData?.phone || "—"}</span></p>
+          <p>🛠 <span className="text-purple-300">{userData?.skills || "—"}</span></p>
+          <p>✨ <span className="text-pink-300 font-mono">Karma: {karmaValue}</span></p>
         </div>
 
         {/* Passkey section */}
