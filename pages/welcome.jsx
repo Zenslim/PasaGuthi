@@ -1,10 +1,9 @@
 // pages/welcome.jsx
 // ELI15: You must be signed in. We save your seed into public.profiles.
-// After success, we SHOW your Guthi Key with a clear "Go to Dashboard" button
-// and also auto-redirect after a short countdown using a HARD navigation
-// (window.location.assign) to avoid client-side router stalls.
+// After success, we SHOW your Guthi Key and WAIT — no auto-redirect.
+// User goes to Dashboard only by clicking the button.
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
 import { nanoid } from 'nanoid';
@@ -141,7 +140,7 @@ export default function Welcome() {
       }
 
       localStorage.setItem('guthiKey', seedKey);
-      setSubmitted(true); // Show success screen (with key + buttons)
+      setSubmitted(true); // Show success screen (with key + button only; no auto-redirect)
     } catch (err) {
       console.error('❌ profile save failed:', err);
       setErrorMsg(err?.message || 'Could not plant your Guthi seed. Please try again.');
@@ -150,34 +149,10 @@ export default function Welcome() {
     }
   };
 
-  // ---------- 5) SUCCESS SCREEN + CLEAN REDIRECT ----------
-  const [countdown, setCountdown] = useState(4); // seconds before auto-redirect
-  const autoRedirectStarted = useRef(false);
-
-  useEffect(() => {
-    if (!submitted || autoRedirectStarted.current) return;
-    autoRedirectStarted.current = true;
-
-    // Countdown → hard navigation (avoids client-side router stalls)
-    const t = setInterval(() => setCountdown((c) => c - 1), 1000);
-    const j = setTimeout(() => {
-      try {
-        window.location.assign('/dashboard'); // full reload to /dashboard
-      } catch {
-        // absolute fallback link if assign fails
-        window.location.href = '/dashboard';
-      }
-    }, 4000);
-
-    return () => {
-      clearInterval(t);
-      clearTimeout(j);
-    };
-  }, [submitted]);
-
+  // ---------- 5) SUCCESS SCREEN (static until button click) ----------
   const goDashboardNow = () => {
     try {
-      window.location.assign('/dashboard');
+      window.location.assign('/dashboard'); // full reload to /dashboard
     } catch {
       window.location.href = '/dashboard';
     }
@@ -204,22 +179,13 @@ export default function Welcome() {
             Keep this safe. It’s also saved in your browser for now.
           </p>
 
-          <div className="mt-6 grid grid-cols-1 gap-3">
+          <div className="mt-6">
             <button
               onClick={goDashboardNow}
               className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-bold w-full"
             >
-              🚀 Go to Dashboard now
+              🚀 Go to Dashboard
             </button>
-            <p className="text-sm text-gray-600">
-              Auto-redirecting in {Math.max(countdown, 0)}…
-            </p>
-            <a
-              href="/dashboard"
-              className="text-blue-700 underline text-sm"
-            >
-              If nothing happens, click here
-            </a>
           </div>
         </div>
       </div>
