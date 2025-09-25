@@ -1,13 +1,15 @@
 // pages/welcome.jsx
-// ELI15: Must be signed in. We save to public.profiles.
-// Fix: send skills as an ARRAY (text[]) not a string, so Postgres won't error.
+// ELI15: You must be signed in. We save your seed into public.profiles.
+// After success, we SHOW your Guthi Key with a clear "Go to Dashboard" button
+// and also auto-redirect after a short countdown using a HARD navigation
+// (window.location.assign) to avoid client-side router stalls.
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
 import { nanoid } from 'nanoid';
 
-// Optional lists; delete if you don't use them
+// Optional lists; remove if not used elsewhere
 import tharList from '../data/tharList.json';
 import skillsList from '../data/skillsList.json';
 import regionList from '../data/regionList.json';
@@ -93,14 +95,14 @@ export default function Welcome() {
     setSubmitting(true);
 
     try {
-      // make a readable, unique-ish key
+      // Human-friendly, unique-ish key
       const seedKey = `${(form.name || 'friend').toLowerCase()}-${(form.thar || 'guthi').toLowerCase()}-${nanoid(5)}`;
       setGuthiKey(seedKey);
 
-      // CRITICAL FIX: convert "doctor, sculptor" -> ["doctor","sculptor"]
+      // Convert comma string -> text[] for Postgres
       const skillsArray = form.skills
         .split(',')
-        .map(s => s.trim())
+        .map((s) => s.trim())
         .filter(Boolean);
 
       const payload = {
@@ -109,10 +111,9 @@ export default function Welcome() {
         thar: form.thar || null,
         gender: form.gender || null,
         region: form.region || null,
-        skills: skillsArray,              // <- text[] column expects an array
+        skills: skillsArray,              // text[] expects array
         phone: phone || null,
-        guthi_key: seedKey                // keep snake_case if your column is snake_case
-        // created_at: let DB default handle it
+        guthi_key: seedKey                // use your actual column name
       };
 
       // 1) Does a profile already exist for this user?
@@ -125,14 +126,14 @@ export default function Welcome() {
       if (findErr) throw findErr;
 
       if (existing?.id) {
-        // 2a) UPDATE
+        // UPDATE
         const { error: updErr } = await supabase
           .from('profiles')
           .update(payload)
           .eq('user_id', user.id);
         if (updErr) throw updErr;
       } else {
-        // 2b) INSERT
+        // INSERT
         const { error: insErr } = await supabase
           .from('profiles')
           .insert([payload]);
@@ -140,13 +141,45 @@ export default function Welcome() {
       }
 
       localStorage.setItem('guthiKey', seedKey);
-      setSubmitted(true);
-      setTimeout(() => router.replace('/dashboard'), 1200);
+      setSubmitted(true); // Show success screen (with key + buttons)
     } catch (err) {
       console.error('❌ profile save failed:', err);
       setErrorMsg(err?.message || 'Could not plant your Guthi seed. Please try again.');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  // ---------- 5) SUCCESS SCREEN + CLEAN REDIRECT ----------
+  const [countdown, setCountdown] = useState(4); // seconds before auto-redirect
+  const autoRedirectStarted = useRef(false);
+
+  useEffect(() => {
+    if (!submitted || autoRedirectStarted.current) return;
+    autoRedirectStarted.current = true;
+
+    // Countdown → hard navigation (avoids client-side router stalls)
+    const t = setInterval(() => setCountdown((c) => c - 1), 1000);
+    const j = setTimeout(() => {
+      try {
+        window.location.assign('/dashboard'); // full reload to /dashboard
+      } catch {
+        // absolute fallback link if assign fails
+        window.location.href = '/dashboard';
+      }
+    }, 4000);
+
+    return () => {
+      clearInterval(t);
+      clearTimeout(j);
+    };
+  }, [submitted]);
+
+  const goDashboardNow = () => {
+    try {
+      window.location.assign('/dashboard');
+    } catch {
+      window.location.href = '/dashboard';
     }
   };
 
@@ -161,16 +194,39 @@ export default function Welcome() {
   if (submitted) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white text-black p-6 text-center">
-        <div>
-          <h1 className="text-2xl font-bold">🌿 Seed planted</h1>
+        <div className="max-w-lg w-full">
+          <h1 className="text-2xl font-bold">🌿 Seed planted successfully</h1>
           <p className="mt-3">Your Guthi Key:</p>
-          <code className="inline-block mt-2 bg-gray-100 px-3 py-2 rounded text-lg">{guthiKey}</code>
-          <p className="mt-4 text-purple-700 italic">Taking you to your dashboard…</p>
+          <code className="inline-block mt-2 bg-gray-100 px-3 py-2 rounded text-lg break-all">
+            {guthiKey}
+          </code>
+          <p className="mt-4 text-gray-700">
+            Keep this safe. It’s also saved in your browser for now.
+          </p>
+
+          <div className="mt-6 grid grid-cols-1 gap-3">
+            <button
+              onClick={goDashboardNow}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-bold w-full"
+            >
+              🚀 Go to Dashboard now
+            </button>
+            <p className="text-sm text-gray-600">
+              Auto-redirecting in {Math.max(countdown, 0)}…
+            </p>
+            <a
+              href="/dashboard"
+              className="text-blue-700 underline text-sm"
+            >
+              If nothing happens, click here
+            </a>
+          </div>
         </div>
       </div>
     );
   }
 
+  // ---------- 6) FORM UI ----------
   return (
     <div className="min-h-screen flex items-center justify-center bg-white text-black p-6">
       <form onSubmit={handleSubmit} className="w-full max-w-md space-y-5">
