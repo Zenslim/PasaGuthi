@@ -1,9 +1,16 @@
 // pages/welcome.jsx
-import bcrypt from 'bcryptjs';
+// ELI15: You must be signed in first. Then this page plants your "Guthi seed"
+// by upserting a row into public.profiles with your Supabase user.id.
+// This avoids "null value in column user_id" and avoids the missing `users` table.
+
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
 import { nanoid } from 'nanoid';
+
+// If you already have these JSONs in your repo, keep them.
+// If not, you can remove all suggestion bits below and keep the core submit.
+// (Keeping them here because they're used elsewhere in your project.)
 import tharList from '../data/tharList.json';
 import skillsList from '../data/skillsList.json';
 import regionList from '../data/regionList.json';
@@ -12,70 +19,63 @@ import Fuse from 'fuse.js';
 export default function Welcome() {
   const router = useRouter();
 
-  // ---- AUTH GUARD: must have a Supabase user so any future profile writes have user_id ----
-  const [authChecked, setAuthChecked] = useState(false);
+  // ---------- 1) AUTH GUARD ----------
+  const [authReady, setAuthReady] = useState(false);
   const [user, setUser] = useState(null);
+
   useEffect(() => {
     (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        // not signed in → route to your sign-in screen
+      const { data } = await supabase.auth.getUser();
+      if (!data?.user) {
+        // Not logged in → send to your sign-in page
         router.replace('/signin');
         return;
       }
-      setUser(user);
-      setAuthChecked(true);
+      setUser(data.user);
+      setAuthReady(true);
     })();
   }, [router]);
 
+  // ---------- 2) FORM STATE ----------
   const [form, setForm] = useState({
     name: '',
     thar: '',
     gender: '',
     region: '',
-    skills: '',
-    password: ''
+    skills: ''
   });
   const [phone, setPhone] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [guthiKey, setGuthiKey] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  // ---------- 3) NICE-TO-HAVE SUGGESTIONS ----------
+  const tharFuse = new Fuse(tharList || [], { keys: ['Thar'], threshold: 0.3 });
+  const regionFuse = new Fuse(regionList || [], { keys: ['Region'], threshold: 0.3 });
+  const skillsFuse = new Fuse(skillsList || [], { keys: ['Skill'], threshold: 0.3 });
+
   const [suggestedThar, setSuggestedThar] = useState([]);
   const [suggestedRegion, setSuggestedRegion] = useState([]);
   const [suggestedSkills, setSuggestedSkills] = useState([]);
-  const [confirmedThar, setConfirmedThar] = useState('');
-  const [confirmedSkills, setConfirmedSkills] = useState([]);
-  const [confirmedRegion, setConfirmedRegion] = useState('');
-  const [guthiKey, setGuthiKey] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
-
-  const tharFuse = new Fuse(tharList, { keys: ['Thar'], threshold: 0.3 });
-  const regionFuse = new Fuse(regionList, { keys: ['Region'], threshold: 0.3 });
-  const skillsFuse = new Fuse(skillsList, { keys: ['Skill'], threshold: 0.3 });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm((p) => ({ ...p, [name]: value }));
 
     if (name === 'thar') {
-      const results = tharFuse.search(value.trim()).map(r => r.item);
+      const results = value.trim() ? tharFuse.search(value.trim()).map(r => r.item) : [];
       setSuggestedThar(results);
-      setConfirmedThar('');
     }
     if (name === 'region') {
-      const results = regionFuse.search(value.trim()).map(r => r.item);
+      const results = value.trim() ? regionFuse.search(value.trim()).map(r => r.item) : [];
       setSuggestedRegion(results);
-      setConfirmedRegion('');
     }
     if (name === 'skills') {
       const parts = value.split(',');
       const last = parts[parts.length - 1].trim();
-      if (last.length > 0) {
-        const results = skillsFuse.search(last).map(r => r.item.Skill);
-        setSuggestedSkills(results);
-      } else {
-        setSuggestedSkills([]);
-      }
+      const results = last ? skillsFuse.search(last).map(r => r.item.Skill) : [];
+      setSuggestedSkills(results);
     }
   };
 
@@ -88,66 +88,53 @@ export default function Welcome() {
     setSuggestedSkills([]);
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const finalSkills = form.skills.split(',').map(s => s.trim()).filter(Boolean);
-      setConfirmedSkills(finalSkills);
-    }
-  };
-
-  const handlePhoneChange = (e) => {
-    const value = e.target.value;
-    setPhone(value);
-    setShowPassword(value.trim().length > 0);
-  };
-
+  // ---------- 4) SUBMIT ----------
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!authChecked || !user) return;
+    if (!authReady || !user) return;
 
     setErrorMsg('');
     setSubmitting(true);
+
     try {
-      const seedKey = `${form.name.toLowerCase()}-${form.thar.toLowerCase()}-${form.region.toLowerCase()}-${form.skills.toLowerCase()}-${nanoid(5)}`;
+      // make a human-readable, unique-ish key
+      const seedKey = `${(form.name || 'friend').toLowerCase()}-${(form.thar || 'guthi').toLowerCase()}-${nanoid(5)}`;
       setGuthiKey(seedKey);
-      setConfirmedRegion(form.region);
 
-      let hashedPassword = null;
-      if (phone && form.password) {
-        hashedPassword = await bcrypt.hash(form.password, 10);
-      }
-
-      // Write into the public directory table (no profiles write here)
-      const { error } = await supabase.from('users').insert([{
-        guthiKey: seedKey,
-        name: form.name,
-        thar: form.thar,
-        gender: form.gender,
-        region: form.region,
-        skills: form.skills,
+      // IMPORTANT: write to public.profiles with user_id = user.id
+      // Use upsert so repeated submit updates the same row.
+      // Adjust columns to match your profiles schema. Keep only safe, common fields.
+      const payload = {
+        user_id: user.id,          // <- fixes the NOT NULL user_id
+        name: form.name || null,
+        thar: form.thar || null,
+        gender: form.gender || null,
+        region: form.region || null,
+        skills: form.skills || null,
         phone: phone || null,
-        password: hashedPassword,
-        createdAt: new Date().toISOString()
-      }]);
+        guthi_key: seedKey,        // column expected as snake_case in many setups
+        created_at: new Date().toISOString()
+      };
+
+      const { error } = await supabase
+        .from('profiles')
+        .upsert(payload, { onConflict: 'user_id' });
 
       if (error) throw error;
 
-      // cache key for later flows
+      // cache and go
       localStorage.setItem('guthiKey', seedKey);
       setSubmitted(true);
-
-      // gentle redirect to dashboard after a short beat
       setTimeout(() => router.replace('/dashboard'), 1200);
     } catch (err) {
-      console.error('❌ Supabase insert failed:', err);
-      setErrorMsg(err?.message || 'Failed to plant your Guthi seed. Please try again.');
+      console.error('❌ profiles upsert failed:', err);
+      setErrorMsg(err?.message || 'Could not plant your Guthi seed. Please try again.');
     } finally {
       setSubmitting(false);
     }
   };
 
-  if (!authChecked) {
+  if (!authReady) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white text-black p-6">
         <p className="text-sm">Checking your session…</p>
@@ -157,12 +144,12 @@ export default function Welcome() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white p-6 text-center text-black">
+      <div className="min-h-screen flex items-center justify-center bg-white text-black p-6 text-center">
         <div>
-          <h1 className="text-2xl font-bold">🌿 Welcome, {form.name || 'Friend'} of the {form.thar || 'Guthi'} lineage</h1>
-          <p className="mt-4">Your Guthi Key:</p>
-          <code className="text-lg bg-gray-100 p-2 rounded mt-2 inline-block">{guthiKey}</code>
-          <p className="mt-4 text-purple-700 italic">🌸 Seed planted. Taking you to your dashboard…</p>
+          <h1 className="text-2xl font-bold">🌿 Seed planted</h1>
+          <p className="mt-3">Your Guthi Key:</p>
+          <code className="inline-block mt-2 bg-gray-100 px-3 py-2 rounded text-lg">{guthiKey}</code>
+          <p className="mt-4 text-purple-700 italic">Taking you to your dashboard…</p>
         </div>
       </div>
     );
@@ -170,9 +157,9 @@ export default function Welcome() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white text-black p-6">
-      <form onSubmit={handleSubmit} onKeyDown={handleKeyPress} className="w-full max-w-md space-y-5">
-        <h1 className="text-2xl font-semibold text-center">🌸 PasaGuthi welcomes you.</h1>
-        <p className="text-center text-sm text-gray-600 mt-1">Step into a living network of memory, meaning, and belonging.</p>
+      <form onSubmit={handleSubmit} className="w-full max-w-md space-y-5">
+        <h1 className="text-2xl font-semibold text-center">🌸 PasaGuthi welcomes you</h1>
+        <p className="text-center text-sm text-gray-600">Plant your seed. Begin your journey.</p>
 
         {errorMsg && (
           <div className="p-3 rounded bg-red-50 text-red-700 text-sm">{errorMsg}</div>
@@ -180,108 +167,128 @@ export default function Welcome() {
 
         {/* Name */}
         <div>
-          <label className="block font-semibold">🪶 What name do the winds call you by?</label>
-          <input name="name" required onChange={handleChange} placeholder="e.g., Nabin" className="border bg-white text-black p-2 w-full rounded" />
+          <label className="block font-semibold">🪶 Name (first name only)</label>
+          <input
+            name="name"
+            required
+            onChange={handleChange}
+            placeholder="e.g., Nabin"
+            className="border bg-white text-black p-2 w-full rounded"
+          />
         </div>
 
         {/* Thar */}
         <div>
-          <label className="block font-semibold">🌳 Your Thar (Lineage)</label>
-          <p className="text-sm text-gray-500 italic mb-1">This binds you to your ancestral tree.</p>
-          <input name="thar" required onChange={handleChange} value={form.thar} placeholder="e.g., Pradhan" className="border bg-white text-black p-2 w-full rounded" />
+          <label className="block font-semibold">🌳 Thar (Lineage)</label>
+          <input
+            name="thar"
+            required
+            value={form.thar}
+            onChange={handleChange}
+            placeholder="e.g., Pradhan"
+            className="border bg-white text-black p-2 w-full rounded"
+          />
           {suggestedThar.length > 0 && (
             <ul className="bg-gray-50 border p-2 text-sm rounded mt-1">
               {suggestedThar.map((t, i) => (
-                <li key={i} className="cursor-pointer hover:bg-gray-100" onClick={() => {
-                  setForm(prev => ({ ...prev, thar: t.Thar }));
-                  setConfirmedThar(t.Thar);
-                  setSuggestedThar([]);
-                }}>{t.Thar}</li>
+                <li
+                  key={i}
+                  className="cursor-pointer hover:bg-gray-100"
+                  onClick={() => {
+                    setForm(prev => ({ ...prev, thar: t.Thar }));
+                    setSuggestedThar([]);
+                  }}
+                >
+                  {t.Thar}
+                </li>
               ))}
             </ul>
-          )}
-          {confirmedThar && (
-            <p className="mt-2 text-sm text-green-700 italic">
-              ✨ Aha, {confirmedThar} — {tharList.find(t => t.Thar.toLowerCase() === confirmedThar.toLowerCase())?.Meaning}
-            </p>
           )}
         </div>
 
         {/* Gender */}
         <div>
-          <label className="block font-semibold">🌸 How shall the Guthi greet you?</label>
-          <select name="gender" required onChange={handleChange} className="border bg-white text-black p-2 w-full rounded">
+          <label className="block font-semibold">🌸 How shall we greet you?</label>
+          <select
+            name="gender"
+            required
+            onChange={handleChange}
+            className="border bg-white text-black p-2 w-full rounded"
+          >
             <option value="">Select</option>
-            <option value="Male">With respect as Sir</option>
-            <option value="Female">With honor as Ma’am</option>
+            <option value="Male">Sir</option>
+            <option value="Female">Ma’am</option>
           </select>
         </div>
 
         {/* Region */}
         <div>
-          <label className="block font-semibold">🌍 Where do your roots now breathe?</label>
-          <p className="text-sm text-gray-500 italic mb-1">This will blossom with meaning.</p>
-          <input name="region" required onChange={handleChange} value={form.region} placeholder="e.g., Patan, Kathmandu — or Boston, USA" className="border bg-white text-black p-2 w-full rounded" />
+          <label className="block font-semibold">🌍 Region</label>
+          <input
+            name="region"
+            required
+            value={form.region}
+            onChange={handleChange}
+            placeholder="e.g., Patan, Kathmandu — or Boston, USA"
+            className="border bg-white text-black p-2 w-full rounded"
+          />
           {suggestedRegion.length > 0 && (
             <ul className="bg-gray-50 border p-2 text-sm rounded mt-1">
               {suggestedRegion.map((r, i) => (
-                <li key={i} className="cursor-pointer hover:bg-gray-100" onClick={() => {
-                  setForm(prev => ({ ...prev, region: r.Region }));
-                  setConfirmedRegion(r.Region);
-                  setSuggestedRegion([]);
-                }}>{r.Region}</li>
+                <li
+                  key={i}
+                  className="cursor-pointer hover:bg-gray-100"
+                  onClick={() => {
+                    setForm(prev => ({ ...prev, region: r.Region }));
+                    setSuggestedRegion([]);
+                  }}
+                >
+                  {r.Region}
+                </li>
               ))}
             </ul>
-          )}
-          {confirmedRegion && (
-            <p className="mt-2 text-sm text-green-700 italic">
-              ✨ Aha, {regionList.find(r => r.Region.toLowerCase() === confirmedRegion.toLowerCase())?.Meaning || "not yet in our sacred list. You are the first to speak it here."}
-            </p>
           )}
         </div>
 
         {/* Skills */}
         <div>
-          <label className="block font-semibold">🤲 What gifts do you offer the Guthi?</label>
-          <p className="text-sm text-gray-500 italic mb-1">Each gift will be honored with a whisper.</p>
-          <input name="skills" required onChange={handleChange} value={form.skills} placeholder="e.g., sculpting, storytelling, healing" className="border bg-white text-black p-2 w-full rounded" />
+          <label className="block font-semibold">🤲 Skills (comma separated)</label>
+          <input
+            name="skills"
+            required
+            value={form.skills}
+            onChange={handleChange}
+            placeholder="e.g., sculpting, storytelling, healing"
+            className="border bg-white text-black p-2 w-full rounded"
+          />
           {suggestedSkills.length > 0 && (
             <ul className="bg-gray-50 border p-2 text-sm rounded mt-1">
               {suggestedSkills.map((s, i) => (
-                <li key={i} className="cursor-pointer hover:bg-gray-100" onClick={() => handleSkillSelect(s)}>{s}</li>
+                <li
+                  key={i}
+                  className="cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleSkillSelect(s)}
+                >
+                  {s}
+                </li>
               ))}
             </ul>
           )}
-          <p className="text-xs text-gray-500 mt-1">Type a skill and press Enter to confirm — every offering adds to the sacred weave.</p>
-          {confirmedSkills.length > 0 && (
-            <div className="mt-2 space-y-1 text-sm text-green-700 italic">
-              {confirmedSkills.map((s, i) => {
-                const match = skillsList.find(k => k.Skill.toLowerCase() === s.toLowerCase());
-                return (
-                  <p key={i}>✨ Aha, {s} — {match ? match.Meaning : "not yet in our sacred list. You are the first to speak it here."}</p>
-                );
-              })}
-            </div>
-          )}
         </div>
 
-        {/* Phone + Password */}
-        <div className="mt-4">
-          <label className="block font-semibold">📱🔑 Recovery Number (Optional)</label>
-          <input type="tel" placeholder="+97798XXXXXXX" value={phone} onChange={handlePhoneChange} className="w-full mt-2 p-2 border rounded" />
-          {showPassword && (
-            <>
-              <label className="block font-semibold mt-3">🔐 Create a Password</label>
-              <input type="password" name="password" required placeholder="Enter a strong password" onChange={handleChange} className="w-full mt-2 p-2 border rounded" />
-              <p className="text-xs text-gray-500 mt-1">This will let you log in on older devices without biometrics.</p>
-            </>
-          )}
-          {!showPassword && (
-            <p className="mt-2 font-medium text-red-700">
-              If you lose your Guthi Key, this is the only way to retrieve it. Without it, you will have to create again from scratch.
-            </p>
-          )}
-          <p className="text-xs text-gray-500 mt-2">Why do we ask this? It’s not for marketing. Only to help you retrieve your Guthi Key if forgotten.</p>
+        {/* Phone (optional) */}
+        <div>
+          <label className="block font-semibold">📱 Recovery Phone (optional)</label>
+          <input
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="+97798XXXXXXX"
+            className="border bg-white text-black p-2 w-full rounded"
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            Used only to help you recover your Guthi Key (OTP), never for marketing.
+          </p>
         </div>
 
         {/* Submit */}
