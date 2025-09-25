@@ -1,16 +1,13 @@
 // pages/welcome.jsx
-// ELI15: You must be signed in first. Then this page plants your "Guthi seed"
-// by upserting a row into public.profiles with your Supabase user.id.
-// This avoids "null value in column user_id" and avoids the missing `users` table.
+// ELI15: Must be signed in. Then we either UPDATE an existing profiles row
+// (matched by user_id) or INSERT a new one. No ON CONFLICT needed.
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../lib/supabaseClient';
 import { nanoid } from 'nanoid';
 
-// If you already have these JSONs in your repo, keep them.
-// If not, you can remove all suggestion bits below and keep the core submit.
-// (Keeping them here because they're used elsewhere in your project.)
+// Optional lists; if you don't have them, you can delete suggestions logic.
 import tharList from '../data/tharList.json';
 import skillsList from '../data/skillsList.json';
 import regionList from '../data/regionList.json';
@@ -27,7 +24,6 @@ export default function Welcome() {
     (async () => {
       const { data } = await supabase.auth.getUser();
       if (!data?.user) {
-        // Not logged in → send to your sign-in page
         router.replace('/signin');
         return;
       }
@@ -50,7 +46,7 @@ export default function Welcome() {
   const [guthiKey, setGuthiKey] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
-  // ---------- 3) NICE-TO-HAVE SUGGESTIONS ----------
+  // ---------- 3) OPTIONAL SUGGESTIONS ----------
   const tharFuse = new Fuse(tharList || [], { keys: ['Thar'], threshold: 0.3 });
   const regionFuse = new Fuse(regionList || [], { keys: ['Region'], threshold: 0.3 });
   const skillsFuse = new Fuse(skillsList || [], { keys: ['Skill'], threshold: 0.3 });
@@ -88,7 +84,7 @@ export default function Welcome() {
     setSuggestedSkills([]);
   };
 
-  // ---------- 4) SUBMIT ----------
+  // ---------- 4) SUBMIT (manual "upsert") ----------
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!authReady || !user) return;
@@ -97,37 +93,51 @@ export default function Welcome() {
     setSubmitting(true);
 
     try {
-      // make a human-readable, unique-ish key
+      // make a readable, unique-ish key
       const seedKey = `${(form.name || 'friend').toLowerCase()}-${(form.thar || 'guthi').toLowerCase()}-${nanoid(5)}`;
       setGuthiKey(seedKey);
 
-      // IMPORTANT: write to public.profiles with user_id = user.id
-      // Use upsert so repeated submit updates the same row.
-      // Adjust columns to match your profiles schema. Keep only safe, common fields.
       const payload = {
-        user_id: user.id,          // <- fixes the NOT NULL user_id
+        user_id: user.id,              // required link
         name: form.name || null,
         thar: form.thar || null,
         gender: form.gender || null,
         region: form.region || null,
         skills: form.skills || null,
         phone: phone || null,
-        guthi_key: seedKey,        // column expected as snake_case in many setups
-        created_at: new Date().toISOString()
+        guthi_key: seedKey
+        // created_at: DB default preferred
       };
 
-      const { error } = await supabase
+      // 1) Does a profile already exist for this user?
+      const { data: existing, error: findErr } = await supabase
         .from('profiles')
-        .upsert(payload, { onConflict: 'user_id' });
+        .select('id')
+        .eq('user_id', user.id)
+        .maybeSingle();
 
-      if (error) throw error;
+      if (findErr) throw findErr;
 
-      // cache and go
+      if (existing?.id) {
+        // 2a) UPDATE existing profile
+        const { error: updErr } = await supabase
+          .from('profiles')
+          .update(payload)
+          .eq('user_id', user.id);
+        if (updErr) throw updErr;
+      } else {
+        // 2b) INSERT new profile
+        const { error: insErr } = await supabase
+          .from('profiles')
+          .insert([payload]);
+        if (insErr) throw insErr;
+      }
+
       localStorage.setItem('guthiKey', seedKey);
       setSubmitted(true);
       setTimeout(() => router.replace('/dashboard'), 1200);
     } catch (err) {
-      console.error('❌ profiles upsert failed:', err);
+      console.error('❌ profile save failed:', err);
       setErrorMsg(err?.message || 'Could not plant your Guthi seed. Please try again.');
     } finally {
       setSubmitting(false);
